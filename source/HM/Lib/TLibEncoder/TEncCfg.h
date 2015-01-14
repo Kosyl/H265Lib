@@ -168,7 +168,7 @@ protected:
   Int       m_iMaxDeltaQP;                      //  Max. absolute delta QP (1:default)
   Int       m_iMaxCuDQPDepth;                   //  Max. depth for a minimum CuDQP (0:default)
 
-  Int       m_chromaCbQpOffset;                 //  Chroma Cb QP Offset (0:default)
+  Int       m_iWaveFrontSubstreamsm_chromaCbQpOffset;                 //  Chroma Cb QP Offset (0:default)
   Int       m_chromaCrQpOffset;                 //  Chroma Cr Qp Offset (0:default)
 
 #if ADAPTIVE_QP_SELECTION

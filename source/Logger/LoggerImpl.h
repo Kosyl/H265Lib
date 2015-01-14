@@ -2,7 +2,6 @@
 template<typename T>
 Logger& operator<<( Logger& o, T const& t )
 {
-	if( LoggingControl::validLog )
 	if( o.isLogging( ) )
 	{
 		o.write( t );
@@ -13,7 +12,6 @@ Logger& operator<<( Logger& o, T const& t )
 template<typename T>
 Logger& operator<<( Logger& o, T** const& t )
 {
-	if( LoggingControl::validLog )
 	if( o.isLogging( ) )
 	{
 		int size1 = sizeof( t ) / sizeof( T* );

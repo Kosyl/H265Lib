@@ -202,6 +202,9 @@ private:
   ContextModel3DBuffer m_cSaoTypeIdxSCModel;
   ContextModel3DBuffer m_cTransformSkipSCModel;
   ContextModel3DBuffer m_CUTransquantBypassFlagSCModel;
+
+  UInt totalBinCount;
+  UInt partialBinCount;
 };
 
 //! \}

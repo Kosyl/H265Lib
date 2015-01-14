@@ -1,11 +1,13 @@
+
+#ifndef _LOGGER_
+#define _LOGGER_
+
 /**
 * @file	Logger.h
 *
 * @brief	Deklaracje klas logowania
 */
 
-#ifndef _LOGGER_
-#define _LOGGER_
 
 #include "TypeDef.h"
 #include <iostream>
@@ -15,11 +17,23 @@
 #include <vector>
 #include <map>
 
-/**
- * @class	Logger
- *
- * @brief	A logger.
- */
+enum LogId
+{
+	LOGGER_FORWARD_TRANSFORM,
+	LOGGER_INVERSE_TRANSFORM,
+	LOGGER_QUANTIZATION,
+	LOGGER_DEQUANTIZATION,
+	LOGGER_LUMA_PREDICTION,
+	LOGGER_LUMA_RECONSTRUCTION,
+	LOGGER_CHROMA_PREDICTION,
+	LOGGER_CHROMA_RECONSTRUCTION,
+	LOGGER_DEBLOCKING_FILTER,
+	LOGGER_DEBLOCKING_FILTER_RESULT,
+	LOGGER_RDO,
+	LOGGER_BINARIZATION,
+	LOGGER_BINARIZATION_SUMMARY,
+	LOGGER_PREDICTION
+};
 
 class Logger
 {
@@ -89,7 +103,7 @@ private:
 	 * @return	Void.
 	 */
 
-	Void emptyBuffer( );
+	Void emptyBuffer();
 
 	/**
 	 * @fn	Void Logger::printSpaces( );
@@ -99,7 +113,7 @@ private:
 	 * @return	Void.
 	 */
 
-	Void printSpaces( );
+	Void printSpaces();
 
 	/**
 	 * @fn	template<typename T> Void Logger::write( T s, identity<T> i );
@@ -114,7 +128,7 @@ private:
 	 */
 
 	template<typename T>
-	Void write( T s, identity<T> i );
+	Void write(T s, identity<T> i);
 
 	/**
 	 * @fn	Void Logger::write( const Char* s, identity<const Char*> i )
@@ -127,10 +141,10 @@ private:
 	 * @return	Void.
 	 */
 
-	Void write( const Char* s, identity<const Char*> i )
+	Void write(const Char* s, identity<const Char*> i)
 	{
-		std::string str( s );
-		write( str );
+		std::string str(s);
+		write(str);
 	}
 
 	/**
@@ -144,9 +158,9 @@ private:
 	 * @return	Void.
 	 */
 
-	Void write( std::string s, identity<std::string> i )
+	Void write(std::string s, identity<std::string> i)
 	{
-		if( !s.compare( "\n" ) || s.find( "\n" ) != std::string::npos )
+		if (!s.compare("\n") || s.find("\n") != std::string::npos)
 		{
 			m_printSpaces = true;
 			m_logStream << s;
@@ -154,9 +168,9 @@ private:
 		}
 		else
 		{
-			if( m_printSpaces )
+			if (m_printSpaces)
 			{
-				printSpaces( );
+				printSpaces();
 			}
 			m_logStream << s;
 		}
@@ -170,7 +184,7 @@ public:
 	 * @brief	Konstrutor domyœlny.
 	 */
 
-	Logger( );
+	Logger();
 
 	/**
 	 * @fn	Logger::Logger( std::string logPath, Bool isLogging );
@@ -178,10 +192,10 @@ public:
 	 * @brief	Konstruktor.
 	 *
 	 * @param	logPath	 	Pe³na œcie¿ka do pliku logowania
-	 * @param	isLogging	W³¹czenie/wy³¹czenie 
+	 * @param	isLogging	W³¹czenie/wy³¹czenie
 	 */
 
-	Logger( std::string logPath, Bool isLogging );
+	Logger(std::string logPath, Bool isLogging);
 
 	/**
 	 * @fn	Logger::~Logger( );
@@ -189,7 +203,7 @@ public:
 	 * @brief	Destruktor.
 	 */
 
-	~Logger( );
+	~Logger();
 
 	/**
 	 * @brief	Czy dodaje parametry typu offsety, shifty, info o glebii bitowej itp.
@@ -209,7 +223,7 @@ public:
 	 */
 
 	template<typename T>
-	friend Logger& operator<<( Logger& o, T const& t );
+	friend Logger& operator<<(Logger& o, T const& t);
 
 	/**
 	 * @fn	Void Logger::increaseSpaces( );
@@ -219,7 +233,7 @@ public:
 	 * @return	Void.
 	 */
 
-	Void increaseSpaces( );
+	Void increaseSpaces();
 
 	/**
 	 * @fn	Void Logger::decreaseSpaces( );
@@ -229,7 +243,7 @@ public:
 	 * @return	Void.
 	 */
 
-	Void decreaseSpaces( );
+	Void decreaseSpaces();
 
 	/**
 	 * @fn	Logger& Logger::operator++( )
@@ -239,9 +253,9 @@ public:
 	 * @return	referencja na aktualny obiekt Logger.
 	 */
 
-	Logger& operator++( )
+	Logger& operator++()
 	{
-		this->increaseSpaces( );
+		this->increaseSpaces();
 		return *this;
 	}
 
@@ -253,9 +267,9 @@ public:
 	 * @return	referencja na aktualny obiekt Logger.
 	 */
 
-	Logger& operator--( )
+	Logger& operator--()
 	{
-		this->decreaseSpaces( );
+		this->decreaseSpaces();
 		return *this;
 	}
 
@@ -269,7 +283,7 @@ public:
 	 * @return	Void.
 	 */
 
-	Void setLogging( Bool log );
+	Void setLogging(Bool log);
 
 	/**
 	 * @fn	Void Logger::changeLogPath( std::string path );
@@ -281,7 +295,7 @@ public:
 	 * @return	A Void.
 	 */
 
-	Void changeLogPath( std::string path );
+	Void changeLogPath(std::string path);
 
 	/**
 	 * @fn	Bool Logger::isLogging( )
@@ -291,7 +305,7 @@ public:
 	 * @return	Prawda, jeœli logowanie jest w³aczone; false w p.p.
 	 */
 
-	Bool isLogging( )
+	Bool isLogging()
 	{
 		return m_loggingOn;
 	}
@@ -306,7 +320,7 @@ public:
 	 * @return	Void.
 	 */
 
-	Void setTabLength( UInt len );
+	Void setTabLength(UInt len);
 
 	/**
 	 * @fn	Void Logger::setTabStep( UInt len );
@@ -318,7 +332,7 @@ public:
 	 * @return	Void.
 	 */
 
-	Void setTabStep( UInt len );
+	Void setTabStep(UInt len);
 
 	/**
 	 * @fn	std::ofstream& Logger::getStream( );
@@ -328,7 +342,7 @@ public:
 	 * @return	Strumieñ wyjœciowy.
 	 */
 
-	std::ofstream& getStream( );
+	std::ofstream& getStream();
 
 	/**
 	 * @fn	template<typename T> Void Logger::write( T s );
@@ -342,7 +356,7 @@ public:
 	 */
 
 	template<typename T>
-	Void write( T s );
+	Void write(T s);
 
 };
 
@@ -359,7 +373,7 @@ public:
  * @return	Logger&amp do dalszych zapisów.
  */
 
-Logger& operator<<( Logger& o, std::ostream& ( *f )( std::ostream& ) );
+Logger& operator<<(Logger& o, std::ostream& (*f)(std::ostream&));
 
 /**
  * @class	LoggingControl
@@ -389,7 +403,7 @@ private:
 	 * @brief	Konstruktor domyœlny.
 	 */
 
-	LoggingControl( );
+	LoggingControl();
 
 	/**
 	 * @fn	void LoggingControl::LoadSettings( );
@@ -397,7 +411,7 @@ private:
 	 * @brief	Wczytanie konfiguracji z pliku.
 	 */
 
-	void LoadSettings( );
+	void LoadSettings();
 
 public:
 
@@ -408,12 +422,6 @@ public:
 	static std::string mainSettingsPath;
 
 	/**
-	 * @brief	Klucz ostatnio u¿ywanego logu.
-	 */
-
-	static std::string lastKey;
-
-	/**
 	 * @fn	static LoggingControl* LoggingControl::getInstance( );
 	 *
 	 * @brief	Dostêp do instancji kontroli logowania.
@@ -421,7 +429,7 @@ public:
 	 * @return	WskaŸnik na instancjê HMLoggingControl
 	 */
 
-	static LoggingControl* getInstance( );
+	static LoggingControl* getInstance();
 
 	/**
 	 * @fn	LoggingControl::~LoggingControl( );
@@ -429,40 +437,14 @@ public:
 	 * @brief	Destruktor.
 	 */
 
-	~LoggingControl( );
-
-	//std::map<std::string, std::ofstream*> logs;
+	~LoggingControl();
 
 	/**
 	 * @brief	Mapa Loggerów.
 	 */
 
-	std::map<std::string, Logger*> logs;
-
-	/**
-	 * @brief	Mapa boolowskich flag kontrolnych.
-	 */
-
-	std::map<std::string, bool> triggers;
-
-	/**
-	 * @brief	Fa³sz, jeœli podejmowana jest próba skorzystania z nieistniej¹cego logu.
-	 */
-
-	static bool validLog;
+	std::map<LogId, Logger*> logs;
 };
-
-/**
- * @fn	Logger& LOG( std::string key );
- *
- * @brief	Zwraca z LoggingControl obiekt Logger o podaym kluczu.
- *
- * @param	key	Klucz logownania.
- *
- * @return	A Logger&amp;
- */
-
-Logger& LOG( std::string key );
 
 /**
  * @fn	Void LOG_TAB( std::string key = "" );
@@ -474,7 +456,7 @@ Logger& LOG( std::string key );
  * @return	Void.
  */
 
-Void LOG_TAB( std::string key = "" );
+Void LOG_TAB(LogId key);
 
 /**
  * @fn	Void LOG_UNTAB( std::string key = "" );
@@ -486,6 +468,8 @@ Void LOG_TAB( std::string key = "" );
  * @return	Void.
  */
 
-Void LOG_UNTAB( std::string key = "" );
+Void LOG_UNTAB(LogId key);
+
+Logger& LOG(LogId key);
 
 #endif

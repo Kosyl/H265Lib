@@ -1,5 +1,10 @@
+/**
+* @file	Logger.cpp
+*
+* @brief	Implementacja klas loguj¹cych
+*/
 
-#include "LoggingControl.h"
+#include "Logger.h"
 
 LoggingControl* LoggingControl::instance = nullptr;
 
@@ -49,7 +54,6 @@ void LoggingControl::LoadSettings()
 	logs[Logs::DeblockingFilter] = Logs::DeblockingFilter ? new Logger(LOGPATH_FDB) : nullptr;
 	logs[Logs::DeblockingFilterResult] = Logs::DeblockingFilterResult ? new Logger(LOGPATH_FDBRES) : nullptr;
 	logs[Logs::Prediction] = Logs::Prediction ? new Logger(LOGPATH_PRED) : nullptr;
-	logs[Logs::Overview] = Logs::Prediction ? new Logger(LOGPATH_OVERVIEW) : nullptr;
 }
 
 Void LOG_TAB(Logs key)

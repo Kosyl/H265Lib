@@ -11,68 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\H265Lib\Binarization.h" />
-    <ClInclude Include="..\source\H265Lib\CoeffGroup.h" />
-    <ClInclude Include="..\source\H265Lib\CTU.h" />
-    <ClInclude Include="..\source\H265Lib\CU.h" />
-    <ClInclude Include="..\source\H265Lib\DeblockingFilter.h" />
-    <ClInclude Include="..\source\H265Lib\IntraMode.h" />
-    <ClInclude Include="..\source\H265Lib\IntraPred.h" />
-    <ClInclude Include="..\source\H265Lib\PartitioningStrategy.h" />
-    <ClInclude Include="..\source\H265Lib\Picture.h" />
-    <ClInclude Include="..\source\H265Lib\PU.h" />
-    <ClInclude Include="..\source\H265Lib\QuadTree.h" />
-    <ClInclude Include="..\source\H265Lib\Quant.h" />
-    <ClInclude Include="..\source\H265Lib\RDCost.h" />
-    <ClInclude Include="..\source\H265Lib\SAOInfo.h" />
-    <ClInclude Include="..\source\H265Lib\SeqPicParameters.h" />
-    <ClInclude Include="..\source\H265Lib\Slice.h" />
-    <ClInclude Include="..\source\H265Lib\Tile.h" />
-    <ClInclude Include="..\source\H265Lib\Transform.h" />
-    <ClInclude Include="..\source\H265Lib\TU.h" />
-    <ClInclude Include="..\source\H265Lib\TypeDef.h" />
-    <ClInclude Include="..\source\H265Lib\UnitBase.h" />
-    <ClInclude Include="..\source\H265Lib\Utils.h" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\H265Lib\Binarization.cpp" />
-    <ClCompile Include="..\source\H265Lib\CoeffGroup.cpp" />
-    <ClCompile Include="..\source\H265Lib\CTU.cpp" />
-    <ClCompile Include="..\source\H265Lib\CU.cpp" />
-    <ClCompile Include="..\source\H265Lib\DeblockingFilter.cpp" />
-    <ClCompile Include="..\source\H265Lib\IntraMode.cpp" />
-    <ClCompile Include="..\source\H265Lib\IntraPred.cpp" />
-    <ClCompile Include="..\source\H265Lib\PartitioningStrategy.cpp" />
-    <ClCompile Include="..\source\H265Lib\Picture.cpp" />
-    <ClCompile Include="..\source\H265Lib\PU.cpp" />
-    <ClCompile Include="..\source\H265Lib\QuadTree.cpp" />
-    <ClCompile Include="..\source\H265Lib\Quant.cpp" />
-    <ClCompile Include="..\source\H265Lib\RDCost.cpp" />
-    <ClCompile Include="..\source\H265Lib\SeqPicParameters.cpp" />
-    <ClCompile Include="..\source\H265Lib\Slice.cpp" />
-    <ClCompile Include="..\source\H265Lib\Tile.cpp" />
-    <ClCompile Include="..\source\H265Lib\Transform.cpp" />
-    <ClCompile Include="..\source\H265Lib\TU.cpp" />
-    <ClCompile Include="..\source\H265Lib\Utils.cpp" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="TypeDef.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{EA5CFA92-5EC8-45C2-BCC6-7D98017E75E2}</ProjectGuid>
+    <ProjectGuid>{302404A6-D2A6-40B5-8236-5DA390C49F65}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>H265Lib</RootNamespace>
+    <RootNamespace>LogTest</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -86,9 +49,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,7 +62,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,7 +78,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

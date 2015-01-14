@@ -10,69 +10,24 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\source\H265Lib\Binarization.h" />
-    <ClInclude Include="..\source\H265Lib\CoeffGroup.h" />
-    <ClInclude Include="..\source\H265Lib\CTU.h" />
-    <ClInclude Include="..\source\H265Lib\CU.h" />
-    <ClInclude Include="..\source\H265Lib\DeblockingFilter.h" />
-    <ClInclude Include="..\source\H265Lib\IntraMode.h" />
-    <ClInclude Include="..\source\H265Lib\IntraPred.h" />
-    <ClInclude Include="..\source\H265Lib\PartitioningStrategy.h" />
-    <ClInclude Include="..\source\H265Lib\Picture.h" />
-    <ClInclude Include="..\source\H265Lib\PU.h" />
-    <ClInclude Include="..\source\H265Lib\QuadTree.h" />
-    <ClInclude Include="..\source\H265Lib\Quant.h" />
-    <ClInclude Include="..\source\H265Lib\RDCost.h" />
-    <ClInclude Include="..\source\H265Lib\SAOInfo.h" />
-    <ClInclude Include="..\source\H265Lib\SeqPicParameters.h" />
-    <ClInclude Include="..\source\H265Lib\Slice.h" />
-    <ClInclude Include="..\source\H265Lib\Tile.h" />
-    <ClInclude Include="..\source\H265Lib\Transform.h" />
-    <ClInclude Include="..\source\H265Lib\TU.h" />
-    <ClInclude Include="..\source\H265Lib\TypeDef.h" />
-    <ClInclude Include="..\source\H265Lib\UnitBase.h" />
-    <ClInclude Include="..\source\H265Lib\Utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\source\H265Lib\Binarization.cpp" />
-    <ClCompile Include="..\source\H265Lib\CoeffGroup.cpp" />
-    <ClCompile Include="..\source\H265Lib\CTU.cpp" />
-    <ClCompile Include="..\source\H265Lib\CU.cpp" />
-    <ClCompile Include="..\source\H265Lib\DeblockingFilter.cpp" />
-    <ClCompile Include="..\source\H265Lib\IntraMode.cpp" />
-    <ClCompile Include="..\source\H265Lib\IntraPred.cpp" />
-    <ClCompile Include="..\source\H265Lib\PartitioningStrategy.cpp" />
-    <ClCompile Include="..\source\H265Lib\Picture.cpp" />
-    <ClCompile Include="..\source\H265Lib\PU.cpp" />
-    <ClCompile Include="..\source\H265Lib\QuadTree.cpp" />
-    <ClCompile Include="..\source\H265Lib\Quant.cpp" />
-    <ClCompile Include="..\source\H265Lib\RDCost.cpp" />
-    <ClCompile Include="..\source\H265Lib\SeqPicParameters.cpp" />
-    <ClCompile Include="..\source\H265Lib\Slice.cpp" />
-    <ClCompile Include="..\source\H265Lib\Tile.cpp" />
-    <ClCompile Include="..\source\H265Lib\Transform.cpp" />
-    <ClCompile Include="..\source\H265Lib\TU.cpp" />
-    <ClCompile Include="..\source\H265Lib\Utils.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{EA5CFA92-5EC8-45C2-BCC6-7D98017E75E2}</ProjectGuid>
+    <ProjectGuid>{DE1939D0-FE53-4A52-91E8-83B0BFFE697F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>H265Lib</RootNamespace>
+    <RootNamespace>BinarizationOnly</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -86,9 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\Repos\HEVC\source\Logger;D:\Repos\HEVC\source\H265Lib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\Repos\HEVC\source\Logger;D:\Repos\HEVC\source\H265Lib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,7 +54,6 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,7 +69,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,6 +77,20 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\H265Lib\Binarization.h" />
+    <ClInclude Include="..\source\H265Lib\CoeffGroup.h" />
+    <ClInclude Include="..\source\H265Lib\SeqPicParameters.h" />
+    <ClInclude Include="..\source\H265Lib\TypeDef.h" />
+    <ClInclude Include="..\source\H265Lib\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\H265App\Main.cpp" />
+    <ClCompile Include="..\source\H265Lib\Binarization.cpp" />
+    <ClCompile Include="..\source\H265Lib\CoeffGroup.cpp" />
+    <ClCompile Include="..\source\H265Lib\SeqPicParameters.cpp" />
+    <ClCompile Include="..\source\H265Lib\Utils.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

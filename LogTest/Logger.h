@@ -8,21 +8,8 @@
 * @brief	Deklaracje klas logowania
 */
 
-typedef       void                Void;
-typedef       bool                Bool;
-typedef       char                Char;
-typedef       unsigned char       UChar;
-typedef       short               Short;
-typedef       unsigned short      UShort;
-typedef       int                 Int;
-typedef		  long				  Long;
-typedef       unsigned int        UInt;
-typedef       double              Double;
-typedef       float               Float;
-typedef       UChar           Pixel;
-typedef       Short           Sample;
-typedef       Int             Coeff;
 
+#include "TypeDef.h"
 #include <iostream>
 #include <fstream>
 #include <string.h>
@@ -44,7 +31,6 @@ typedef       Int             Coeff;
 #define LOGPATH_FDB "D:\\txt\\fdb.txt"
 #define LOGPATH_FDBRES "D:\\txt\\HMfdbres.txt"
 #define LOGPATH_PRED "D:\\txt\\predykcja.txt"
-#define LOGPATH_OVERVIEW "D:\\txt\\overview.txt"
 
 #define STRINGIZE(x) #x 
 #define PRINTVAR(x) (#x),": ",(x)," "
@@ -61,11 +47,10 @@ enum Logs
 	ChromaReco = 0,//8,
 	DeblockingFilter = 0,//9,
 	DeblockingFilterResult = 0,//10,
-	RDO = 0,//11,
+	RDO = 11,
 	Binarization = 0,//12,
 	BinarizationSummary = 0,//13,
-	Prediction = 0,//14
-	Overview = 15
+	Prediction = 0//14
 };
 
 
@@ -374,16 +359,6 @@ Void LOG_TAB(Logs key);
 Void LOG_UNTAB(Logs key);
 
 template<typename... Params>
-Void printlnToLog(Logs id, Params... args)
-{
-	Logger* log = LoggingControl::getInstance()->logs[id];
-	if (log == nullptr)
-		return;
-	log->printSpaces();
-	log->printValues(args...);
-	log->getStream() << std::endl;
-}
-template<typename... Params>
 Void printToLog(Logs id, Params... args)
 {
 	Logger* log = LoggingControl::getInstance()->logs[id];
@@ -391,6 +366,7 @@ Void printToLog(Logs id, Params... args)
 		return;
 	log->printSpaces();
 	log->printValues(args...);
+	log->getStream() << std::endl;
 }
 template<typename T>
 Void printMatrixToLog(Logs id, const char* name, T** matrix, int sizeX, int sizeY)
@@ -425,14 +401,13 @@ Void printMatrixToLog1Dto2D(Logs id, const char* name, T* matrix, int sizeX, int
 		log->printSpaces();
 		for (int j = 0; j < sizeX; ++j)
 		{
-			log->printValues(matrix[i*stride + j], " ");
+			log->printValues(matrix[i*stride+j], " ");
 		}
 		log->getStream() << std::endl;
 	}
 }
 
 #ifdef _DEBUG
-#define LOGLN(...) printlnToLog(__VA_ARGS__)
 #define LOG(...) printToLog(__VA_ARGS__)
 
 #define GET_MACRO(_1,_2,_3,_4,NAME,...) NAME
@@ -445,7 +420,6 @@ Void printMatrixToLog1Dto2D(Logs id, const char* name, T* matrix, int sizeX, int
 #define COMBINE(a,b) COMBINE1(a,b)
 #define LOG_SCOPE_INDENT(logId) Indent indent##logId(logId)
 #define LOG_FUNCTION_INDENT(logId) Indent COMBINE(indent,__LINE__)(__FUNCTION__,logId)
-
 #else
 #define LOG(...)
 #define LOG_MATRIX(logId,x,mat_size) 
@@ -456,7 +430,7 @@ class Indent
 {
 	Logs m_id;
 public:
-	Indent(Logs inId) :
+	Indent(Logs inId):
 		m_id(inId)
 	{
 		LOG_TAB(inId);

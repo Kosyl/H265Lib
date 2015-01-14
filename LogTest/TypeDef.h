@@ -1,8 +1,8 @@
 /**
- * @file	TypeDef.h
- *
- * @brief Redefinicje typów
- */
+* @file	TypeDef.h
+*
+* @brief Redefinicje typów
+*/
 
 #ifndef _TYPEDEF_
 #define _TYPEDEF_
@@ -18,8 +18,8 @@ typedef		  long				  Long;
 typedef       unsigned int        UInt;
 typedef       double              Double;
 typedef       float               Float;
-typedef       UChar           Pixel;        
-typedef       Short           Sample;        
-typedef       Int             Coeff;     
+typedef       UChar           Pixel;
+typedef       Short           Sample;
+typedef       Int             Coeff;
 
 #endif

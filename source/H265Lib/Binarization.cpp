@@ -37,9 +37,6 @@ HorizontalScanningMode::~HorizontalScanningMode( )
 
 std::vector<std::shared_ptr<CoeffGroup> > HorizontalScanningMode::scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY )
 {
-	printMatrix( coeffs, size, LOG( "SCAN" ) );
-	LOG( "SCAN" ) << std::endl;
-
 	UInt sizeInCGs = size / ScanningMode::CG_SIZE;
 	UInt numCGs = sizeInCGs * sizeInCGs;
 
@@ -55,9 +52,6 @@ std::vector<std::shared_ptr<CoeffGroup> > HorizontalScanningMode::scan( Coeff** 
 			num = 0;
 			std::shared_ptr<CoeffGroup> cg = std::make_shared<CoeffGroup>( );
 
-			printMatrix( subset, ScanningMode::CG_SIZE, LOG( "SCAN" ) );
-			LOG( "SCAN" ) << std::endl;
-
 			pastFirstNonZeroInCG = false;
 
 			for( Int y = ScanningMode::CG_SIZE - 1; y >= 0; --y )
@@ -65,7 +59,6 @@ std::vector<std::shared_ptr<CoeffGroup> > HorizontalScanningMode::scan( Coeff** 
 				for( Int x = ScanningMode::CG_SIZE - 1; x >= 0; --x )
 				{
 					( *cg )[ num ] = subset[ x ][ y ];
-					LOG( "SCAN" ) << subset[ x ][ y ] << " ";
 
 					if( ( *cg )[ num ] != 0 )
 					{
@@ -86,8 +79,6 @@ std::vector<std::shared_ptr<CoeffGroup> > HorizontalScanningMode::scan( Coeff** 
 					++num;
 				}
 			}
-
-			LOG( "SCAN" ) << std::endl;
 
 			if( pastFirstNonZero || ( cgX == 0 && cgY == 0 ) )
 			{
@@ -108,9 +99,6 @@ VerticalScanningMode::~VerticalScanningMode( )
 
 std::vector<std::shared_ptr<CoeffGroup> > VerticalScanningMode::scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY )
 {
-	printMatrix( coeffs, size, LOG( "SCAN" ) );
-	LOG( "SCAN" ) << std::endl;
-
 	UInt sizeInCGs = size / ScanningMode::CG_SIZE;
 	UInt numCGs = sizeInCGs * sizeInCGs;
 
@@ -126,9 +114,6 @@ std::vector<std::shared_ptr<CoeffGroup> > VerticalScanningMode::scan( Coeff** co
 			num = 0;
 			std::shared_ptr<CoeffGroup> cg = std::make_shared<CoeffGroup>( );
 
-			printMatrix( subset, ScanningMode::CG_SIZE, LOG( "SCAN" ) );
-			LOG( "SCAN" ) << std::endl;
-
 			pastFirstNonZeroInCG = false;
 
 			for( Int x = ScanningMode::CG_SIZE - 1; x >= 0; --x )
@@ -136,7 +121,6 @@ std::vector<std::shared_ptr<CoeffGroup> > VerticalScanningMode::scan( Coeff** co
 				for( Int y = ScanningMode::CG_SIZE - 1; y >= 0; --y )
 				{
 					( *cg )[ num ] = subset[ x ][ y ];
-					LOG( "SCAN" ) << subset[ x ][ y ] << " ";
 
 					if( ( *cg )[ num ] != 0 )
 					{
@@ -157,7 +141,6 @@ std::vector<std::shared_ptr<CoeffGroup> > VerticalScanningMode::scan( Coeff** co
 				}
 			}
 
-			LOG( "SCAN" ) << std::endl;
 			if( pastFirstNonZero || ( cgX == 0 && cgY == 0 ) )
 			{
 				res.push_back( cg );
@@ -183,9 +166,6 @@ const UInt DiagonalScanningMode::coeffIdxInCG[ 2 ][ 16 ] =
 
 std::vector<std::shared_ptr<CoeffGroup> > DiagonalScanningMode::scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY )
 {
-	printMatrix( coeffs, size, LOG( "SCAN" ) );
-	LOG( "SCAN" ) << std::endl;
-
 	UInt sizeInCGs = size / ScanningMode::CG_SIZE;
 	UInt numCGs = sizeInCGs * sizeInCGs;
 	UInt numCGInLine = 1;
@@ -208,9 +188,6 @@ std::vector<std::shared_ptr<CoeffGroup> > DiagonalScanningMode::scan( Coeff** co
 
 			std::shared_ptr<CoeffGroup> cg = std::make_shared<CoeffGroup>( );
 
-			printMatrix( subset, ScanningMode::CG_SIZE, LOG( "SCAN" ) );
-			LOG( "SCAN" ) << std::endl;
-
 			bool pastFirstNonZeroInCG = false;
 
 			for( Short i = 0; i < 16; ++i )
@@ -219,7 +196,6 @@ std::vector<std::shared_ptr<CoeffGroup> > DiagonalScanningMode::scan( Coeff** co
 				y = coeffIdxInCG[ 1 ][ i ];
 
 				( *cg )[ i ] = subset[ x ][ y ];
-				LOG( "SCAN" ) << subset[ x ][ y ] << " ";
 
 				if( ( *cg )[ i ] != 0 )
 				{
@@ -237,8 +213,6 @@ std::vector<std::shared_ptr<CoeffGroup> > DiagonalScanningMode::scan( Coeff** co
 					cg->setLastPosInScan( i );
 				}
 			}
-
-			LOG( "SCAN" ) << std::endl;
 
 			++checkedCGs;
 			if( pastFirstNonZero || checkedCGs == numCGs )
@@ -291,119 +265,40 @@ UInt Binarization::binarizeCoefficientRemainingLevel_NumBits( UInt symbol, UInt 
 	value -= threshold;
 
 	return ( ( ( numBits( value + ( 1 << rParam ) ) ) - 1 ) << 1 ) + 4 - rParam;
-
-	/*Int codeNumber = (Int)symbol;
-	UInt length;
-
-	UInt prefixBins, prefixLength, suffixBins, suffixLength;
-
-	log << "(" << symbol << "," << rParam << ")" << std::endl;
-	if( codeNumber < ( COEFF_REMAIN_THRESHOLD << rParam ) )
-	{
-	log << "kodowanie GR, remain: " << codeNumber << " < " << ( COEFF_REMAIN_THRESHOLD << rParam ) << std::endl;
-	++log;
-
-	length = codeNumber >> rParam;
-
-	prefixBins = ( 1 << ( length + 1 ) ) - 2;
-	prefixLength = length + 1;
-	suffixBins = codeNumber % ( 1 << rParam );
-	suffixLength = rParam;
-
-	std::bitset<( sizeof Int ) * 8> first( prefixBins );
-	std::bitset<( sizeof Int ) * 8> second( suffixBins );
-	for( int i = prefixLength - 1; i >= 0; --i )
-	log << first[ i ];
-	log << " ";
-	for( int i = suffixLength - 1; i >= 0; --i )
-	log << second[ i ];
-	log << std::endl;
-	--log;
-	}
-	else
-	{
-	log << "kodowanie TU+EG(k), remain: " << codeNumber << " >= " << ( COEFF_REMAIN_THRESHOLD << rParam ) << std::endl;
-	++log;
-	length = rParam;
-	codeNumber = codeNumber - ( COEFF_REMAIN_THRESHOLD << rParam );
-
-	log << "poprawka remain: " << codeNumber << std::endl;
-
-	++log;
-	while( codeNumber >= ( 1 << length ) )
-	{
-	log << "remain = " << codeNumber << " >= 1<<length = " << ( 1 << length ) << std::endl;
-	codeNumber -= ( 1 << ( length++ ) );
-	log << "remain = " << codeNumber << ", length = " << length << std::endl;
-	}
-	--log;
-
-	prefixBins = ( 1 << ( COEFF_REMAIN_THRESHOLD + length + 1 - rParam ) ) - 2;
-	prefixLength = COEFF_REMAIN_THRESHOLD + length + 1 - rParam;
-	suffixBins = codeNumber;
-	suffixLength = length;
-
-	std::bitset<( sizeof Int ) * 8> first( prefixBins );
-	std::bitset<( sizeof Int ) * 8> second( suffixBins );
-	for( int i = prefixLength - 1; i >= 0; --i )
-	log << first[ i ];
-	log << " ";
-	for( int i = suffixLength - 1; i >= 0; --i )
-	log << second[ i ];
-	log << std::endl;
-	--log;
-	}
-	log << "(" << symbol << "," << rParam << ") -> " << ( prefixLength + suffixLength ) << " bitow" << std::endl;
-	return prefixLength + suffixLength;*/
 }
 
 UInt Binarization::countBinsInTB( Coeff** coefficients, UInt size, ScanningMode* scanningMode )
 {
-	LOG( "BIN" ) << "#######################" << std::endl;
-	printMatrix( coefficients, size, LOG( "BIN" ) );
-
 	UInt totalBins = 0;
 	UInt log2TUSize = 2;
 
 	UInt lastCoeffX = 0, lastCoeffY = 0;
 
 	std::vector<std::shared_ptr<CoeffGroup> > CGs = scanningMode->scan( coefficients, size, lastCoeffX, lastCoeffY );
-	LOG( "BIN" ) << "numCGs: " << CGs.size( ) << std::endl;
 
 	if( lastCoeffX == 0 && lastCoeffY == 0 && ( CGs[ 0 ] )->getLastPosInScan( ) == -1 )
 		return 0;
 
 	if( size == 4 && PicParams( )->getTransformSkipEnabled( ) && !itsCurrentCUUsesTransQuantBypass )
 	{
-		LOG( "BIN" ) << "transformSkipFlag: " << itsCurrentTUUsesTransformSkip;
 		++totalBins;
 	}
 
 	Coeff* remains = new Coeff[ Constants::NUM_COEFFS_IN_CG ];
 
-	LOG( "BIN" ) << "lastCoeffX: " << lastCoeffX << "(" << binarizeLastSignificantXY_NumBits( lastCoeffX, size ) << ")" << std::endl;
-	LOG( "BIN" ) << "lastCoeffY: " << lastCoeffY << "(" << binarizeLastSignificantXY_NumBits( lastCoeffY, size ) << ")" << std::endl;
-
 	totalBins += binarizeLastSignificantXY_NumBits( lastCoeffX, size );
 	totalBins += binarizeLastSignificantXY_NumBits( lastCoeffY, size );
 
-	for( UInt i = 0; i < CGs.size( ); ++i )
+	for( UInt i = 0; i < CGs.size( ); ++i ) //TUTAJ sa obliczenia dla kazdego bloku 4x4 (Coefficient Group, ja nazywam CG), chyba o to chodzilo Pastuszakowi
 	{
 		std::shared_ptr<CoeffGroup> CG = CGs[ i ];
 
-		LOG( "BIN" ) << "##### CG #####" << std::endl;
-		for( Int j = 0; j < Constants::NUM_COEFFS_IN_CG; ++j )
-			LOG( "BIN" ) << ( *CG )[ j ] << " ";
-		LOG( "BIN" ) << std::endl << "firstPos: " << CG->getFirstPosInScan( ) << ", lastPos: " << CG->getLastPosInScan( ) << std::endl;;
-
 		if( !( i == 0 || i == ( CGs.size( ) - 1 ) ) )
 		{
-			LOG( "BIN" ) << "SigCoeffGroup (1)" << std::endl;
 			++totalBins; //sigCGflag
 		}
 
 		UInt numNonZero = countNonZeroCoeffsAndSigns( CG, ( i + 1 ) == CGs.size( ) );
-		LOG( "BIN" ) << "numNonZero: " << numNonZero << std::endl;
 
 		if( numNonZero == 0 && !( i == 0 || i == ( CGs.size( ) - 1 ) ) )
 			continue;
@@ -413,26 +308,21 @@ UInt Binarization::countBinsInTB( Coeff** coefficients, UInt size, ScanningMode*
 			boost::dynamic_bitset<> tmp = CG->getSignificantCoeffFlags( );
 			tmp.resize( Constants::NUM_COEFFS_IN_CG - 1 - CG->getFirstPosInScan( ) );
 			CG->setSignificantCoeffFlags( tmp );
-			LOG( "BIN" ) << "sigCoeffs po przesunieciu: " << bitsetToString( CG->getSignificantCoeffFlags( ) ) << " (" << static_cast<std::streamsize>( CG->getSignificantCoeffFlags( ).size( ) ) << ")" << std::endl;
 			totalBins += CG->getSignificantCoeffFlags( ).size( );
 		}
 		else
 		{
-			LOG( "BIN" ) << "sigCoeffs: " << bitsetToString( CG->getSignificantCoeffFlags( ) ) << " ( " << static_cast<std::streamsize>( CG->getSignificantCoeffFlags( ).size( ) ) << " )" << std::endl;
 			totalBins += CG->getSignificantCoeffFlags( ).size( );
 		}
 
-		LOG( "BIN" ) << "znaki";
 		if( CG->getLastPosInScan( ) - CG->getFirstPosInScan( ) >= Constants::SDH_THRESHOLD && useSDH( ) && !itsCurrentCUUsesTransQuantBypass )
 		{
-			LOG( "BIN" ) << "(SDH)";
 			boost::dynamic_bitset<> tmp = reverseBitset( CG->getCoeffSigns( ) );
 			tmp.resize( tmp.size( ) - 1 );
 			CG->setCoeffSigns( reverseBitset( tmp ) );
 		}
 
 		UInt numSignBits = CG->getCoeffSigns( ).size( );
-		LOG( "BIN" ) << ": " << bitsetToString( CG->getCoeffSigns( ) ) << "  (" << numSignBits << ")" << std::endl;
 		totalBins += numSignBits; // zliczanie bitów znaków
 
 		for( UInt i = 0; i < numNonZero; ++i ) // wiemy ze sa >=1, wiec kodowac bedziemy x-1
@@ -442,7 +332,6 @@ UInt Binarization::countBinsInTB( Coeff** coefficients, UInt size, ScanningMode*
 
 		UInt C1andC2bins = calcC1andC2( CG, remains, numNonZero );
 
-		LOG( "BIN" ) << "C1andC2bins (" << C1andC2bins << ")" << std::endl;
 		totalBins += C1andC2bins; // biny flag C1 i C2
 
 		UInt riceParam = 0;
@@ -453,7 +342,6 @@ UInt Binarization::countBinsInTB( Coeff** coefficients, UInt size, ScanningMode*
 			{
 				UInt size = binarizeCoefficientRemainingLevel_NumBits( remains[ i ], riceParam );
 				totalBins += size;
-				LOG( "BIN" ) << "znak (" << size << ")" << std::endl;
 				if( ( *CG )[ i ] > 3 * ( 1 << riceParam ) )
 				{
 					riceParam = std::min<UInt>( riceParam + 1, 4 );
@@ -463,7 +351,6 @@ UInt Binarization::countBinsInTB( Coeff** coefficients, UInt size, ScanningMode*
 	}
 	delete[] remains;
 
-	LOG( "BIN" ) << "WSZYSTKICH: " << totalBins << std::endl;
 	return totalBins;
 }
 
@@ -588,7 +475,6 @@ UInt Binarization::binarizeLastSignificantXY_NumBits( UInt position, UInt transf
 {
 	UInt pref = 0, suf = 0;
 	binarizeLastSignificantXY_GetPrefixAndSuffix( position, transformSize, pref, suf );
-	LOG( "XY" ) << "preflen: " << binarizeTR_NumBits( pref, ( log2Int( transformSize ) << 1 ) - 1, 0 ) << ", suflen: " << ( pref > 3 ? numBits( 1 << ( ( pref >> 1 ) - 2 ) ) : 0 ) << std::endl;
 	return binarizeTR_NumBits( pref, ( log2Int( transformSize ) << 1 ) - 1, 0 ) + ( pref > 3 ? numBits( 1 << ( ( pref >> 1 ) - 2 ) ) : 0 );
 }
 
@@ -660,5 +546,5 @@ boost::dynamic_bitset<> Binarization::binarizeTR( UInt val, UInt maxLenBeforeSuf
 
 Bool Binarization::useSDH( )
 {
-	return PicParams( )->getSDHEnabled( ); // TODO: dodac flagi z roznych pieter, CU, TU
+	return PicParams( )->getSDHEnabled( );
 }

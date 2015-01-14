@@ -32,12 +32,6 @@
     <ClInclude Include="..\source\H265Lib\IntraPred.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\LoggerImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\H265Lib\PartitioningStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -104,9 +98,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\IntraPred.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\PartitioningStrategy.cpp">

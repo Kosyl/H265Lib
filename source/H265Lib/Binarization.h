@@ -7,7 +7,6 @@
 #define BINARIZATION_H
 
 #include "Utils.h"
-#include "Logger.h"
 #include <bitset>
 #include <boost\dynamic_bitset.hpp>
 
