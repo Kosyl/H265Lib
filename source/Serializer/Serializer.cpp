@@ -38,9 +38,9 @@
 #ifndef _MAIN_
 #define _MAIN_
 
-#include "Quant.h"
-#include "Transform.h"
-#include "TypeDef.h"
+#include "Modules/Quant.h"
+#include "Modules/Transform.h"
+#include "Common/TypeDef.h"
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
@@ -49,6 +49,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace H265Lib;
 
 void transfer(ifstream& in, ofstream& out, const Int& num)
 {

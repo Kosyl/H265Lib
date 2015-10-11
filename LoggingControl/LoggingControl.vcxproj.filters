@@ -10,12 +10,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\LoggingControl\LoggingControl.cpp">
+    <ClCompile Include="..\source\LoggingControl\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\LoggingControl\LoggingControl.h">
+    <ClInclude Include="..\source\LoggingControl\Logger.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

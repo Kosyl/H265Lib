@@ -39,7 +39,7 @@
 #include "TLibCommon/TComRom.h"
 #include "TLibCommon/TComMotionInfo.h"
 #include "TEncSearch.h"
-#include "LoggingControl.h"
+#include "Logger.h"
 #include <math.h>
 
 #include <fstream>

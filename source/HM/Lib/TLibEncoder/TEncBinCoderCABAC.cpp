@@ -37,7 +37,7 @@
 
 #include "TEncBinCoderCABAC.h"
 #include "TLibCommon/TComRom.h"
-#include "LoggingControl.h"
+#include "Logger.h"
 #include <fstream>
 
 
@@ -70,6 +70,8 @@ Void TEncBinCABAC::uninit()
 
 Void TEncBinCABAC::start()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
+	LOGLN(Logs::BinOut, "RESET KODERA");
 	m_uiLow            = 0;
 	m_uiRange          = 510;
 	m_bitsLeft         = 23;
@@ -79,6 +81,7 @@ Void TEncBinCABAC::start()
 
 Void TEncBinCABAC::finish()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	if ( m_uiLow >> ( 32 - m_bitsLeft ) )
 	{
 		//assert( m_numBufferedBytes > 0 );
@@ -108,6 +111,7 @@ Void TEncBinCABAC::finish()
 
 Void TEncBinCABAC::flush()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	encodeBinTrm(1);
 	finish();
 	m_pcTComBitIf->write(1, 1);
@@ -121,6 +125,7 @@ Void TEncBinCABAC::flush()
 */
 Void TEncBinCABAC::resetBac()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	start();
 }
 
@@ -129,6 +134,7 @@ Void TEncBinCABAC::resetBac()
 */
 Void TEncBinCABAC::encodePCMAlignBits()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	finish();
 	m_pcTComBitIf->write(1, 1);
 	m_pcTComBitIf->writeAlignZero(); // pcm align zero
@@ -141,17 +147,20 @@ Void TEncBinCABAC::encodePCMAlignBits()
 */
 Void TEncBinCABAC::xWritePCMCode(UInt uiCode, UInt uiLength)
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	m_pcTComBitIf->write(uiCode, uiLength);
 }
 
 Void TEncBinCABAC::copyState( TEncBinIf* pcTEncBinIf )
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	TEncBinCABAC* pcTEncBinCABAC = pcTEncBinIf->getTEncBinCABAC();
 	m_uiLow           = pcTEncBinCABAC->m_uiLow;
 	m_uiRange         = pcTEncBinCABAC->m_uiRange;
 	m_bitsLeft        = pcTEncBinCABAC->m_bitsLeft;
 	m_bufferedByte    = pcTEncBinCABAC->m_bufferedByte;
 	m_numBufferedBytes = pcTEncBinCABAC->m_numBufferedBytes;
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
 #if FAST_BIT_EST
 	m_fracBits = pcTEncBinCABAC->m_fracBits;
 #endif
@@ -159,6 +168,7 @@ Void TEncBinCABAC::copyState( TEncBinIf* pcTEncBinIf )
 
 Void TEncBinCABAC::resetBits()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	m_uiLow            = 0;
 	m_bitsLeft         = 23;
 	m_numBufferedBytes = 0;
@@ -167,6 +177,7 @@ Void TEncBinCABAC::resetBits()
 	{
 		m_uiBinsCoded = 0;
 	}
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
 #if FAST_BIT_EST
 	m_fracBits &= 32767;
 #endif
@@ -185,6 +196,10 @@ UInt TEncBinCABAC::getNumWrittenBits()
 */
 Void TEncBinCABAC::encodeBin( UInt binValue, ContextModel &rcCtxModel )
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
+	LOGLN(Logs::BinOut, "binvalue: ",binValue, ", stateValue: ", ((rcCtxModel.getState() << 1) + rcCtxModel.getMps()), ", mps: ", (int)rcCtxModel.getMps(), ", state : ", (int)rcCtxModel.getState(), ", bins coded : ", rcCtxModel.getBinsCoded());
+
 	{
 		DTRACE_CABAC_VL( g_nSymbolCounter++ )
 			DTRACE_CABAC_T( "\tstate=" )
@@ -197,11 +212,18 @@ Void TEncBinCABAC::encodeBin( UInt binValue, ContextModel &rcCtxModel )
 	rcCtxModel.setBinsCoded( 1 );
 	
 	UInt  uiLPS   = TComCABACTables::sm_aucLPSTable[ rcCtxModel.getState() ][ ( m_uiRange >> 6 ) & 3 ];
-	m_uiRange    -= uiLPS;
+	m_uiRange -= uiLPS;
+	LOGLN(Logs::BinOut, "uiLPS   = ", uiLPS);
+	LOGLN(Logs::BinOut, "m_uiRange -= uiLPS");
 
 	if( binValue != rcCtxModel.getMps() )
 	{
-		Int numBits = TComCABACTables::sm_aucRenormTable[ uiLPS >> 3 ];
+		LOG_SCOPE_INDENT(Logs::BinOut, "");
+		LOGLN(Logs::BinOut, "LPS");
+		Int numBits = TComCABACTables::sm_aucRenormTable[uiLPS >> 3];
+		LOGLN(Logs::BinOut, "m_uiRange   = uiLPS << numBits");
+		LOGLN(Logs::BinOut, "m_uiLow     = ( m_uiLow + m_uiRange ) << numBits = (",m_uiLow," + ",m_uiRange,") << ",numBits);
+		LOGLN(Logs::BinOut, "m_bitsLeft -= numBits");
 		m_uiLow     = ( m_uiLow + m_uiRange ) << numBits;
 		m_uiRange   = uiLPS << numBits;
 		rcCtxModel.updateLPS();
@@ -211,11 +233,16 @@ Void TEncBinCABAC::encodeBin( UInt binValue, ContextModel &rcCtxModel )
 	}
 	else
 	{
-		
+		LOG_SCOPE_INDENT(Logs::BinOut, "");
+		LOGLN(Logs::BinOut, "MPS");
+		LOGLN(Logs::BinOut, "m_uiLow <<= 1");
+		LOGLN(Logs::BinOut, "m_uiRange <<= 1");
+		LOGLN(Logs::BinOut, "m_bitsLeft--");
 		rcCtxModel.updateMPS();
 		if ( m_uiRange >= 256 )
 		{
-			
+			LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
+			LOGLN(Logs::BinOut, "stateValue: ", ((rcCtxModel.getState() << 1) + rcCtxModel.getMps()), ", mps: ", (int)rcCtxModel.getMps(), ", state : ", (int)rcCtxModel.getState(), ", bins coded : ", rcCtxModel.getBinsCoded());
 			return;
 		}
 
@@ -224,7 +251,8 @@ Void TEncBinCABAC::encodeBin( UInt binValue, ContextModel &rcCtxModel )
 		m_bitsLeft--;
 		
 	}
-
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
+	LOGLN(Logs::BinOut, "stateValue: ", ((rcCtxModel.getState() << 1) + rcCtxModel.getMps()), ", mps: ", (int)rcCtxModel.getMps(), ", state : ", (int)rcCtxModel.getState(), ", bins coded : ", rcCtxModel.getBinsCoded());
 	testAndWriteOut();
 }
 
@@ -235,6 +263,9 @@ Void TEncBinCABAC::encodeBin( UInt binValue, ContextModel &rcCtxModel )
 */
 Void TEncBinCABAC::encodeBinEP( UInt binValue )
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
+	LOGLN(Logs::BinOut, PRINTVAR(binValue));
 	{
 		DTRACE_CABAC_VL( g_nSymbolCounter++ )
 			DTRACE_CABAC_T( "\tEPsymbol=" )
@@ -243,12 +274,16 @@ Void TEncBinCABAC::encodeBinEP( UInt binValue )
 	}
 	m_uiBinsCoded += m_binCountIncrement;
 	m_uiLow <<= 1;
+	LOGLN(Logs::BinOut, "m_uiLow <<= 1");
 	if( binValue )
 	{
+		LOGLN(Logs::BinOut, "m_uiLow += m_uiRange");
 		m_uiLow += m_uiRange;
 	}
 	m_bitsLeft--;
 
+	LOGLN(Logs::BinOut, "m_bitsLeft--");
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
 	testAndWriteOut();
 }
 
@@ -260,6 +295,9 @@ Void TEncBinCABAC::encodeBinEP( UInt binValue )
 */
 Void TEncBinCABAC::encodeBinsEP( UInt binValues, Int numBins )
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
+	LOGLN(Logs::BinOut, PRINTVAR(binValues), PRINTVAR(numBins));
 	m_uiBinsCoded += numBins & -m_binCountIncrement;
 
 	for ( Int i = 0; i < numBins; i++ )
@@ -286,6 +324,7 @@ Void TEncBinCABAC::encodeBinsEP( UInt binValues, Int numBins )
 	m_uiLow += m_uiRange * binValues;
 	m_bitsLeft -= numBins;
 
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
 	testAndWriteOut();
 }
 
@@ -296,6 +335,8 @@ Void TEncBinCABAC::encodeBinsEP( UInt binValues, Int numBins )
 */
 Void TEncBinCABAC::encodeBinTrm( UInt binValue )
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
 	m_uiBinsCoded += m_binCountIncrement;
 	m_uiRange -= 2;
 	if( binValue )
@@ -316,11 +357,13 @@ Void TEncBinCABAC::encodeBinTrm( UInt binValue )
 		m_bitsLeft--;    
 	}
 
+	LOGLN(Logs::BinOut, PRINTVAR(m_uiLow), PRINTVAR(m_uiRange), PRINTVAR(m_uiBinsCoded), PRINTVAR(m_bitsLeft), PRINTVAR(m_bufferedByte), PRINTVAR(m_numBufferedBytes));
 	testAndWriteOut();
 }
 
 Void TEncBinCABAC::testAndWriteOut()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	if ( m_bitsLeft < 12 )
 	{
 		writeOut();
@@ -332,6 +375,7 @@ Void TEncBinCABAC::testAndWriteOut()
 */
 Void TEncBinCABAC::writeOut()
 {
+	LOG_FUNCTION_INDENT(Logs::BinOut);
 	UInt leadByte = m_uiLow >> (24 - m_bitsLeft);
 	m_bitsLeft += 8;
 	m_uiLow &= 0xffffffffu >> m_bitsLeft;

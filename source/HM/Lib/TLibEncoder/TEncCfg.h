@@ -170,6 +170,7 @@ protected:
 
   Int       m_iWaveFrontSubstreamsm_chromaCbQpOffset;                 //  Chroma Cb QP Offset (0:default)
   Int       m_chromaCrQpOffset;                 //  Chroma Cr Qp Offset (0:default)
+  Int       m_chromaCbQpOffset;
 
 #if ADAPTIVE_QP_SELECTION
   Bool      m_bUseAdaptQpSelect;

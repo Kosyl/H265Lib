@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Log">
+      <UniqueIdentifier>{3be95c03-8ca4-4fe6-b364-ae1cb1c1dbf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructuresTests">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="UtilitiesTests">
+      <UniqueIdentifier>{e43c5042-d1a4-4d56-9751-1a3588822031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParameterSetsTests">
+      <UniqueIdentifier>{5faa1ae4-de3a-4b81-8eac-cae89df74942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MiscTests">
+      <UniqueIdentifier>{d1b0064f-d7a7-4b70-a8a2-16a117877fa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModulesTests">
+      <UniqueIdentifier>{bafe8011-b551-485e-a5b9-fbcc32ba6e9c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="..\source\Tests\UnitTestLogger\UnitTestLogger.h">
+      <Filter>Log</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\Tests\DataStructuresTests\BitsetTests.cpp">
+      <Filter>DataStructuresTests</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="..\source\Tests\UnitTestLogger\UnitTestLogger.cpp">
+      <Filter>Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\DataStructuresTests\MatrixTests.cpp">
+      <Filter>DataStructuresTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\UtilsTests\FileIOTests.cpp">
+      <Filter>UtilitiesTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\UtilsTests\CalcTests.cpp">
+      <Filter>UtilitiesTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\ParameterSetTests\VideoParameterSetTests.cpp">
+      <Filter>ParameterSetsTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\MiscTests\InterfaceTests.cpp">
+      <Filter>MiscTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\MiscTests\PropertyTests.cpp">
+      <Filter>MiscTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\ParameterSetTests\SequenceParameterSetTests.cpp">
+      <Filter>ParameterSetsTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\DataStructuresTests\PositionTests.cpp">
+      <Filter>DataStructuresTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\DataStructuresTests\PictureTests.cpp">
+      <Filter>DataStructuresTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\ModulesTests\IntraPictureEncoderTests.cpp">
+      <Filter>ModulesTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Tests\MiscTests\ReferenceTests.cpp">
+      <Filter>MiscTests</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

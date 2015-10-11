@@ -1,7 +1,7 @@
 /* The copyright in this software is being made available under the BSD
  * License, included below. This software may be subject to other third party
  * and contributor rights, including patent rights, and no such rights are
- * granted under this license.  
+ * granted under this license.
  *
  * Copyright (c) 2010-2013, ITU/ISO/IEC
  * All rights reserved.
@@ -32,12 +32,12 @@
  */
 
 /** \file     TEncBinCoderCABAC.cpp
-    \brief    binary entropy encoder of CABAC
-*/
+	\brief    binary entropy encoder of CABAC
+	*/
 
 #include "TEncBinCoderCABACCounter.h"
 #include "TLibCommon/TComRom.h"
-#include "LoggingControl.h"
+#include "Logger.h"
 #include <fstream>
 
 #if FAST_BIT_EST
@@ -56,13 +56,17 @@ TEncBinCABACCounter::~TEncBinCABACCounter()
 
 Void TEncBinCABACCounter::finish()
 {
-  m_pcTComBitIf->write(0, UInt(m_fracBits >> 15) );
-  m_fracBits &= 32767;
+	LOG_FUNCTION_INDENT(Logs::Overview);
+	LOGLN(Logs::Overview, "counter");
+	m_pcTComBitIf->write(0, UInt(m_fracBits >> 15));
+	m_fracBits &= 32767;
 }
 
 UInt TEncBinCABACCounter::getNumWrittenBits()
 {
-  return m_pcTComBitIf->getNumberOfWrittenBits() + UInt( m_fracBits >> 15 );
+	LOG_FUNCTION_INDENT(Logs::Overview);
+	LOGLN(Logs::Overview, "counter");
+	return m_pcTComBitIf->getNumberOfWrittenBits() + UInt(m_fracBits >> 15);
 }
 
 /**
@@ -71,13 +75,15 @@ UInt TEncBinCABACCounter::getNumWrittenBits()
  * \param binValue   bin value
  * \param rcCtxModel context model
  */
-Void TEncBinCABACCounter::encodeBin( UInt binValue, ContextModel &rcCtxModel )
+Void TEncBinCABACCounter::encodeBin(UInt binValue, ContextModel &rcCtxModel)
 {
-  m_uiBinsCoded += m_binCountIncrement;
-  
-  m_fracBits += rcCtxModel.getEntropyBits( binValue );
-	
-  rcCtxModel.update( binValue );
+	LOG_FUNCTION_INDENT(Logs::Overview);
+	LOGLN(Logs::Overview, "counter");
+	m_uiBinsCoded += m_binCountIncrement;
+
+	m_fracBits += rcCtxModel.getEntropyBits(binValue);
+
+	rcCtxModel.update(binValue);
 }
 
 /**
@@ -85,11 +91,13 @@ Void TEncBinCABACCounter::encodeBin( UInt binValue, ContextModel &rcCtxModel )
  *
  * \param binValue bin value
  */
-Void TEncBinCABACCounter::encodeBinEP( UInt binValue )
+Void TEncBinCABACCounter::encodeBinEP(UInt binValue)
 {
-	
-  m_uiBinsCoded += m_binCountIncrement;
-  m_fracBits += 32768;
+
+	LOG_FUNCTION_INDENT(Logs::Overview);
+	LOGLN(Logs::Overview, "counter");
+	m_uiBinsCoded += m_binCountIncrement;
+	m_fracBits += 32768;
 }
 
 /**
@@ -98,11 +106,13 @@ Void TEncBinCABACCounter::encodeBinEP( UInt binValue )
  * \param binValues bin values
  * \param numBins number of bins
  */
-Void TEncBinCABACCounter::encodeBinsEP( UInt binValues, Int numBins )
+Void TEncBinCABACCounter::encodeBinsEP(UInt binValues, Int numBins)
 {
-	
-  m_uiBinsCoded += numBins & -m_binCountIncrement;
-  m_fracBits += 32768 * numBins;
+	LOG_FUNCTION_INDENT(Logs::Overview);
+	LOGLN(Logs::Overview, "counter");
+
+	m_uiBinsCoded += numBins & -m_binCountIncrement;
+	m_fracBits += 32768 * numBins;
 }
 
 /**
@@ -110,10 +120,12 @@ Void TEncBinCABACCounter::encodeBinsEP( UInt binValues, Int numBins )
  *
  * \param binValue bin value
  */
-Void TEncBinCABACCounter::encodeBinTrm( UInt binValue )
+Void TEncBinCABACCounter::encodeBinTrm(UInt binValue)
 {
-  m_uiBinsCoded += m_binCountIncrement;
-  m_fracBits += ContextModel::getEntropyBitsTrm( binValue );
+	LOG_FUNCTION_INDENT(Logs::Overview);
+	LOGLN(Logs::Overview, "counter");
+	m_uiBinsCoded += m_binCountIncrement;
+	m_fracBits += ContextModel::getEntropyBitsTrm(binValue);
 }
 
 //! \}

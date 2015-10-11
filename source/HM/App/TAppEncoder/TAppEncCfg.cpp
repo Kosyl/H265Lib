@@ -404,7 +404,7 @@ Bool TAppEncCfg::parseCfg( Int argc, Char* argv[] )
   ("WaveFrontSynchro",            m_iWaveFrontSynchro,             0,          "0: no synchro; 1 synchro with TR; 2 TRR etc")
   ("ScalingList",                 m_useScalingListId,              0,          "0: no scaling list, 1: default scaling lists, 2: scaling lists specified in ScalingListFile")
   ("ScalingListFile",             cfg_ScalingListFile,             string(""), "Scaling list file name")
-  ("SignHideFlag,-SBH",                m_signHideFlag, 1)
+  ("SignHideFlag,-SBH",                m_signHideFlag, 0)
   ("MaxNumMergeCand",             m_maxNumMergeCand,             5u,         "Maximum number of merge candidates")
 
   /* Misc. */

@@ -44,6 +44,7 @@
 
 #include "TLibCommon/TComRom.h"
 #include "TVideoIOYuv.h"
+#include "Logger.h"
 
 using namespace std;
 

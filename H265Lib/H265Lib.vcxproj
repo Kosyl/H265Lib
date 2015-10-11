@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -11,49 +11,83 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\H265Lib\Binarization.h" />
-    <ClInclude Include="..\source\H265Lib\CoeffGroup.h" />
-    <ClInclude Include="..\source\H265Lib\CTU.h" />
-    <ClInclude Include="..\source\H265Lib\CU.h" />
-    <ClInclude Include="..\source\H265Lib\DeblockingFilter.h" />
-    <ClInclude Include="..\source\H265Lib\IntraMode.h" />
-    <ClInclude Include="..\source\H265Lib\IntraPred.h" />
-    <ClInclude Include="..\source\H265Lib\PartitioningStrategy.h" />
-    <ClInclude Include="..\source\H265Lib\Picture.h" />
-    <ClInclude Include="..\source\H265Lib\PU.h" />
-    <ClInclude Include="..\source\H265Lib\QuadTree.h" />
-    <ClInclude Include="..\source\H265Lib\Quant.h" />
-    <ClInclude Include="..\source\H265Lib\RDCost.h" />
-    <ClInclude Include="..\source\H265Lib\SAOInfo.h" />
-    <ClInclude Include="..\source\H265Lib\SeqPicParameters.h" />
-    <ClInclude Include="..\source\H265Lib\Slice.h" />
-    <ClInclude Include="..\source\H265Lib\Tile.h" />
-    <ClInclude Include="..\source\H265Lib\Transform.h" />
-    <ClInclude Include="..\source\H265Lib\TU.h" />
-    <ClInclude Include="..\source\H265Lib\TypeDef.h" />
-    <ClInclude Include="..\source\H265Lib\UnitBase.h" />
-    <ClInclude Include="..\source\H265Lib\Utils.h" />
+    <ClInclude Include="..\source\H265Lib\Common\Enums.h" />
+    <ClInclude Include="..\source\H265Lib\Data\PB.h" />
+    <ClInclude Include="..\source\H265Lib\Data\TB.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\Binarization.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\CoeffGroup.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\CTUEncoder.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\CUEncoder.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\PictureEncoder.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\SliceEncoder.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\ParameterBank.h" />
+    <ClInclude Include="..\source\H265Lib\Data\CTU.h" />
+    <ClInclude Include="..\source\H265Lib\Data\CU.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\DeblockingFilter.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\IntraMode.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\IntraPred.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\PartitioningStrategy.h" />
+    <ClInclude Include="..\source\H265Lib\Data\Picture.h" />
+    <ClInclude Include="..\source\H265Lib\Data\PU.h" />
+    <ClInclude Include="..\source\H265Lib\Data\QuadTree.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\Quant.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\RDCost.h" />
+    <ClInclude Include="..\source\H265Lib\Data\SAOInfo.h" />
+    <ClInclude Include="..\source\H265Lib\Data\Slice.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\Transform.h" />
+    <ClInclude Include="..\source\H265Lib\Data\TU.h" />
+    <ClInclude Include="..\source\H265Lib\Data\BlockBase.h" />
+    <ClInclude Include="..\source\H265Lib\Common\Calc.h" />
+    <ClInclude Include="..\Source\H265Lib\Common\Constants.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\HRDParameters.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\ParametersBundle.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\ParameterSetBase.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\PictureParameterSet.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\ProfileTierLevel.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\ScalingListData.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\SequenceParameterSet.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\ShortTermReferencePictureSet.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\SubLayerOrderingInfo.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\VideoParameterSet.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\VUIParameters.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\H265Lib\Binarization.cpp" />
-    <ClCompile Include="..\source\H265Lib\CoeffGroup.cpp" />
-    <ClCompile Include="..\source\H265Lib\CTU.cpp" />
-    <ClCompile Include="..\source\H265Lib\CU.cpp" />
-    <ClCompile Include="..\source\H265Lib\DeblockingFilter.cpp" />
-    <ClCompile Include="..\source\H265Lib\IntraMode.cpp" />
-    <ClCompile Include="..\source\H265Lib\IntraPred.cpp" />
-    <ClCompile Include="..\source\H265Lib\PartitioningStrategy.cpp" />
-    <ClCompile Include="..\source\H265Lib\Picture.cpp" />
-    <ClCompile Include="..\source\H265Lib\PU.cpp" />
-    <ClCompile Include="..\source\H265Lib\QuadTree.cpp" />
-    <ClCompile Include="..\source\H265Lib\Quant.cpp" />
-    <ClCompile Include="..\source\H265Lib\RDCost.cpp" />
-    <ClCompile Include="..\source\H265Lib\SeqPicParameters.cpp" />
-    <ClCompile Include="..\source\H265Lib\Slice.cpp" />
-    <ClCompile Include="..\source\H265Lib\Tile.cpp" />
-    <ClCompile Include="..\source\H265Lib\Transform.cpp" />
-    <ClCompile Include="..\source\H265Lib\TU.cpp" />
-    <ClCompile Include="..\source\H265Lib\Utils.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\PB.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\TB.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\Binarization.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\CoeffGroup.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\CTU.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\CU.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\CTUEncoder.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\CUEncoder.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\DeblockingFilter.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\IntraMode.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\IntraPred.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\PartitioningStrategy.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\Picture.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\PU.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\QuadTree.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\PictureEncoder.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\Quant.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\RDCost.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\Slice.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\SliceEncoder.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\Transform.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\TU.cpp" />
+    <ClCompile Include="..\source\H265Lib\Common\Calc.cpp" />
+    <ClCompile Include="..\source\H265Lib\ParameterSets\PictureParameterSet.cpp" />
+    <ClCompile Include="..\source\H265Lib\ParameterSets\SequenceParameterSet.cpp" />
+    <ClCompile Include="..\source\H265Lib\ParameterSets\VideoParameterSet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.vcxproj">
+      <Project>{5540167b-3a3c-4ace-9f0f-04267f12e855}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA5CFA92-5EC8-45C2-BCC6-7D98017E75E2}</ProjectGuid>
@@ -64,13 +98,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -86,9 +120,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\Repos\HEVC\source\H265Lib;D:\Repos\HEVC\source\LoggingControl;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\Repos\HEVC\source\H265Lib;D:\Repos\HEVC\source\LoggingControl;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

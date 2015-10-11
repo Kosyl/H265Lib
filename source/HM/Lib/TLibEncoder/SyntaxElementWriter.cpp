@@ -37,6 +37,9 @@
 
 #include "TLibCommon/CommonDef.h"
 #include "SyntaxElementWriter.h"
+#include "Logger.h"
+#include <bitset>
+#include <boost/dynamic_bitset.hpp>
 
 //! \ingroup TLibEncoder
 //! \{
@@ -45,7 +48,6 @@
 
 Void  SyntaxElementWriter::xWriteCodeTr (UInt value, UInt  length, const Char *pSymbolName)
 {
-  xWriteCode (value,length);
   if( g_HLSTraceEnable )
   {
     fprintf( g_hTrace, "%8lld  ", g_nSymbolCounter++ );
@@ -58,36 +60,68 @@ Void  SyntaxElementWriter::xWriteCodeTr (UInt value, UInt  length, const Char *p
       fprintf( g_hTrace, "%-50s u(%d) : %d\n", pSymbolName, length, value ); 
     }
   }
+  LOGLN(Logs::BinOut, pSymbolName, " u(",length,") : ", boost::dynamic_bitset<>(length, value), " (", value, ")");
+
+  xWriteCode(value, length);
 }
 
 Void  SyntaxElementWriter::xWriteUvlcTr (UInt value, const Char *pSymbolName)
 {
-  xWriteUvlc (value);
   if( g_HLSTraceEnable )
   {
     fprintf( g_hTrace, "%8lld  ", g_nSymbolCounter++ );
     fprintf( g_hTrace, "%-50s ue(v) : %d\n", pSymbolName, value ); 
   }
+  //////////////////////////KOSYL
+  UInt tmp = value;
+  UInt uiLength = 1;
+  UInt uiTemp = ++tmp;
+
+  assert(uiTemp);
+
+  while (1 != uiTemp)
+  {
+	  uiTemp >>= 1;
+	  uiLength += 2;
+  }
+  LOGLN(Logs::BinOut, pSymbolName, " ue(", uiLength, ") : ", boost::dynamic_bitset<>(uiLength >> 1, 0), boost::dynamic_bitset<>((uiLength + 1) >> 1, tmp), " (", value, ")");
+  xWriteUvlc(value);
 }
 
 Void  SyntaxElementWriter::xWriteSvlcTr (Int value, const Char *pSymbolName)
 {
-  xWriteSvlc(value);
   if( g_HLSTraceEnable )
   {
     fprintf( g_hTrace, "%8lld  ", g_nSymbolCounter++ );
     fprintf( g_hTrace, "%-50s se(v) : %d\n", pSymbolName, value ); 
   }
+  //////////////////////KOSYL
+  UInt uiCode;
+
+  uiCode = xConvertToUInt(value); 
+  UInt uiLength = 1;
+  UInt uiTemp = ++uiCode;
+
+  assert(uiTemp);
+
+  while (1 != uiTemp)
+  {
+	  uiTemp >>= 1;
+	  uiLength += 2;
+  }
+  LOGLN(Logs::BinOut, pSymbolName, " se(v) : ", boost::dynamic_bitset<>(uiLength >> 1, 0), boost::dynamic_bitset<>((uiLength + 1) >> 1, uiCode), " (", value, ")");
+  xWriteSvlc(value);
 }
 
 Void  SyntaxElementWriter::xWriteFlagTr(UInt value, const Char *pSymbolName)
 {
-  xWriteFlag(value);
   if( g_HLSTraceEnable )
   {
     fprintf( g_hTrace, "%8lld  ", g_nSymbolCounter++ );
     fprintf( g_hTrace, "%-50s u(1)  : %d\n", pSymbolName, value ); 
   }
+  LOGLN(Logs::BinOut, pSymbolName, " u(1) : ", std::bitset<1>(value));
+  xWriteFlag(value);
 }
 
 #endif
@@ -97,6 +131,7 @@ Void SyntaxElementWriter::xWriteCode     ( UInt uiCode, UInt uiLength )
 {
   assert ( uiLength > 0 );
   m_pcBitIf->write( uiCode, uiLength );
+  
 }
 
 Void SyntaxElementWriter::xWriteUvlc     ( UInt uiCode )

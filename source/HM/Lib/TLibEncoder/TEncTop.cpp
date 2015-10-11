@@ -345,6 +345,8 @@ Void TEncTop::deletePicBuffer()
 Void TEncTop::encode(Bool flush, TComPicYuv* pcPicYuvOrg, TComList<TComPicYuv*>& rcListPicYuvRecOut, std::list<AccessUnit>& accessUnitsOut, Int& iNumEncoded)
 {
 	LOG_FUNCTION_INDENT(Logs::Overview);
+	LOGLN(Logs::Overview,"access units out count:",accessUnitsOut.size());
+
 	if (pcPicYuvOrg) {
 		// get original YUV
 		TComPic* pcPicCurr = NULL;

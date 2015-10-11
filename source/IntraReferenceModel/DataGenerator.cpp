@@ -129,7 +129,7 @@ std::string PredWriter::getImgComp() const
   else if (pu->getImgComp() == CR)
     return "CR";
   else
-    return "LUMA";
+    return "Luma";
 }
 
 void PredWriter::storeHeader(std::ofstream *targetFile) const
@@ -149,7 +149,7 @@ void PredWriter::storePredSamples() const
   int blockY = getBlockY() % pu->getPuSize();
   int blockSize = pu->getPuSize() > 4 ? 8 : 4;
 
-/*  if (pu->getImgComp() != LUMA)
+/*  if (pu->getImgComp() != Luma)
   {
     blockX = 0;
     blockY = 0;

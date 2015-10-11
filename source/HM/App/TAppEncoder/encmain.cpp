@@ -32,13 +32,14 @@
  */
 
 /** \file     encmain.cpp
-    \brief    Encoder application main
+	\brief    Encoder application main
 */
 
 #include <time.h>
 #include <iostream>
 #include "TAppEncTop.h"
 #include "TAppCommon/program_options_lite.h"
+#include <windows.h>
 
 using namespace std;
 namespace po = df::program_options_lite;
@@ -68,16 +69,18 @@ int main(int argc, char* argv[])
   // parse configuration
   try
   {
-    if(!cTAppEncTop.parseCfg( argc, argv ))
-    {
-      cTAppEncTop.destroy();
-      return 1;
-    }
+	if(!cTAppEncTop.parseCfg( argc, argv ))
+	{
+		cTAppEncTop.destroy();
+		if (IsDebuggerPresent())getchar();
+	  return 1;
+	}
   }
   catch (po::ParseFailure& e)
   {
-    cerr << "Error parsing option \""<< e.arg <<"\" with argument \""<< e.val <<"\"." << endl;
-    return 1;
+	  cerr << "Error parsing option \"" << e.arg << "\" with argument \"" << e.val << "\"." << endl;
+	  if (IsDebuggerPresent())getchar();
+	return 1;
   }
 
   // starting time
@@ -94,6 +97,7 @@ int main(int argc, char* argv[])
   // destroy application encoder class
   cTAppEncTop.destroy();
 
+  if (IsDebuggerPresent())getchar();
   return 0;
 }
 

@@ -86,10 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265App\Main.cpp" />
-    <ClCompile Include="..\source\H265Lib\Binarization.cpp" />
-    <ClCompile Include="..\source\H265Lib\CoeffGroup.cpp" />
-    <ClCompile Include="..\source\H265Lib\SeqPicParameters.cpp" />
-    <ClCompile Include="..\source\H265Lib\Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
