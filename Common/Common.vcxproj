@@ -80,18 +80,6 @@
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\source\H265Lib\Common\FileIO.cpp" />
-    <ClCompile Include="..\source\H265Lib\Common\Logger.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\source\H265Lib\Common\Bitset.h" />
-    <ClInclude Include="..\source\H265Lib\Common\FileIO.h" />
-    <ClInclude Include="..\Source\H265Lib\Common\Matrix.h" />
-    <ClInclude Include="..\source\H265Lib\Common\Singleton.h" />
-    <ClInclude Include="..\source\H265Lib\Common\TypeDef.h" />
-    <ClInclude Include="..\source\H265Lib\Common\Logger.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -72,114 +72,42 @@ namespace H265Lib
 		Bool _shouldDeleteStream;
 
 		template<typename T>
-		Void write(T s)
-		{
-			*_logStream << s;
-		}
+		Void write(T s);
 
 		template<>
-		Void write(NewLineToken)
-		{
-			*_logStream << std::endl;
-			printSpaces();
-		}
+		Void write(NewLineToken);
 
 	public:
 
-		Logger(std::string logPath) :
-			_logPath(logPath),
-			_numTabs(0),
-			_step(2),
-			_spaces(""),
-			_shouldDeleteStream(true)
-		{
-			_logStream = new std::ofstream(logPath, std::fstream::out | std::fstream::ate);
-		}
+		Logger(std::string logPath);
 
-		Logger() :
-			_logPath(""),
-			_numTabs(0),
-			_step(2),
-			_spaces(""),
-			_shouldDeleteStream(false)
-		{
-			_logStream = &std::cout;
-		}
+		Logger();
 
-		static std::shared_ptr<Logger> createFileLogger(std::string logPath)
-		{
-			return std::make_shared<Logger>(logPath);
-		}
+		static std::shared_ptr<Logger> createFileLogger(std::string logPath);
 
-		static std::shared_ptr<Logger> createConsoleLogger()
-		{
-			return std::make_shared<Logger>();
-		}
+		static std::shared_ptr<Logger> createConsoleLogger();
 
-		Void printSpaces()
-		{
-			for (UInt i = 0; i < _numTabs; ++i)
-				*_logStream << "  ";
-		}
+		Void printSpaces();
 
-		~Logger()
-		{
-			if (_shouldDeleteStream)
-			{
-				_logStream->flush();
-				delete _logStream;
-			}
-			_logStream = nullptr;
-		}
+		~Logger();
 
-		Void increaseSpaces()
-		{
-			setTabLength(_numTabs + 1);
-		}
+		Void increaseSpaces();
 
-		Void decreaseSpaces()
-		{
-			setTabLength(_numTabs - 1);
-		}
+		Void decreaseSpaces();
 
-		Void setTabLength(Int len)
-		{
-			if (len >= 0)
-			{
-				_numTabs = len;
-			}
-			else
-				setTabLength(0);
-		}
+		Void setTabLength(Int len);
 
-		UInt getTabLength()
-		{
-			return _numTabs;
-		}
+		UInt getTabLength();
 
-		Void setTabStep(UInt len)
-		{
-			_step = len;
-			setTabLength(_numTabs);
-		}
+		Void setTabStep(UInt len);
 
-		std::ostream& getStream()
-		{
-			return *_logStream;
-		}
+		std::ostream& getStream();
 
 		template<typename T>
-		void printValues(T&& arg)
-		{
-			write(std::forward<T>(arg));
-		}
+		void printValues(T&& arg);
 
 		template<typename T1, typename... Tn>
-		void printValues(T1&& arg1, Tn&&... args)
-		{
-			write(std::forward<T1>(arg1));
-			printValues(std::forward<Tn>(args)...);
-		}
+		void printValues(T1&& arg1, Tn&&... args);
 	};
 
 	class LoggingControl : public Singleton < LoggingControl >
@@ -208,9 +136,26 @@ namespace H265Lib
 		void turnOn(Logs logId);
 	};
 
-	Void LOG_TAB(Logs key);
+	template<typename... Params>
+	Void printlnToLog(Logs id, Params... args);
 
-	Void LOG_UNTAB(Logs key);
+	template<typename... Params>
+	Void printToLog(Logs id, Params... args);
+
+	template<typename T>
+	Void printArrayToLog(Logs id, const char* name, T** matrix, int sizeX, int sizeY);
+
+	template<typename T>
+	Void printArrayToLog1Dto2D(Logs id, const char* name, T* matrix, int sizeX, int sizeY, int stride);
+
+	template<typename T, template<class> class TMatrix>
+	void log_printMatrix(Logs logId, TMatrix<T>& matrix);
+
+	template<typename T, template<class> class TMatrix, template<class> class SptrTMatrix>
+	void log_printMatrix(Logs logId, SptrTMatrix<TMatrix<T>> pmatrix);
+
+#pragma region Impl
+
 
 	template<typename... Params>
 	Void printlnToLog(Logs id, Params... args)
@@ -222,6 +167,7 @@ namespace H265Lib
 		log->printValues(args...);
 		log->getStream() << std::endl;
 	}
+
 	template<typename... Params>
 	Void printToLog(Logs id, Params... args)
 	{
@@ -289,7 +235,6 @@ namespace H265Lib
 		}
 	}
 
-
 	template<typename T, template<class> class TMatrix, template<class> class SptrTMatrix>
 	void log_printMatrix(Logs logId, SptrTMatrix<TMatrix<T>> pmatrix)
 	{
@@ -306,6 +251,34 @@ namespace H265Lib
 			log->getStream() << std::endl;
 		}
 	}
+
+	template<typename T>
+	Void Logger::write(T s)
+	{
+		*_logStream << s;
+	}
+
+	template<>
+	Void Logger::write(NewLineToken)
+	{
+		*_logStream << std::endl;
+		printSpaces();
+	}
+
+	template<typename T>
+	void Logger::printValues(T&& arg)
+	{
+		write(std::forward<T>(arg));
+	}
+
+	template<typename T1, typename... Tn>
+	void Logger::printValues(T1&& arg1, Tn&&... args)
+	{
+		write(std::forward<T1>(arg1));
+		printValues(std::forward<Tn>(args)...);
+	}
+
+#pragma endregion
 
 #ifdef _DEBUG
 
@@ -340,46 +313,24 @@ namespace H265Lib
 
 	class Indent
 	{
+	private:
 		Logs m_id;
+
+		Void tab(Logs logId);
+		Void untab(Logs logId);
+
 	public:
-		Indent(Logs inId) :
-			m_id(inId)
-		{
-			auto log = LoggingControl::instance().logs[inId];
-			if (log == nullptr)
-				return;
-			LOG_TAB(inId);
-		}
-		Indent(const char* func, Logs inId) :
-			m_id(inId)
-		{
-			auto log = LoggingControl::instance().logs[inId];
-			if (log == nullptr)
-				return;
-			LOGLN(inId, func);
-			LOG_TAB(inId);
-		}
-		~Indent()
-		{
-			auto log = LoggingControl::instance().logs[m_id];
-			if (log == nullptr)
-				return;
-			LOG_UNTAB(m_id);
-		}
+		Indent(Logs inId);
+		Indent(const char* func, Logs inId);
+
+		~Indent();
 	};
 
 	class Mute
 	{
 		Logs m_id;
 	public:
-		Mute(Logs inId) :
-			m_id(inId)
-		{
-			LOG_OFF(inId);
-		}
-		~Mute()
-		{
-			LOG_ON(m_id);
-		}
+		Mute(Logs inId);
+		~Mute();
 	};
 }

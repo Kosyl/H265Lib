@@ -30,11 +30,11 @@ namespace UnitTests
 
 		TEST_METHOD(clipToRange_higherThanRange_returnsUpperBound)
 		{
-			int i = 400;
+			unsigned int i = 400;
 
-			auto result = Calc::clipToRange(90, 255, i);
+			auto result = Calc::clipToRange(90u, 255u, i);
 
-			Assert::AreEqual(255, result);
+			Assert::AreEqual(255u, result);
 		}
 
 		TEST_METHOD(log2Int_valuesTest)

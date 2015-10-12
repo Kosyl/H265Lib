@@ -132,6 +132,24 @@
     <ClInclude Include="..\source\H265Lib\Modules\CUEncoder.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\TypeDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Bitset.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\FileIO.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Logger.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\H265Lib\Common\Matrix.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Singleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265Lib\ParameterSets\PictureParameterSet.cpp">
@@ -211,6 +229,21 @@
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\Modules\CUEncoder.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\FileIO.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\Logger.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\CalcImpl.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\Bitset.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\LoggerImpl.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

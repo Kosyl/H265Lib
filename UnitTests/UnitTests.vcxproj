@@ -111,9 +111,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.vcxproj">
-      <Project>{5540167b-3a3c-4ace-9f0f-04267f12e855}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\H265Lib\H265Lib.vcxproj">
       <Project>{ea5cfa92-5ec8-45c2-bcc6-7d98017e75e2}</Project>
     </ProjectReference>

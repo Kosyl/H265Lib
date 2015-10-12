@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "H265Lib", "H265Lib\H265Lib.vcxproj", "{EA5CFA92-5EC8-45C2-BCC6-7D98017E75E2}"
 EndProject
@@ -60,8 +60,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HM", "HM", "{1B10528C-9B4F-4531-BBFC-FA5A2AEFECEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{75EF3B11-8337-4A90-A98A-9F0B0FAD3282}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{5540167B-3A3C-4ACE-9F0F-04267F12E855}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{17465E17-FEC4-4A21-81B4-EA2649D4DB59}"
 EndProject
@@ -171,14 +169,6 @@ Global
 		{D647355B-1D89-4584-B19B-7963C97466C5}.Release|Win32.ActiveCfg = Release|Win32
 		{D647355B-1D89-4584-B19B-7963C97466C5}.Release|Win32.Build.0 = Release|Win32
 		{D647355B-1D89-4584-B19B-7963C97466C5}.Release|x64.ActiveCfg = Release|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Debug|ARM.ActiveCfg = Debug|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Debug|Win32.Build.0 = Debug|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Debug|x64.ActiveCfg = Debug|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Release|ARM.ActiveCfg = Release|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Release|Win32.ActiveCfg = Release|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Release|Win32.Build.0 = Release|Win32
-		{5540167B-3A3C-4ACE-9F0F-04267F12E855}.Release|x64.ActiveCfg = Release|Win32
 		{17465E17-FEC4-4A21-81B4-EA2649D4DB59}.Debug|ARM.ActiveCfg = Debug|Win32
 		{17465E17-FEC4-4A21-81B4-EA2649D4DB59}.Debug|Win32.ActiveCfg = Debug|Win32
 		{17465E17-FEC4-4A21-81B4-EA2649D4DB59}.Debug|Win32.Build.0 = Debug|Win32

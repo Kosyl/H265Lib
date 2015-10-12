@@ -71,7 +71,7 @@ namespace H265Lib
 		return Logger::createFileLogger(path);
 	}
 
-	Void LOG_TAB(Logs key)
+	Void Indent::tab(Logs key)
 	{
 		auto log = LoggingControl::instance().logs[key];
 		if (log == nullptr)
@@ -81,7 +81,7 @@ namespace H265Lib
 		log->increaseSpaces();
 	}
 
-	Void LOG_UNTAB(Logs key)
+	Void Indent::untab(Logs key)
 	{
 		auto log = LoggingControl::instance().logs[key];
 		if (log == nullptr)
@@ -89,5 +89,125 @@ namespace H265Lib
 		log->decreaseSpaces();
 		log->printSpaces();
 		log->getStream() << "}" << std::endl;
+	}
+
+	Indent::Indent(Logs inId):
+		m_id(inId)
+	{
+		auto log = LoggingControl::instance().logs[inId];
+		if (log == nullptr)
+			return;
+		tab(inId);
+	}
+
+	Indent::Indent(const char* func, Logs inId):
+		m_id(inId)
+	{
+		auto log = LoggingControl::instance().logs[inId];
+		if (log == nullptr)
+			return;
+		LOGLN(inId, func);
+		tab(inId);
+	}
+
+	Indent::~Indent()
+	{
+		auto log = LoggingControl::instance().logs[m_id];
+		if (log == nullptr)
+			return;
+		untab(m_id);
+	}
+
+	Mute::Mute(Logs inId):
+		m_id(inId)
+	{
+		LOG_OFF(inId);
+	}
+
+	Mute::~Mute()
+	{
+		LOG_ON(m_id);
+	}
+
+	Logger::Logger(std::string logPath):
+		_logPath(logPath),
+		_numTabs(0),
+		_step(2),
+		_spaces(""),
+		_shouldDeleteStream(true)
+	{
+		_logStream = new std::ofstream(logPath, std::fstream::out | std::fstream::ate);
+	}
+
+	Logger::Logger():
+		_logPath(""),
+		_numTabs(0),
+		_step(2),
+		_spaces(""),
+		_shouldDeleteStream(false)
+	{
+		_logStream = &std::cout;
+	}
+
+	std::shared_ptr<Logger> Logger::createFileLogger(std::string logPath)
+	{
+		return std::make_shared<Logger>(logPath);
+	}
+
+	std::shared_ptr<Logger> Logger::createConsoleLogger()
+	{
+		return std::make_shared<Logger>();
+	}
+
+	Void Logger::printSpaces()
+	{
+		for (UInt i = 0; i < _numTabs; ++i)
+			*_logStream << "  ";
+	}
+
+	Logger::~Logger()
+	{
+		if (_shouldDeleteStream)
+		{
+			_logStream->flush();
+			delete _logStream;
+		}
+		_logStream = nullptr;
+	}
+
+	Void Logger::increaseSpaces()
+	{
+		setTabLength(_numTabs + 1);
+	}
+
+	Void Logger::decreaseSpaces()
+	{
+		setTabLength(_numTabs - 1);
+	}
+
+	Void Logger::setTabLength(Int len)
+	{
+		if (len >= 0)
+		{
+			_numTabs = len;
+		}
+		else
+			setTabLength(0);
+	}
+
+	UInt Logger::getTabLength()
+	{
+		return _numTabs;
+	}
+
+	Void Logger::setTabStep(UInt len)
+	{
+		_step = len;
+		setTabLength(_numTabs);
+	}
+
+	std::ostream& Logger::getStream()
+	{
+		return *_logStream;
 	}
 }

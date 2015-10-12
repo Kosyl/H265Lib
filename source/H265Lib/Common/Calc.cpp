@@ -14,7 +14,7 @@ namespace H265Lib
 			return log2;
 		}
 
-		size_t numBits(const int value)
+		size_t numBits(const Int value)
 		{
 			return log2Int(value) + 1;
 		}
@@ -23,5 +23,6 @@ namespace H265Lib
 		{
 			return numBits((Int)value);
 		}
+
 	}
 }
