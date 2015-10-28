@@ -7,6 +7,7 @@ namespace H265Lib
 	{
 
 	}
+
 	Bitset::Bitset() :
 		vector<bool>(0)
 	{

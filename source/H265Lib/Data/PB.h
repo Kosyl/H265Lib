@@ -64,7 +64,7 @@ namespace H265Lib
 			return itsPredictionDone;
 		}*/
 
-		virtual Void printDescription(Logs logId) override;
+		virtual Void printDescription(Logs logId, Bool recursive = true) override;
 	};
 
 }

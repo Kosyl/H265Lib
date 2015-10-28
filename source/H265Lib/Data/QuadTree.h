@@ -16,23 +16,11 @@ namespace H265Lib
 	protected:
 
 		Matrix<std::shared_ptr<self>> _subTrees;
-
 		std::shared_ptr<T> _leaf;
 
 		QTMode _mode;
 
-		void refreshPositionInCTU()
-		{
-			auto log2CTUSize = Parameters.Sps->getLog2CTUSize();
-			auto log2MinBlock = Parameters.Sps->getLog2MinTUSize();
-
-			auto x = this->PositionInPicture.X >> log2CTUSize;
-			auto y = this->PositionInPicture.Y >> log2CTUSize;
-			PositionInCTU.X = x >> log2MinBlock;
-			PositionInCTU.Y = y >> log2MinBlock;
-
-			PositionInCTU.resolveIdx(*Parameters.Sps, Indexing::ZScanByBlock);
-		}
+		void refreshPositionInCTU();
 
 		Void setLeaf(std::shared_ptr<T> rhs)
 		{
@@ -49,29 +37,14 @@ namespace H265Lib
 			return std::make_shared<T>(PositionInPicture.X, PositionInPicture.Y, _size, Parameters);
 		}
 
-		Void createSubTrees()
-		{
-			_subTrees(0, 0) = makeSubTree(PositionInPicture.X, PositionInPicture.Y);
-
-			Bool createRight = PositionInPicture.X + _size / 2 < Parameters.Sps->getPicWidth();
-			Bool createLower = PositionInPicture.Y + _size / 2 < Parameters.Sps->getPicHeight();
-
-			if (createRight)
-				_subTrees(1, 0) = makeSubTree(PositionInPicture.X + (_size / 2), PositionInPicture.Y);
-
-			if (createLower)
-				_subTrees(0, 1) = makeSubTree(PositionInPicture.X, PositionInPicture.Y + (_size / 2));
-
-			if (createLower && createRight)
-				_subTrees(1, 1) = makeSubTree(PositionInPicture.X + (_size / 2), PositionInPicture.Y + (_size / 2));
-		}
+		Void createSubTrees();
 
 	public:
 
 		Position PositionInCTU;
 
 		QuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters);
-		virtual ~QuadTree();
+		virtual ~QuadTree() = default;
 
 		std::shared_ptr<self> getSubTree(TreePart placement)
 		{
@@ -99,49 +72,12 @@ namespace H265Lib
 			return _leaf;
 		}
 
-		Void clear()
-		{
-			for (auto& subtree:_subTrees)
-			{
-				subtree = nullptr;
-			}
-			setLeaf(nullptr);
-			_mode = QTMode::Unset;
-		}
+		Void clear();
 
-		QTMode getQTMode() const
-		{
-			return _mode;
-		}
-
-		void rebuild(QTMode val)
-		{
-			assert(val != QTMode::Unset);
-
-			clear();
-			_mode = val;
-
-			switch (_mode)
-			{
-			case QTMode::Split:
-				createSubTrees();
-				break;
-			case QTMode::Leaf:
-			default:
-				_leaf = makeLeaf();
-				break;
-			}
-		}
-
-		Bool isLeaf()
-		{
-			return _mode == QTMode::Leaf;
-		}
-
-		Bool isSplit()
-		{
-			return _mode == QTMode::Split;
-		}
+		QTMode getQTMode() const;
+		void rebuild(QTMode val);
+		Bool isLeaf() const;
+		Bool isSplit() const;
 	};
 
 	class CUQuadTree : public QuadTree < CU, CUQuadTree >
@@ -151,20 +87,11 @@ namespace H265Lib
 	public:
 
 		CUQuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters);
+		virtual ~CUQuadTree() = default;
 
-		virtual ~CUQuadTree();
+		std::shared_ptr<CU> getCU();
 
-		std::shared_ptr<CU> getCU()
-		{
-			return _leaf;
-		}
-
-		/*virtual std::shared_ptr<CUQuadTree> createSubTree(UInt x, UInt y) override
-		{
-			return std::make_shared<CUQuadTree>(x, y, _size/2);
-		}*/
-
-		virtual Void printDescription(Logs logId) override;
+		virtual Void printDescription(Logs logId, Bool recursive = true) override;
 	};
 
 	class TUQuadTree : public QuadTree < TU, TUQuadTree >
@@ -174,20 +101,11 @@ namespace H265Lib
 	public:
 
 		TUQuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters);
+		virtual ~TUQuadTree() = default;
 
-		virtual ~TUQuadTree();
+		std::shared_ptr<TU> getTU();
 
-		std::shared_ptr<TU> getTU()
-		{
-			return _leaf;
-		}
-
-		/*virtual std::shared_ptr<TUQuadTree > createSubTree(UInt x, UInt y) override
-		{
-			return std::make_shared<TUQuadTree>(x, y, _size/2);
-		}*/
-
-		virtual Void printDescription(Logs logId) override;
+		virtual Void printDescription(Logs logId, Bool recursive = true) override;
 
 		std::shared_ptr<TU> getTuContainingPosition(UInt x, UInt y);
 	};

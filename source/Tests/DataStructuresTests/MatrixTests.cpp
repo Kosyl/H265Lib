@@ -65,22 +65,6 @@ namespace UnitTests
 
 			m2.at(1, 1) = 3;
 
-			Assert::AreEqual(m.at(1, 1), 3);
-			Assert::AreEqual(m2.at(1, 1), 3);
-		}
-
-		TEST_METHOD(DeepCopyTest)
-		{
-			Log::println(__FUNCTION__);
-
-			auto m = H265Lib::Matrix<Int>(3, 3);
-			auto m2 = m.deepCopy();
-
-			Assert::AreEqual(m.at(1, 1), 0);
-			Assert::AreEqual(m2.at(1, 1), 0);
-
-			m2.at(1, 1) = 3;
-
 			Assert::AreEqual(m.at(1, 1), 0);
 			Assert::AreEqual(m2.at(1, 1), 3);
 		}

@@ -9,11 +9,17 @@ namespace H265Lib
 	{
 	}
 
-	CTU::~CTU()
+	std::shared_ptr<CUQuadTree> CTU::getCUQuadTree()
 	{
+		return _CUQuadTree;
 	}
 
-	Void CTU::printDescription()
+	Bool CTU::isPartitioned()
+	{
+		return _CUQuadTree != nullptr;
+	}
+
+	Void CTU::printDescription(Logs logId, Bool recursive)
 	{
 	}
 }

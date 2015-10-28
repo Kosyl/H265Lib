@@ -74,7 +74,7 @@ namespace H265Lib
 
 		virtual Void reconstructionLoop() = 0;*/
 
-		virtual Void printDescription( Logs logId ) override;
+		virtual Void printDescription(Logs logId, Bool recursive = true) override;
 	};
 
 	class CUIntra : public CU
@@ -134,6 +134,6 @@ namespace H265Lib
 		Double getTotalCost();
 		*/
 
-		virtual Void printDescription(Logs logId) override;
+		virtual Void printDescription(Logs logId, Bool recursive = true) override;
 	};
 }

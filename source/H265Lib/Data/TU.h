@@ -31,7 +31,7 @@ namespace H265Lib
 		{
 		}
 
-		virtual Void printDescription(Logs logId) override;
+		virtual Void printDescription(Logs logId, Bool recursive = true) override;
 
 		/*std::shared_ptr<TB> getTB(ImgComp comp) const
 		{

@@ -19,6 +19,7 @@
     <ClInclude Include="..\source\H265Lib\Common\Singleton.h" />
     <ClInclude Include="..\source\H265Lib\Common\TypeDef.h" />
     <ClInclude Include="..\source\H265Lib\Data\PB.h" />
+    <ClInclude Include="..\source\H265Lib\Data\ReferenceSamples.h" />
     <ClInclude Include="..\source\H265Lib\Data\TB.h" />
     <ClInclude Include="..\source\H265Lib\Modules\Binarization.h" />
     <ClInclude Include="..\source\H265Lib\Modules\CoeffGroup.h" />
@@ -59,13 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265Lib\Common\Bitset.cpp" />
-    <ClCompile Include="..\source\H265Lib\Common\CalcImpl.cpp" />
     <ClCompile Include="..\source\H265Lib\Common\FileIO.cpp" />
     <ClCompile Include="..\source\H265Lib\Common\Logger.cpp" />
-    <ClCompile Include="..\source\H265Lib\Common\LoggerImpl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\BlockBase.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\PB.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\TB.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\Binarization.cpp" />

@@ -61,11 +61,8 @@ namespace H265Lib
 	private:
 
 		std::string _logPath;
-
 		std::ostream* _logStream;
-
 		std::string _spaces;
-
 		UInt _numTabs;
 
 		UInt _step;

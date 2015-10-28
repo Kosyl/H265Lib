@@ -235,7 +235,7 @@ namespace H265Lib
 	//	itsPredictionDone = true;
 	//}
 
-	Void PBIntra::printDescription( Logs logId)
+	Void PBIntra::printDescription( Logs logId, bool recursive)
 	{
 		////LOG( "OPT" ) << "PBIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", comp: " << itsComp << std::endl;
 	}

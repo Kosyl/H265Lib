@@ -11,7 +11,7 @@ namespace H265Lib
 	{
 	}
 
-	Void PUIntra::printDescription( Logs logId)
+	Void PUIntra::printDescription( Logs logId, bool recursive)
 	{
 		////LOG( "PART" ) << "PUIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
 

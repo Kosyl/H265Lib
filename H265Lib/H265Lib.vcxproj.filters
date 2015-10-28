@@ -150,6 +150,9 @@
     <ClInclude Include="..\source\H265Lib\Common\Singleton.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\ReferenceSamples.h">
+      <Filter>Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265Lib\ParameterSets\PictureParameterSet.cpp">
@@ -236,14 +239,11 @@
     <ClCompile Include="..\source\H265Lib\Common\Logger.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Common\CalcImpl.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\H265Lib\Common\Bitset.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Common\LoggerImpl.cpp">
-      <Filter>Common</Filter>
+    <ClCompile Include="..\source\H265Lib\Data\BlockBase.cpp">
+      <Filter>Data</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

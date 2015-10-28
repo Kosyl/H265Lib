@@ -16,19 +16,11 @@ namespace H265Lib
 	public:
 
 		CTU(UShort x, UShort y, UShort size, ParametersBundle parameters);
+		virtual ~CTU() = default;
 
-		virtual ~CTU();
+		std::shared_ptr<CUQuadTree> getCUQuadTree();
+		Bool isPartitioned();
 
-		std::shared_ptr<CUQuadTree> getCUQuadTree()
-		{
-			return _CUQuadTree;
-		}
-
-		Bool isPartitioned()
-		{
-			return _CUQuadTree != nullptr;
-		}
-
-		virtual Void printDescription();
+		virtual Void printDescription(Logs logId, Bool recursive = true) override;
 	};
 }

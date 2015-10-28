@@ -1,1 +1,12 @@
-﻿  H265Lib.vcxproj -> D:\Repos\HEVC\Debug\H265Lib.lib
+﻿  QuadTree.cpp
+d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
+  Generating Code...
+  Compiling...
+  PictureEncoder.cpp
+d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
+  Picture.cpp
+d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
+  CTU.cpp
+d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
+  Generating Code...
+  H265Lib.vcxproj -> D:\Repos\HEVC\Debug\H265Lib.lib

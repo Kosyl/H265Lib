@@ -36,16 +36,18 @@ namespace H265Lib
 	}
 	}*/
 
-	/*Bool TB::hasAtLeastOneNonZeroCoeff()
+	Bool TB::hasAtLeastOneNonZeroCoeff()
 	{
-	for (Int i = 0; i < itsSize; ++i)
-	{
-	for (Int j = 0; j < itsSize; ++j)
-	{
-	if (itsCoefficients[i][j] != 0)
-	return true;
+		for (auto& coeff : _transformCoefficients)
+		{
+			if (coeff != 0)
+				return true;
+		}
+		return false;
 	}
+
+	Void TB::printDescription(Logs logId, Bool recursive)
+	{
+		BlockBase::printDescription(logId, recursive);
 	}
-	return false;
-	}*/
 }

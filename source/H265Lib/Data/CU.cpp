@@ -22,7 +22,7 @@ namespace H265Lib
 		
 	}
 
-	Void CU::printDescription( Logs logId)
+	Void CU::printDescription(Logs logId, Bool recursive)
 	{
 		////LOG( "PART" ) << "CU[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << std::endl;
 	}
@@ -48,7 +48,7 @@ namespace H265Lib
 	{
 	}
 
-	Void CUIntra::printDescription( Logs logId)
+	Void CUIntra::printDescription(Logs logId, Bool recursive)
 	{
 		////LOG( "PART" ) << "CUIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", chromaModeDerivation: " << itsChromaPredictionDerivationType << "; partMode: " << ( itsPartitionMode == PART_NxN ? "NxN" : "2Nx2N" ) << std::endl;
 		//printMatrix( itsParentPicture->getSamples( Luma ), itsSize, itsSize, //LOG( "PART" ), itsX, itsY, "" );
