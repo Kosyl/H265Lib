@@ -80,6 +80,8 @@ namespace H265Lib
 		Bool isSplit() const;
 	};
 
+#include "QuadTreeImpl.cpp"
+
 	class CUQuadTree : public QuadTree < CU, CUQuadTree >
 	{
 	private:

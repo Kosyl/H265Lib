@@ -1,12 +1,42 @@
-﻿  QuadTree.cpp
-d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
-  Generating Code...
-  Compiling...
-  PictureEncoder.cpp
-d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
-  Picture.cpp
-d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
-  CTU.cpp
-d:\repos\hevc\source\h265lib\parametersets\parametersbundle.h(67): warning C4267: 'argument': conversion from 'size_t' to 'UShort', possible loss of data
-  Generating Code...
-  H265Lib.vcxproj -> D:\Repos\HEVC\Debug\H265Lib.lib
+﻿Build started 2015-11-05 13:15:28.
+     1>Project "D:\Repos\HEVC\H265Lib\H265Lib.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\H265Lib.pdb" /Gd /TP /analyze- /errorReport:prompt ..\source\H265Lib\Common\FileIO.cpp
+         FileIO.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"D:\Repos\HEVC\Debug\H265Lib.lib" /NOLOGO Debug\Bitset.obj
+         Debug\FileIO.obj
+         Debug\Logger.obj
+         Debug\BlockBase.obj
+         Debug\PB.obj
+         Debug\TB.obj
+         Debug\Binarization.obj
+         Debug\CoeffGroup.obj
+         Debug\CTU.obj
+         Debug\CU.obj
+         Debug\CTUEncoder.obj
+         Debug\CUEncoder.obj
+         Debug\DeblockingFilter.obj
+         Debug\IntraMode.obj
+         Debug\IntraPred.obj
+         Debug\PartitioningStrategy.obj
+         Debug\Picture.obj
+         Debug\PU.obj
+         Debug\QuadTree.obj
+         Debug\PictureEncoder.obj
+         Debug\Quant.obj
+         Debug\RDCost.obj
+         Debug\Slice.obj
+         Debug\SliceEncoder.obj
+         Debug\Transform.obj
+         Debug\TU.obj
+         Debug\Calc.obj
+         Debug\PictureParameterSet.obj
+         Debug\SequenceParameterSet.obj
+         Debug\VideoParameterSet.obj
+         H265Lib.vcxproj -> D:\Repos\HEVC\Debug\H265Lib.lib
+     1>Done Building Project "D:\Repos\HEVC\H265Lib\H265Lib.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.92

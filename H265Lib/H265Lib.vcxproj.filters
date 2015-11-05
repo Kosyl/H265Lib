@@ -13,6 +13,12 @@
     <Filter Include="Modules">
       <UniqueIdentifier>{88bdb01f-16bd-413f-b4c1-7c2a8ecf1960}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Headers">
+      <UniqueIdentifier>{c75188b2-6538-4756-9e85-21147fe97c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Source">
+      <UniqueIdentifier>{6ffedc20-b6d2-45a4-9f20-c826eb5d68cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\H265Lib\ParameterSets\PictureParameterSet.h">
@@ -20,9 +26,6 @@
     </ClInclude>
     <ClInclude Include="..\source\H265Lib\ParameterSets\SequenceParameterSet.h">
       <Filter>ParameterSets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\H265Lib\Common\Constants.h">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\source\H265Lib\Data\CTU.h">
       <Filter>Data</Filter>
@@ -102,12 +105,6 @@
     <ClInclude Include="..\source\H265Lib\ParameterSets\ParameterBank.h">
       <Filter>ParameterSets</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Common\Enums.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Common\Calc.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\H265Lib\Data\BlockBase.h">
       <Filter>Data</Filter>
     </ClInclude>
@@ -132,26 +129,35 @@
     <ClInclude Include="..\source\H265Lib\Modules\CUEncoder.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Common\TypeDef.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Common\Bitset.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Common\FileIO.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Common\Logger.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\H265Lib\Common\Matrix.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Common\Singleton.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\H265Lib\Data\ReferenceSamples.h">
       <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Bitset.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Calc.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\H265Lib\Common\Constants.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Enums.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\FileIO.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Logger.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\H265Lib\Common\Matrix.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\Singleton.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Common\TypeDef.h">
+      <Filter>Common\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -212,9 +218,6 @@
     <ClCompile Include="..\source\H265Lib\ParameterSets\VideoParameterSet.cpp">
       <Filter>ParameterSets</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Common\Calc.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\H265Lib\Data\PB.cpp">
       <Filter>Data</Filter>
     </ClCompile>
@@ -233,17 +236,23 @@
     <ClCompile Include="..\source\H265Lib\Modules\CUEncoder.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Common\FileIO.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Common\Logger.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Common\Bitset.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\H265Lib\Data\BlockBase.cpp">
       <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\QuadTreeImpl.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\Bitset.cpp">
+      <Filter>Common\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\Calc.cpp">
+      <Filter>Common\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\FileIO.cpp">
+      <Filter>Common\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\Logger.cpp">
+      <Filter>Common\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

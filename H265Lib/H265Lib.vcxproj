@@ -64,6 +64,10 @@
     <ClCompile Include="..\source\H265Lib\Common\Logger.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\BlockBase.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\PB.cpp" />
+    <ClCompile Include="..\source\H265Lib\Data\QuadTreeImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\source\H265Lib\Data\TB.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\Binarization.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\CoeffGroup.cpp" />

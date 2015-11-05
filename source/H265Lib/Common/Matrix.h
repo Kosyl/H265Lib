@@ -9,6 +9,7 @@
 
 namespace H265Lib
 {
+	
 	template<typename T>
 	class Matrix
 	{
@@ -129,7 +130,6 @@ namespace H265Lib
 		}
 
 #pragma region Iterator
-
 		template
 			<
 				class Type,
@@ -175,20 +175,19 @@ namespace H265Lib
 				refreshIdx();
 			}
 
-			ForwardIterator& operator++ () // Pre-increment
+			ForwardIterator& operator++ ()
 			{
 				incrementIdx();
 				return *this;
 			}
 
-			ForwardIterator operator++ (int) // Post-increment
+			ForwardIterator operator++ (int)
 			{
 				ForwardIterator tmp(*this);
 				incrementIdx();
 				return tmp;
 			}
 
-			// two-way comparison: v.begin() == v.cbegin() and vice versa
 			template<class OtherType>
 			bool operator == (const ForwardIterator<OtherType>& rhs) const
 			{
@@ -211,7 +210,6 @@ namespace H265Lib
 				return (*(_sourceMatrix._data))[_idx];
 			}
 
-			// One way conversion: iterator -> const_iterator
 			operator ForwardIterator<const Type>() const
 			{
 				return ForwardIterator<const Type>(_sourceMatrix);
@@ -220,7 +218,7 @@ namespace H265Lib
 
 		friend class ForwardIterator < T > ;
 		friend class ForwardIterator < const T > ;
-		// `iterator` and `const_iterator` used by your class:
+
 		typedef ForwardIterator<T> iterator;
 		typedef ForwardIterator<const T> const_iterator;
 

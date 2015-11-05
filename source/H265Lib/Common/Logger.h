@@ -1,30 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include <fstream>
 #include "Common/TypeDef.h"
 #include <memory>
 #include <vector>
 #include <map>
 #include "Common\Singleton.h"
-
-#define LOGPATH_FT "D:\\txt\\ft.txt"
-#define LOGPATH_IT "D:\\txt\\it.txt"
-#define LOGPATH_Q "D:\\txt\\q.txt"
-#define LOGPATH_IQ "D:\\txt\\iq.txt"
-#define LOGPATH_LP "D:\\txt\\lp.txt"
-#define LOGPATH_LR "D:\\txt\\lr.txt"
-#define LOGPATH_CP "D:\\txt\\cp.txt"
-#define LOGPATH_CR "D:\\txt\\cr.txt"
-#define LOGPATH_RDO "D:\\txt\\rdo.txt"
-#define LOGPATH_EC "D:\\txt\\ec.txt"
-#define LOGPATH_EC_SUMMARY "D:\\txt\\ec_summary.txt"
-#define LOGPATH_FDB "D:\\txt\\fdb.txt"
-#define LOGPATH_FDBRES "D:\\txt\\HMfdbres.txt"
-#define LOGPATH_PRED "D:\\txt\\predykcja.txt"
-#define LOGPATH_OVERVIEW "D:\\txt\\overview.txt"
-#define LOGPATH_BINOUT "D:\\txt\\binout.txt"
-#include "Common/Matrix.h"
 
 namespace H265Lib
 {
@@ -33,131 +14,113 @@ namespace H265Lib
 
 	};
 
-	enum class Logs
-	{
-		Off = 0,
-		Console = 1000,
-		Dump = 1001,
-		ForwardTransform = 0,//1,
-		InverseTransform = 0,//2,
-		Quant = 3,
-		Dequant = 0,//4,
-		LumaPrediction = 0,//6
-		LumaReco = 0,//6,
-		ChromaPred = 0,//7,
-		ChromaReco = 0,//8,
-		DeblockingFilter = 0,//9,
-		DeblockingFilterResult = 0,//10,
-		RDO = 0,//11,
-		Binarization = 0,//12,
-		BinarizationSummary = 0,//13,
-		Prediction = 0,//14,
-		Overview = 0,//15,
-		BinOut = 0//16
-	};
+	using LogId = std::string;
 
 	class Logger
 	{
 	private:
 
-		std::string _logPath;
+		String _logPath;
 		std::ostream* _logStream;
-		std::string _spaces;
-		UInt _numTabs;
 
+		String _spaces;
+		UInt _numTabs;
 		UInt _step;
+
 		Bool _shouldDeleteStream;
 
 		template<typename T>
 		Void write(T s);
-
 		template<>
 		Void write(NewLineToken);
 
 	public:
 
 		Logger(std::string logPath);
-
 		Logger();
-
-		static std::shared_ptr<Logger> createFileLogger(std::string logPath);
-
-		static std::shared_ptr<Logger> createConsoleLogger();
-
-		Void printSpaces();
-
 		~Logger();
 
+		static std::shared_ptr<Logger> createFileLogger(std::string logPath);
+		static std::shared_ptr<Logger> createConsoleLogger();
+
+		static const LogId Off;
+		static const LogId Console;
+		static const LogId Dump;
+		static const LogId ForwardTransform;
+		static const LogId InverseTransform;
+		static const LogId Quant;
+		static const LogId Dequant;
+		static const LogId LumaPrediction;
+		static const LogId LumaReco;
+		static const LogId ChromaPred;
+		static const LogId ChromaReco;
+		static const LogId DeblockingFilter;
+		static const LogId DeblockingFilterResult;
+		static const LogId RDO;
+		static const LogId Binarization;
+		static const LogId BinarizationSummary;
+		static const LogId Prediction;
+		static const LogId Overview;
+		static const LogId BinOut;
+
+		Void printSpaces();
 		Void increaseSpaces();
-
 		Void decreaseSpaces();
-
 		Void setTabLength(Int len);
-
 		UInt getTabLength();
-
 		Void setTabStep(UInt len);
 
 		std::ostream& getStream();
-
 		template<typename T>
-		void printValues(T&& arg);
-
+		Void printValues(T&& arg);
 		template<typename T1, typename... Tn>
-		void printValues(T1&& arg1, Tn&&... args);
+		Void printValues(T1&& arg1, Tn&&... args);
 	};
 
 	class LoggingControl : public Singleton < LoggingControl >
 	{
 	private:
 
-		std::vector<std::string> logNames;
-		std::map<Logs, std::shared_ptr<Logger>> swapBuffer;
+		std::vector<std::string> _logNames;
+		std::map<LogId, std::shared_ptr<Logger>> _swapBuffer;
+		std::map<LogId, std::shared_ptr<Logger>> _logs;
+		std::map<LogId, UInt> _muteStack;
 
-		void LoadSettings();
-
-		std::shared_ptr<Logger> createLog(Logs logId, std::string path);
+		Void loadSettings();
+		std::shared_ptr<Logger> createLog(LogId logId, std::string path);
 
 	public:
 
 		LoggingControl();
+		~LoggingControl();
 
 		static std::string mainSettingsPath;
 
-		~LoggingControl();
+		std::shared_ptr<Logger> getLog(LogId logId);
 
-		std::map<Logs, std::shared_ptr<Logger>> logs;
-		std::map<Logs, int> muteStack;
+		void turnOff(LogId logId);
+		void turnOn(LogId logId);
 
-		void turnOff(Logs logId);
-		void turnOn(Logs logId);
+		template<typename... Params>
+		Void printlnToLog(LogId id, Params... args);
+		template<typename... Params>
+		Void printToLog(LogId id, Params... args);
+		template<typename T>
+		Void printArrayToLog(LogId id, const Char* name, T** matrix, size_t sizeX, size_t sizeY);
+		template<typename T>
+		Void printArrayToLog1Dto2D(LogId id, const Char* name, T* matrix, size_t sizeX, size_t sizeY, size_t stride);
+		template<typename T, template<class> class TMatrix>
+		void printMatrix(LogId logId, TMatrix<T>& matrix);
+		template<typename T, template<class> class TMatrix, template<class> class SptrTMatrix>
+		void printMatrix(LogId logId, SptrTMatrix<TMatrix<T>> pmatrix);
 	};
-
-	template<typename... Params>
-	Void printlnToLog(Logs id, Params... args);
-
-	template<typename... Params>
-	Void printToLog(Logs id, Params... args);
-
-	template<typename T>
-	Void printArrayToLog(Logs id, const char* name, T** matrix, int sizeX, int sizeY);
-
-	template<typename T>
-	Void printArrayToLog1Dto2D(Logs id, const char* name, T* matrix, int sizeX, int sizeY, int stride);
-
-	template<typename T, template<class> class TMatrix>
-	void log_printMatrix(Logs logId, TMatrix<T>& matrix);
-
-	template<typename T, template<class> class TMatrix, template<class> class SptrTMatrix>
-	void log_printMatrix(Logs logId, SptrTMatrix<TMatrix<T>> pmatrix);
 
 #pragma region Impl
 
-
 	template<typename... Params>
-	Void printlnToLog(Logs id, Params... args)
+	Void LoggingControl::printlnToLog(LogId id, Params... args)
 	{
-		auto log = LoggingControl::instance().logs[id];
+		auto log = instance()._logs[id];
 		if (log == nullptr)
 			return;
 		log->printSpaces();
@@ -166,9 +129,9 @@ namespace H265Lib
 	}
 
 	template<typename... Params>
-	Void printToLog(Logs id, Params... args)
+	Void LoggingControl::printToLog(LogId id, Params... args)
 	{
-		auto log = LoggingControl::instance().logs[id];
+		auto log = instance()._logs[id];
 		if (log == nullptr)
 			return;
 		log->printSpaces();
@@ -176,9 +139,9 @@ namespace H265Lib
 	}
 
 	template<typename T>
-	Void printArrayToLog(Logs id, const char* name, T** matrix, int sizeX, int sizeY)
+	Void LoggingControl::printArrayToLog(LogId id, const Char* name, T** matrix, size_t sizeX, size_t sizeY)
 	{
-		auto log = LoggingControl::instance().logs[id];
+		auto log = instance()._logs[id];
 		if (log == nullptr)
 			return;
 		log->printSpaces();
@@ -196,9 +159,9 @@ namespace H265Lib
 	}
 
 	template<typename T>
-	Void printArrayToLog1Dto2D(Logs id, const char* name, T* matrix, int sizeX, int sizeY, int stride)
+	Void LoggingControl::printArrayToLog1Dto2D(LogId id, const Char* name, T* matrix, size_t sizeX, size_t sizeY, size_t stride)
 	{
-		auto log = LoggingControl::instance().logs[id];
+		auto log = instance()._logs[id];
 		if (log == nullptr)
 			return;
 		log->printSpaces();
@@ -216,9 +179,9 @@ namespace H265Lib
 	}
 
 	template<typename T, template<class> class TMatrix>
-	void log_printMatrix(Logs logId, TMatrix<T>& matrix)
+	void LoggingControl::printMatrix(LogId logId, TMatrix<T>& matrix)
 	{
-		auto log = LoggingControl::instance().logs[logId];
+		auto log = instance()._logs[logId];
 		if (log == nullptr)
 			return;
 		for (size_t y = 0; y < matrix.rows(); ++y)
@@ -233,9 +196,9 @@ namespace H265Lib
 	}
 
 	template<typename T, template<class> class TMatrix, template<class> class SptrTMatrix>
-	void log_printMatrix(Logs logId, SptrTMatrix<TMatrix<T>> pmatrix)
+	void LoggingControl::printMatrix(LogId logId, SptrTMatrix<TMatrix<T>> pmatrix)
 	{
-		auto log = LoggingControl::instance().logs[logId];
+		auto log = instance()._logs[logId];
 		if (log == nullptr)
 			return;
 		for (size_t y = 0; y < pmatrix->rows(); ++y)
@@ -256,7 +219,7 @@ namespace H265Lib
 	}
 
 	template<>
-	Void Logger::write(NewLineToken)
+	inline Void Logger::write(NewLineToken)
 	{
 		*_logStream << std::endl;
 		printSpaces();
@@ -277,57 +240,77 @@ namespace H265Lib
 
 #pragma endregion
 
-#ifdef _DEBUG
-
 #define STRINGIZE(x) #x 
 #define PRINTVAR(x) (#x),": ",(x),NewLineToken()
 #define BINARIZE(x,numBits) (#x),": ",std::bitset<numBits>(x),NewLineToken()
 
-#define LOGLN(...) printlnToLog(__VA_ARGS__)
-#define LOG(...) printToLog(__VA_ARGS__)
-#define LOG_OFF(logId) LoggingControl::instance().turnOff(logId)
-#define LOG_ON(logId) LoggingControl::instance().turnOn(logId)
-
 #define GET_MACRO(_1,_2,_3,_4,NAME,...) NAME
-#define LOG_ARRAY_SQUARE(logId,x,mat_size) printArrayToLog(logId,(#x),(x),mat_size,mat_size)
-#define LOG_ARRAY_RECT(logId,x,mat_sizeX, mat_sizeY) printArrayToLog(logId,(#x),(x),mat_sizeX,mat_sizeY)
-#define LOG_ARRAY_1D(logId,x,mat_sizeX, mat_sizeY, stride) printArrayToLog1Dto2D(logId,(#x),(x),mat_sizeX,mat_sizeY, stride)
-#define LOG_ARRAY(...) GET_MACRO(__VA_ARGS__, LOG_ARRAY_RECT, LOG_ARRAY_SQUARE)(__VA_ARGS__)
 
 #define COMBINE1(a,b) a##b
 #define COMBINE(a,b) COMBINE1(a,b)
+
+#ifdef _DEBUG
+
+#define LOGLN(...) LoggingControl::instance().printlnToLog(__VA_ARGS__)
+#define LOG(...) LoggingControl::instance().printToLog(__VA_ARGS__)
+#define LOG_OFF(logId) LoggingControl::instance().turnOff(logId)
+#define LOG_ON(logId) LoggingControl::instance().turnOn(logId)
+#define LOG_ARRAY_SQUARE(logId,x,mat_size) LoggingControl::printArrayToLog(logId,(#x),(x),mat_size,mat_size)
+#define LOG_ARRAY_RECT(logId,x,mat_sizeX, mat_sizeY) LoggingControl::printArrayToLog(logId,(#x),(x),mat_sizeX,mat_sizeY)
+#define LOG_ARRAY_1D(logId,x,mat_sizeX, mat_sizeY, stride) LoggingControl::printArrayToLog1Dto2D(logId,(#x),(x),mat_sizeX,mat_sizeY, stride)
+#define LOG_ARRAY(...) GET_MACRO(__VA_ARGS__, LOG_ARRAY_RECT, LOG_ARRAY_SQUARE)(__VA_ARGS__)
+
 #define LOG_SCOPE_INDENT(logId,title) Indent COMBINE(logIndent,__LINE__)(title,logId)
 #define LOG_FUNCTION_INDENT(logId) Indent COMBINE(logIndent,__LINE__)(__FUNCTION__,logId)
 #define LOG_SCOPE_MUTE(logId) Mute COMBINE(logMute,__LINE__)(logId)
-
-#define LOG_MATRIX(log,matrix) log_printMatrix(log, matrix)
+#define LOG_MATRIX(log,matrix) LoggingControl::printMatrix(log, matrix)
 
 #else
+
+#define LOGLN(...)
 #define LOG(...)
-#define LOG_MATRIX(logId,x,mat_size) 
+#define LOG_OFF(logId)
+#define LOG_ON(logId)
+#define LOG_MATRIX(logId,x,mat_size)
 #define LOG_MATRIX(logId,x,mat_sizeX, mat_sizeY)
+#define LOG_ARRAY_SQUARE(logId,x,mat_size)
+#define LOG_ARRAY_RECT(logId,x,mat_sizeX, mat_sizeY)
+#define LOG_ARRAY_1D(logId,x,mat_sizeX, mat_sizeY, stride)
+#define LOG_ARRAY(...)
+
+#define LOG_SCOPE_INDENT(logId,title)
+#define LOG_FUNCTION_INDENT(logId)
+#define LOG_SCOPE_MUTE(logId)
+#define LOG_MATRIX(log,matrix)
+
 #endif
 
 	class Indent
 	{
 	private:
-		Logs m_id;
 
-		Void tab(Logs logId);
-		Void untab(Logs logId);
+		LogId _logId;
+
+		Void tab(LogId logId);
+		Void untab(LogId logId);
 
 	public:
-		Indent(Logs inId);
-		Indent(const char* func, Logs inId);
+
+		Indent(LogId inId);
+		Indent(const Char* func, LogId inId);
 
 		~Indent();
 	};
 
 	class Mute
 	{
-		Logs m_id;
+	private:
+
+		LogId _logId;
+
 	public:
-		Mute(Logs inId);
+
+		Mute(LogId inId);
 		~Mute();
 	};
 }

@@ -1,33 +1,58 @@
-
 #include "Logger.h"
+#include <fstream>
 
 namespace H265Lib
 {
+	const LogId Logger::Off{ "Off" };
+	const LogId Logger::Console{ "Console" };
+	const LogId Logger::Dump{ "Dump" };
+	const LogId Logger::ForwardTransform{ "ForwardTransform" };
+	const LogId Logger::InverseTransform{ "InverseTransform" };
+	const LogId Logger::Quant{ "Quant" };
+	const LogId Logger::Dequant{ "Dequant" };
+	const LogId Logger::LumaPrediction{ "LumaPrediction" };
+	const LogId Logger::LumaReco{ "LumaReco" };
+	const LogId Logger::ChromaPred{ "ChromaPred" };
+	const LogId Logger::ChromaReco{ "ChromaReco" };
+	const LogId Logger::DeblockingFilter{ "DeblockingFilter" };
+	const LogId Logger::DeblockingFilterResult{ "DeblockingFilterResult" };
+	const LogId Logger::RDO{ "RDO" };
+	const LogId Logger::Binarization{ "Binarization" };
+	const LogId Logger::BinarizationSummary{ "BinarizationSummary" };
+	const LogId Logger::Prediction{ "Prediction" };
+	const LogId Logger::Overview{ "Overview" };
+	const LogId Logger::BinOut{ "BinOut" };
+
 	LoggingControl::LoggingControl()
 	{
-		this->LoadSettings();
+		this->loadSettings();
 	}
 
-	void LoggingControl::turnOff(Logs logId)
+	std::shared_ptr<Logger> LoggingControl::getLog(LogId logId)
 	{
-		muteStack[logId]++;
+		return LoggingControl::instance()._logs[logId];
+	}
 
-		if (muteStack[logId] > 0 && logs[logId] != nullptr)
+	void LoggingControl::turnOff(LogId logId)
+	{
+		_muteStack[logId]++;
+
+		if (_muteStack[logId] > 0 && _logs[logId] != nullptr)
 		{
-			swapBuffer[logId] = logs[logId];
-			logs[logId] = nullptr;
+			_swapBuffer[logId] = _logs[logId];
+			_logs[logId] = nullptr;
 		}
 	}
 
-	void LoggingControl::turnOn(Logs logId)
+	void LoggingControl::turnOn(LogId logId)
 	{
-		if (muteStack[logId] > 0)
+		if (_muteStack[logId] > 0)
 		{
-			muteStack[logId]--;
-			if (muteStack[logId] == 0 && swapBuffer[logId] != nullptr)
+			_muteStack[logId]--;
+			if (_muteStack[logId] == 0 && _swapBuffer[logId] != nullptr)
 			{
-				logs[logId] = swapBuffer[logId];
-				swapBuffer[logId] = nullptr;
+				_logs[logId] = _swapBuffer[logId];
+				_swapBuffer[logId] = nullptr;
 			}
 		}
 	}
@@ -36,44 +61,43 @@ namespace H265Lib
 	{
 	}
 
-	void LoggingControl::LoadSettings()
+	void LoggingControl::loadSettings()
 	{
+		_logs[Logger::Console] = createLog(Logger::Console, "");
+		_logs[Logger::Dump] = createLog(Logger::Dump, "");
 
-		logs[Logs::Console] = createLog(Logs::Console, "");
-		logs[Logs::Dump] = createLog(Logs::Dump, "");
-
-		logs[Logs::ForwardTransform] = createLog(Logs::ForwardTransform, LOGPATH_FT);
-		logs[Logs::InverseTransform] = createLog(Logs::InverseTransform,LOGPATH_IT);
-		logs[Logs::Quant] = createLog(Logs::Quant,LOGPATH_Q);
-		logs[Logs::Dequant] = createLog(Logs::Dequant,LOGPATH_IQ);
-		logs[Logs::LumaPrediction] = createLog(Logs::LumaPrediction,LOGPATH_LP);
-		logs[Logs::LumaReco] = createLog(Logs::LumaReco,LOGPATH_LR);
-		logs[Logs::ChromaPred] = createLog(Logs::ChromaPred,LOGPATH_CP);
-		logs[Logs::ChromaReco] = createLog(Logs::ChromaReco,LOGPATH_CR);
-		logs[Logs::RDO] = createLog(Logs::RDO,LOGPATH_RDO);
-		logs[Logs::Binarization] = createLog(Logs::Binarization,LOGPATH_EC);
-		logs[Logs::BinarizationSummary] = createLog(Logs::BinarizationSummary,LOGPATH_EC_SUMMARY);
-		logs[Logs::DeblockingFilter] = createLog(Logs::DeblockingFilter,LOGPATH_FDB);
-		logs[Logs::DeblockingFilterResult] = createLog(Logs::DeblockingFilterResult,LOGPATH_FDBRES);
-		logs[Logs::Prediction] = createLog(Logs::Prediction,LOGPATH_PRED);
-		logs[Logs::Overview] = createLog(Logs::Overview,LOGPATH_OVERVIEW);
-		logs[Logs::BinOut] = createLog(Logs::BinOut,LOGPATH_BINOUT);
+		_logs[Logger::ForwardTransform] = createLog(Logger::ForwardTransform, "D:\\txt\\ft.txt");
+		_logs[Logger::InverseTransform] = createLog(Logger::InverseTransform, "D:\\txt\\it.txt");
+		_logs[Logger::Quant] = createLog(Logger::Quant, "D:\\txt\\q.txt");
+		_logs[Logger::Dequant] = createLog(Logger::Dequant, "D:\\txt\\iq.txt");
+		_logs[Logger::LumaPrediction] = createLog(Logger::LumaPrediction, "D:\\txt\\lp.txt");
+		_logs[Logger::LumaReco] = createLog(Logger::LumaReco, "D:\\txt\\lr.txt");
+		_logs[Logger::ChromaPred] = createLog(Logger::ChromaPred, "D:\\txt\\cp.txt");
+		_logs[Logger::ChromaReco] = createLog(Logger::ChromaReco, "D:\\txt\\cr.txt");
+		_logs[Logger::RDO] = createLog(Logger::RDO, "D:\\txt\\rdo.txt");
+		_logs[Logger::Binarization] = createLog(Logger::Binarization, "D:\\txt\\ec.txt");
+		_logs[Logger::BinarizationSummary] = createLog(Logger::BinarizationSummary, "D:\\txt\\ec_summary.txt");
+		_logs[Logger::DeblockingFilter] = createLog(Logger::DeblockingFilter, "D:\\txt\\fdb.txt");
+		_logs[Logger::DeblockingFilterResult] = createLog(Logger::DeblockingFilterResult, "D:\\txt\\HMfdbres.txt");
+		_logs[Logger::Prediction] = createLog(Logger::Prediction, "D:\\txt\\predykcja.txt");
+		_logs[Logger::Overview] = createLog(Logger::Overview, "D:\\txt\\overview.txt");
+		_logs[Logger::BinOut] = createLog(Logger::BinOut, "D:\\txt\\binout.txt");
 	}
 
-	std::shared_ptr<Logger> LoggingControl::createLog(Logs logId, std::string path)
+	std::shared_ptr<Logger> LoggingControl::createLog(LogId logId, std::string path)
 	{
-		if (logId == Logs::Off)
+		if (logId == Logger::Off)
 			return nullptr;
-		if (logId == Logs::Console)
+		if (logId == Logger::Console)
 			return Logger::createConsoleLogger();
-		if (logId == Logs::Dump)
+		if (logId == Logger::Dump)
 			return Logger::createFileLogger("D:\\dump.txt");
 		return Logger::createFileLogger(path);
 	}
 
-	Void Indent::tab(Logs key)
+	Void Indent::tab(LogId key)
 	{
-		auto log = LoggingControl::instance().logs[key];
+		auto log = LoggingControl::instance().getLog(key);
 		if (log == nullptr)
 			return;
 		log->printSpaces();
@@ -81,9 +105,9 @@ namespace H265Lib
 		log->increaseSpaces();
 	}
 
-	Void Indent::untab(Logs key)
+	Void Indent::untab(LogId key)
 	{
-		auto log = LoggingControl::instance().logs[key];
+		auto log = LoggingControl::instance().getLog(key);
 		if (log == nullptr)
 			return;
 		log->decreaseSpaces();
@@ -91,45 +115,45 @@ namespace H265Lib
 		log->getStream() << "}" << std::endl;
 	}
 
-	Indent::Indent(Logs inId):
-		m_id(inId)
+	Indent::Indent(LogId key) :
+		_logId(key)
 	{
-		auto log = LoggingControl::instance().logs[inId];
+		auto log = LoggingControl::instance().getLog(key);
 		if (log == nullptr)
 			return;
-		tab(inId);
+		tab(key);
 	}
 
-	Indent::Indent(const char* func, Logs inId):
-		m_id(inId)
+	Indent::Indent(const Char* func, LogId key) :
+		_logId(key)
 	{
-		auto log = LoggingControl::instance().logs[inId];
+		auto log = LoggingControl::instance().getLog(key);
 		if (log == nullptr)
 			return;
-		LOGLN(inId, func);
-		tab(inId);
+		LOGLN(key, func);
+		tab(key);
 	}
 
 	Indent::~Indent()
 	{
-		auto log = LoggingControl::instance().logs[m_id];
+		auto log = LoggingControl::instance().getLog(_logId);
 		if (log == nullptr)
 			return;
-		untab(m_id);
+		untab(_logId);
 	}
 
-	Mute::Mute(Logs inId):
-		m_id(inId)
+	Mute::Mute(LogId inId) :
+		_logId(inId)
 	{
 		LOG_OFF(inId);
 	}
 
 	Mute::~Mute()
 	{
-		LOG_ON(m_id);
+		LOG_ON(_logId);
 	}
 
-	Logger::Logger(std::string logPath):
+	Logger::Logger(std::string logPath) :
 		_logPath(logPath),
 		_numTabs(0),
 		_step(2),
@@ -139,7 +163,7 @@ namespace H265Lib
 		_logStream = new std::ofstream(logPath, std::fstream::out | std::fstream::ate);
 	}
 
-	Logger::Logger():
+	Logger::Logger() :
 		_logPath(""),
 		_numTabs(0),
 		_step(2),

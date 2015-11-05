@@ -8,11 +8,8 @@ namespace H265Lib
 		//itsScanStrategy(nullptr),
 		_codedSubBlockFlags(),
 		_lastSignificantCoeffX(0),
-		_lastSignificantCoeffY(0)
-	{
-	}
-
-	TB::~TB()
+		_lastSignificantCoeffY(0),
+		_referenceSamples(size)
 	{
 	}
 

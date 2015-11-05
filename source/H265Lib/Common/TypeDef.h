@@ -1,6 +1,8 @@
 #pragma once
 
-#define interface struct __declspec(novtable) 
+#include <string>
+
+#define interface struct __declspec(novtable)
 
 using Void = void;
 using Bool = bool;
@@ -13,6 +15,7 @@ using Long = long;
 using UInt = unsigned int;
 using Double = double;
 using Float = float;
+using String = std::string;
 
 using Pixel = UChar;
 using Sample = Short;

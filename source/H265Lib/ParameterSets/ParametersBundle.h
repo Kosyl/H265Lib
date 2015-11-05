@@ -58,7 +58,7 @@ namespace H265Lib
 
 		}
 
-		static ParametersBundle getDefaultParameters(size_t picWIdth, size_t picHeight)
+		static ParametersBundle getDefaultParameters(UShort picWIdth, UShort picHeight)
 		{
 			auto vps = VideoParameterSetBank::instance().createNext();
 			auto sps = SequenceParameterSetBank::instance().createNext();
