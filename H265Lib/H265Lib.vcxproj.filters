@@ -19,6 +19,12 @@
     <Filter Include="Common\Source">
       <UniqueIdentifier>{6ffedc20-b6d2-45a4-9f20-c826eb5d68cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\Headers">
+      <UniqueIdentifier>{685980eb-3797-43fb-af67-587b041e17e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Source">
+      <UniqueIdentifier>{016b02fb-7a3f-4651-80da-f31e47ab5a5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\H265Lib\ParameterSets\PictureParameterSet.h">
@@ -26,30 +32,6 @@
     </ClInclude>
     <ClInclude Include="..\source\H265Lib\ParameterSets\SequenceParameterSet.h">
       <Filter>ParameterSets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\CTU.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\CU.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\Picture.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\PU.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\QuadTree.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\SAOInfo.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\Slice.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\TU.h">
-      <Filter>Data</Filter>
     </ClInclude>
     <ClInclude Include="..\source\H265Lib\Modules\Binarization.h">
       <Filter>Modules</Filter>
@@ -105,15 +87,6 @@
     <ClInclude Include="..\source\H265Lib\ParameterSets\ParameterBank.h">
       <Filter>ParameterSets</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\BlockBase.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\PB.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\TB.h">
-      <Filter>Data</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\H265Lib\Modules\PictureEncoder.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -128,9 +101,6 @@
     </ClInclude>
     <ClInclude Include="..\source\H265Lib\Modules\CUEncoder.h">
       <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\H265Lib\Data\ReferenceSamples.h">
-      <Filter>Data</Filter>
     </ClInclude>
     <ClInclude Include="..\source\H265Lib\Common\Bitset.h">
       <Filter>Common\Headers</Filter>
@@ -159,6 +129,42 @@
     <ClInclude Include="..\source\H265Lib\Common\TypeDef.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\BlockBase.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\CTU.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\CU.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\PB.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\Picture.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\PU.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\QuadTree.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\ReferenceSamples.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\SAOInfo.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\Slice.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\TB.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Data\TU.h">
+      <Filter>Data\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265Lib\ParameterSets\PictureParameterSet.cpp">
@@ -166,27 +172,6 @@
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\ParameterSets\SequenceParameterSet.cpp">
       <Filter>ParameterSets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\CTU.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\CU.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\Picture.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\PU.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\QuadTree.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\Slice.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\TU.cpp">
-      <Filter>Data</Filter>
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\Modules\Binarization.cpp">
       <Filter>Modules</Filter>
@@ -218,12 +203,6 @@
     <ClCompile Include="..\source\H265Lib\ParameterSets\VideoParameterSet.cpp">
       <Filter>ParameterSets</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\PB.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\TB.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\H265Lib\Modules\PictureEncoder.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -236,12 +215,6 @@
     <ClCompile Include="..\source\H265Lib\Modules\CUEncoder.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\BlockBase.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\Data\QuadTreeImpl.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\H265Lib\Common\Bitset.cpp">
       <Filter>Common\Source</Filter>
     </ClCompile>
@@ -253,6 +226,39 @@
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\Common\Logger.cpp">
       <Filter>Common\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\BlockBase.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\CTU.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\CU.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\PB.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\Picture.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\PU.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\QuadTree.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\QuadTreeImpl.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\Slice.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\TB.cpp">
+      <Filter>Data\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Data\TU.cpp">
+      <Filter>Data\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -51,20 +51,20 @@ namespace UnitTests
 			Picture p(ParametersBundle(sps, pps));
 
 			auto ctu00 = p.getCTUBySamplePosition(0, 0);
-			Assert::IsTrue(ctu00->PositionInPicture.X == 0);
-			Assert::IsTrue(ctu00->PositionInPicture.Y == 0);
+			Assert::IsTrue(ctu00->Position.X == 0);
+			Assert::IsTrue(ctu00->Position.Y == 0);
 
 			auto ctu10 = p.getCTUBySamplePosition(75, 0);
-			Assert::IsTrue(ctu10->PositionInPicture.X == 64);
-			Assert::IsTrue(ctu10->PositionInPicture.Y == 0);
+			Assert::IsTrue(ctu10->Position.X == 64);
+			Assert::IsTrue(ctu10->Position.Y == 0);
 
 			auto ctu01 = p.getCTUBySamplePosition(63, 64);
-			Assert::IsTrue(ctu01->PositionInPicture.X == 0);
-			Assert::IsTrue(ctu01->PositionInPicture.Y == 64);
+			Assert::IsTrue(ctu01->Position.X == 0);
+			Assert::IsTrue(ctu01->Position.Y == 64);
 
 			auto ctu11 = p.getCTUBySamplePosition(64, 126);
-			Assert::IsTrue(ctu11->PositionInPicture.X == 64);
-			Assert::IsTrue(ctu11->PositionInPicture.Y == 64);
+			Assert::IsTrue(ctu11->Position.X == 64);
+			Assert::IsTrue(ctu11->Position.Y == 64);
 		}
 	};
 }

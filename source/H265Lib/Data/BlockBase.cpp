@@ -27,22 +27,21 @@ namespace H265Lib
 	}
 
 	BlockBase::BlockBase():
-		BlockBase(0, 0, 0, ParametersBundle())
+		BlockBase(0, 0, 0)
 	{
 
 	}
 
-	BlockBase::BlockBase(UShort x, UShort y, UShort size, ParametersBundle parameters):
-		PositionInPicture(x, y),
-		_size(size),
-		Parameters(parameters)
+	BlockBase::BlockBase(UShort x, UShort y, UShort size) :
+		Position(x, y),
+		_size(size)
 	{
 		assert(size > 0 && size % 4 == 0);
 	}
 
-	Void BlockBase::printDescription(Logs logId, Bool recursive)
+	Void BlockBase::printDescription(LogId logId, Bool recursive)
 	{
-		LOGLN(logId, "(", this->PositionInPicture.X, ",", this->PositionInPicture.Y, "), size=", this->_size);
+		LOGLN(logId, "(", this->Position.X, ",", this->Position.Y, "), size=", this->_size);
 	}
 
 	UShort BlockBase::getSize()

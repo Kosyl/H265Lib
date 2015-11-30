@@ -36,7 +36,7 @@ namespace UnitTests
 				for (auto x = 0; x < widthInCTUs; ++x)
 				{
 					auto ctu = pic.getCTU(x, y);
-					Log::println("CTU: x=", ctu->PositionInPicture.X, ", y=", ctu->PositionInPicture.Y, ", size=", ctu->getSize());
+					Log::println("CTU: x=", ctu->Position.X, ", y=", ctu->Position.Y, ", size=", ctu->getSize());
 					printCUTreeDescription(ctu->getCUQuadTree());
 				}
 			}
@@ -47,11 +47,11 @@ namespace UnitTests
 			if (subTree->getQTMode() == QTMode::Leaf)
 			{
 				auto leaf = subTree->getLeaf();
-				Log::println("CU: x=", leaf->PositionInPicture.X, ", y=", leaf->PositionInPicture.Y, ", size=", leaf->getSize());
+				Log::println("CU: x=", leaf->Position.X, ", y=", leaf->Position.Y, ", size=", leaf->getSize());
 			}
 			else
 			{
-				Log::println("CUTree: x=", subTree->PositionInPicture.X, ", y=", subTree->PositionInPicture.Y, ", size=", subTree->getSize());
+				Log::println("CUTree: x=", subTree->Position.X, ", y=", subTree->Position.Y, ", size=", subTree->getSize());
 				for (auto& i : subTree->getSubTrees())
 				{
 					if (i != nullptr)

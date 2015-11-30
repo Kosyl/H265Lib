@@ -13,17 +13,15 @@
 
 namespace H265Lib
 {
-	Picture::Picture():
-		_CTUs(0,0), _tilesMap(0,0), _slicesMap(0,0)
+	Picture::Picture()
 	{
 		resetSampleBuffers();
 	}
 
 	Picture::Picture(ParametersBundle parameters) :
-		_CTUs(0, 0), _tilesMap(0, 0), _slicesMap(0, 0), Parameters(parameters)
+		Picture::Picture()
 	{
-		resetSampleBuffers();
-		initFromParameters(Parameters);
+		initFromParameters(parameters);
 	}
 
 	Void Picture::initFromParameters(ParametersBundle parameters)
@@ -31,26 +29,19 @@ namespace H265Lib
 		assert(parameters.Sps != nullptr);
 		assert(parameters.Pps != nullptr);
 
-		Parameters.Sps = parameters.Sps;
-		Parameters.Pps = parameters.Pps;
+		_widthLuma = parameters.Sps->getPicWidth(ImgComp::Luma);
+		_widthChroma = parameters.Sps->getPicWidth(ImgComp::Cb);
+		_heightLuma = parameters.Sps->getPicHeight(ImgComp::Luma);
+		_heightChroma = parameters.Sps->getPicHeight(ImgComp::Cb);
+		_tilesEnabled = parameters.Pps->getTilesEnabled();
+		_widthInCTUs = parameters.Sps->getPicWidthInCTUs();
+		_heightInCTUs = parameters.Sps->getPicHeightInCTUs();
+		_ctuSize = parameters.Sps->getCTUSize();
 
-		setSize(
-			Parameters.Sps->getPicWidth(ImgComp::Luma),
-			Parameters.Sps->getPicHeight(ImgComp::Luma), 
-			Parameters.Sps->getPicWidth(ImgComp::Cb), 
-			Parameters.Sps->getPicHeight(ImgComp::Cb));
-
-		_slices.clear();
-
-		if (Parameters.Pps->getTilesEnabled() == true)
-		{
-			_tilesMap = Matrix<UShort>(Parameters.Sps->getPicWidthInCTUs(), Parameters.Sps->getPicHeightInCTUs());
-		}
-
-		initCTUs();
+		setSize(_widthLuma, _widthChroma, _heightLuma, _heightChroma);
 	}
 
-	void Picture::setSize(UInt lumaWidth, UInt lumaHeight, UInt chromaWidth, UInt chromaHeight)
+	void Picture::setSize(UShort lumaWidth, UShort lumaHeight, UShort chromaWidth, UShort chromaHeight)
 	{
 		resetSampleBuffers();
 
@@ -64,12 +55,20 @@ namespace H265Lib
 		_reconstructedSamplesCb = std::make_shared<Matrix<Sample>>(chromaWidth, chromaHeight);
 		_reconstructedSamplesCr = std::make_shared<Matrix<Sample>>(chromaWidth, chromaHeight);
 
+		_slices.clear();
+
+		if (_tilesEnabled)
+		{
+			_tilesMap = Matrix<UShort>(_widthInCTUs, _heightInCTUs);
+		}
+
+		initCTUs();
 	}
 
 	void Picture::loadFrameFromYuv(std::ifstream& yuvFile)
 	{
 		UChar tmp;
-		UInt width = Parameters.Sps->getPicWidth(), height = Parameters.Sps->getPicHeight();
+		UInt width = _widthLuma, height = _heightLuma;
 
 		for (UInt i = 0; i < height; ++i)
 		{
@@ -80,8 +79,8 @@ namespace H265Lib
 			}
 		}
 
-		UInt ch = Parameters.Sps->getPicHeight(ImgComp::Cb);
-		UInt cw = Parameters.Sps->getPicWidth(ImgComp::Cb);
+		UInt ch = _widthChroma;
+		UInt cw = _heightChroma;
 
 		for (UInt i = 0; i < ch; ++i)
 		{
@@ -121,15 +120,15 @@ namespace H265Lib
 			return _reconstructedSamplesCb;
 	}
 
-	std::shared_ptr<CTU> Picture::getCTU(UInt ctuX, UInt ctuY)
+	std::shared_ptr<CTU> Picture::getCTU(UShort ctuX, UShort ctuY)
 	{
 		return _CTUs(ctuX, ctuY);
 	}
 
-	std::shared_ptr<CTU> Picture::getCTUBySamplePosition(UInt sampleX, UInt sampleY)
+	std::shared_ptr<CTU> Picture::getCTUBySamplePosition(UShort sampleX, UShort sampleY)
 	{
-		auto ctuX = sampleX / Parameters.Sps->getCTUSize();
-		auto ctuY = sampleY / Parameters.Sps->getCTUSize();
+		auto ctuX = sampleX / _ctuSize;
+		auto ctuY = sampleY / _ctuSize;
 
 		return getCTU(ctuX, ctuY);
 	}
@@ -147,33 +146,35 @@ namespace H265Lib
 
 	Void Picture::initCTUs()
 	{
-		UShort CTUSize = Parameters.Sps->getCTUSize();
-		UShort picWidthInCTUs = Parameters.Sps->getPicWidthInCTUs(), picHeightInCTUs = Parameters.Sps->getPicHeightInCTUs();
+		_CTUs.resize(_widthInCTUs, _heightInCTUs);
 
-		_CTUs.resize(picWidthInCTUs, picHeightInCTUs);
-
-		for (UInt i = 0; i < picHeightInCTUs; ++i)
+		for (UInt i = 0; i < _heightInCTUs; ++i)
 		{
-			for (UInt j = 0; j < picWidthInCTUs; ++j)
+			for (UInt j = 0; j < _widthInCTUs; ++j)
 			{
-				_CTUs(j, i) = std::make_shared<CTU>(j*CTUSize, i*CTUSize, CTUSize, Parameters);
+				_CTUs(j, i) = std::make_shared<CTU>(j*_ctuSize, i*_ctuSize, _ctuSize);
 			}
 		}
 	}
 
-	Void Picture::printDescription()
+	Void Picture::printDescription(LogId logId, Bool recursive = true, Bool printSamples = false)
 	{
-		/*//LOG( "PART" ) << "Obraz " << SeqParams( )->getPicWidth( ) << " x " << SeqParams( )->getPicHeight( ) << std::endl;
-		printMatrix( itsSamplesY, SeqParams( )->getPicWidth( ), SeqParams( )->getPicHeight( ), //LOG( "PART" ) );
-		//LOG_TAB );
-		for( UInt i = 0; i < itsCTUs.size( ); ++i )
+		LOGLN(logId, "Obraz ", _widthLuma, " x ", _widthChroma);
+		if (printSamples)
 		{
-		if( itsCTUs[ i ] != nullptr ) itsCTUs[ i ]->printDescription( );
+			LOG_MATRIX(logId, _inputSamplesY);
 		}
-		//LOG_UNTAB );*/
+		if (recursive)
+		{
+			LOG_SCOPE_INDENT(logId, "CTU:");
+			for (auto& ctu : _CTUs)
+			{
+				if (ctu != nullptr) ctu->printDescription(logId, recursive);
+			}
+		}
 	}
 
-	std::shared_ptr<CU> Picture::getCuContainingPosition(UInt x, UInt y)
+	std::shared_ptr<CU> Picture::getCuContainingPosition(UShort x, UShort y)
 	{
 		std::shared_ptr<CTU> ctu = getCTUBySamplePosition(x, y);
 		std::shared_ptr<CU> cu = nullptr;
@@ -205,5 +206,19 @@ namespace H265Lib
 		}
 		} while (cu == nullptr);*/
 		return cu;
+	}
+
+	UShort Picture::getWidth(const ImgComp comp) const
+	{
+		if (comp == Luma)
+			return _widthLuma;
+		return _widthChroma;
+	}
+
+	UShort Picture::getHeight(const ImgComp comp) const
+	{
+		if (comp == Luma)
+			return _heightLuma;
+		return _heightChroma;
 	}
 }

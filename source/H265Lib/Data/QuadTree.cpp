@@ -68,8 +68,8 @@ namespace H265Lib
 		{
 			UInt step = _size / 2;
 			Int left, up;
-			left = PositionInPicture.X + step > x ? 0 : 1;
-			up = PositionInPicture.Y + step > x ? 0 : 1;
+			left = Position.X + step > x ? 0 : 1;
+			up = Position.Y + step > x ? 0 : 1;
 			TreePart comp;
 			if (left && up)
 				comp = TreePart::UpperLeft;

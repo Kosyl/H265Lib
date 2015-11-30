@@ -16,42 +16,47 @@ namespace H265Lib
 	{
 	protected:
 
-		std::shared_ptr<Matrix<Sample>> _inputSamplesY;
-		std::shared_ptr<Matrix<Sample>> _inputSamplesCb;
-		std::shared_ptr<Matrix<Sample>> _inputSamplesCr;
+		UShort _widthLuma{ 0 }, _widthChroma{ 0 }, _heightLuma{ 0 }, _heightChroma{ 0 };
+		UShort _widthInCTUs{ 0 }, _heightInCTUs{ 0 };
+		UShort _ctuSize{ 0 };
+		Bool _tilesEnabled{ false };
 
-		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesY;
-		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesCb;
-		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesCr;
-		
-		Matrix<UShort> _tilesMap;
-		Matrix<UShort> _slicesMap;
+		std::shared_ptr<Matrix<Sample>> _inputSamplesY{ nullptr };
+		std::shared_ptr<Matrix<Sample>> _inputSamplesCb{ nullptr };
+		std::shared_ptr<Matrix<Sample>> _inputSamplesCr{ nullptr };
 
-		std::vector<std::shared_ptr<Slice>> _slices;
-		Matrix<std::shared_ptr<CTU>> _CTUs;
+		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesY{ nullptr };
+		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesCb{ nullptr };
+		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesCr{ nullptr };
 
-		void setSize(unsigned width, unsigned height, unsigned chromaWidth, unsigned chromaHeight);
+		Matrix<UShort> _tilesMap{ 0,0 };
+		Matrix<UShort> _slicesMap{ 0,0 };
 
+		std::vector<std::shared_ptr<Slice>> _slices{ 0 };
+		Matrix<std::shared_ptr<CTU>> _CTUs{ 0,0 };
+
+		Void setSize(UShort width, UShort height, UShort chromaWidth, UShort chromaHeight);
 		Void initCTUs();
 
 	public:
-
-		ParametersBundle Parameters;
 
 		Picture();
 		Picture(ParametersBundle parameters);
 
 		Void initFromParameters(ParametersBundle parameters);
-		Void loadFrameFromYuv(std::ifstream& yuvStream);
+		Void loadFrameFromYuv(std::ifstream& yuvFile);
+		Void resetSampleBuffers();
 
 		std::shared_ptr<Matrix<Sample>> getInputSamples(const ImgComp comp);
 		std::shared_ptr<Matrix<Sample>> getReconstructionMatrix(const ImgComp comp);
-		Void resetSampleBuffers();
 
-		std::shared_ptr<CTU> getCTU(UInt ctuX, UInt ctuY);
-		std::shared_ptr<CTU> getCTUBySamplePosition(UInt sampleX, UInt sampleY);
-		std::shared_ptr<CU> getCuContainingPosition(UInt sampleX, UInt sampleY);
+		std::shared_ptr<CTU> getCTU(UShort ctuX, UShort ctuY);
+		std::shared_ptr<CTU> getCTUBySamplePosition(UShort sampleX, UShort sampleY);
+		std::shared_ptr<CU> getCuContainingPosition(UShort sampleX, UShort sampleY);
 
-		Void printDescription();
+		UShort getWidth(const ImgComp comp) const;
+		UShort getHeight(const ImgComp comp) const;
+
+		Void printDescription(LogId logId, Bool recursive = true, Bool printSamples = false);
 	};
 }

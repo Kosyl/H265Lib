@@ -27,15 +27,14 @@ namespace H265Lib
 
 	public:
 
-		ParametersBundle Parameters;
-		Position PositionInPicture;
+		Position Position;
 
 		BlockBase();
-		BlockBase(UShort x, UShort y, UShort size, ParametersBundle parameters);
+		BlockBase(UShort x, UShort y, UShort size);
 		virtual ~BlockBase() = default;
 
 		UShort getSize();
 
-		virtual Void printDescription(Logs logId, Bool recursive = true);
+		virtual Void printDescription(LogId logId, Bool recursive = true);
 	};
 }

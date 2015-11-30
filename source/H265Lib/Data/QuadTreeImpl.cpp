@@ -2,19 +2,19 @@
 template <class T, class self>
 Void QuadTree<T, self>::createSubTrees()
 {
-	_subTrees(0, 0) = makeSubTree(PositionInPicture.X, PositionInPicture.Y);
+	_subTrees(0, 0) = makeSubTree(Position.X, Position.Y);
 
-	Bool createRight = PositionInPicture.X + _size / 2 < Parameters.Sps->getPicWidth();
-	Bool createLower = PositionInPicture.Y + _size / 2 < Parameters.Sps->getPicHeight();
+	Bool createRight = Position.X + _size / 2 < Parameters.Sps->getPicWidth();
+	Bool createLower = Position.Y + _size / 2 < Parameters.Sps->getPicHeight();
 
 	if (createRight)
-		_subTrees(1, 0) = makeSubTree(PositionInPicture.X + (_size / 2), PositionInPicture.Y);
+		_subTrees(1, 0) = makeSubTree(Position.X + (_size / 2), Position.Y);
 
 	if (createLower)
-		_subTrees(0, 1) = makeSubTree(PositionInPicture.X, PositionInPicture.Y + (_size / 2));
+		_subTrees(0, 1) = makeSubTree(Position.X, Position.Y + (_size / 2));
 
 	if (createLower && createRight)
-		_subTrees(1, 1) = makeSubTree(PositionInPicture.X + (_size / 2), PositionInPicture.Y + (_size / 2));
+		_subTrees(1, 1) = makeSubTree(Position.X + (_size / 2), Position.Y + (_size / 2));
 }
 
 template<class T, class S>
@@ -79,8 +79,8 @@ void QuadTree<T, self>::refreshPositionInCTU()
 	auto log2CTUSize = Parameters.Sps->getLog2CTUSize();
 	auto log2MinBlock = Parameters.Sps->getLog2MinTUSize();
 
-	auto x = this->PositionInPicture.X >> log2CTUSize;
-	auto y = this->PositionInPicture.Y >> log2CTUSize;
+	auto x = this->Position.X >> log2CTUSize;
+	auto y = this->Position.Y >> log2CTUSize;
 	PositionInCTU.X = x >> log2MinBlock;
 	PositionInCTU.Y = y >> log2MinBlock;
 

@@ -34,7 +34,7 @@ namespace H265Lib
 
 		std::shared_ptr<T> makeLeaf()
 		{
-			return std::make_shared<T>(PositionInPicture.X, PositionInPicture.Y, _size, Parameters);
+			return std::make_shared<T>(Position.X, Position.Y, _size, Parameters);
 		}
 
 		Void createSubTrees();

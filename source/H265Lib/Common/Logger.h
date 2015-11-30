@@ -255,15 +255,15 @@ namespace H265Lib
 #define LOG(...) LoggingControl::instance().printToLog(__VA_ARGS__)
 #define LOG_OFF(logId) LoggingControl::instance().turnOff(logId)
 #define LOG_ON(logId) LoggingControl::instance().turnOn(logId)
-#define LOG_ARRAY_SQUARE(logId,x,mat_size) LoggingControl::printArrayToLog(logId,(#x),(x),mat_size,mat_size)
-#define LOG_ARRAY_RECT(logId,x,mat_sizeX, mat_sizeY) LoggingControl::printArrayToLog(logId,(#x),(x),mat_sizeX,mat_sizeY)
-#define LOG_ARRAY_1D(logId,x,mat_sizeX, mat_sizeY, stride) LoggingControl::printArrayToLog1Dto2D(logId,(#x),(x),mat_sizeX,mat_sizeY, stride)
+#define LOG_ARRAY_SQUARE(logId,x,mat_size) LoggingControl::instance().printArrayToLog(logId,(#x),(x),mat_size,mat_size)
+#define LOG_ARRAY_RECT(logId,x,mat_sizeX, mat_sizeY) LoggingControl::instance().printArrayToLog(logId,(#x),(x),mat_sizeX,mat_sizeY)
+#define LOG_ARRAY_1D(logId,x,mat_sizeX, mat_sizeY, stride) LoggingControl::instance().printArrayToLog1Dto2D(logId,(#x),(x),mat_sizeX,mat_sizeY, stride)
 #define LOG_ARRAY(...) GET_MACRO(__VA_ARGS__, LOG_ARRAY_RECT, LOG_ARRAY_SQUARE)(__VA_ARGS__)
+#define LOG_MATRIX(log,matrix) LoggingControl::instance().printMatrix(log, matrix)
 
 #define LOG_SCOPE_INDENT(logId,title) Indent COMBINE(logIndent,__LINE__)(title,logId)
 #define LOG_FUNCTION_INDENT(logId) Indent COMBINE(logIndent,__LINE__)(__FUNCTION__,logId)
 #define LOG_SCOPE_MUTE(logId) Mute COMBINE(logMute,__LINE__)(logId)
-#define LOG_MATRIX(log,matrix) LoggingControl::printMatrix(log, matrix)
 
 #else
 
@@ -277,11 +277,11 @@ namespace H265Lib
 #define LOG_ARRAY_RECT(logId,x,mat_sizeX, mat_sizeY)
 #define LOG_ARRAY_1D(logId,x,mat_sizeX, mat_sizeY, stride)
 #define LOG_ARRAY(...)
+#define LOG_MATRIX(log,matrix)
 
 #define LOG_SCOPE_INDENT(logId,title)
 #define LOG_FUNCTION_INDENT(logId)
 #define LOG_SCOPE_MUTE(logId)
-#define LOG_MATRIX(log,matrix)
 
 #endif
 
