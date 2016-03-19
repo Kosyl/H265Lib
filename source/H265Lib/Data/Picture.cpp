@@ -157,7 +157,7 @@ namespace H265Lib
 		}
 	}
 
-	Void Picture::printDescription(LogId logId, Bool recursive = true, Bool printSamples = false)
+	Void Picture::printDescription(LogId logId, Bool recursive, Bool printSamples)
 	{
 		LOGLN(logId, "Obraz ", _widthLuma, " x ", _widthChroma);
 		if (printSamples)

@@ -64,7 +64,7 @@ namespace H265Lib
 
 		static UInt getModeForChroma(UInt modeForLuma, UInt chromaPredictionDerivationMode);*/
 
-		virtual Void printDescription(Logs logId, Bool recursive = true) override;
+		virtual Void printDescription(LogId logId, Bool recursive = true) override;
 
 		//std::vector<UInt> bestSAD8x8modes;
 	};

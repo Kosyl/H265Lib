@@ -20,3 +20,5 @@ using String = std::string;
 using Pixel = UChar;
 using Sample = Short;
 using Coeff = Int;
+
+using LogId = std::string;

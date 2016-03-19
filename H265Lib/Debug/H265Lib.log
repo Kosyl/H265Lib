@@ -1,94 +1,33 @@
-﻿  TB.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\tb.h(40): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\tb.cpp(46): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\tb.cpp(46): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\tb.cpp(47): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\tb.cpp(47): error C2447: '{': missing function header (old-style formal list?)
+﻿  PictureEncoder.cpp
+d:\repos\hevc\source\h265lib\data\quadtree.h(32): error C2065: 'Parameters': undeclared identifier
+  d:\repos\hevc\source\h265lib\data\quadtree.h(31): note: while compiling class template member function 'std::shared_ptr<self> H265Lib::QuadTree<H265Lib::TU,self>::makeSubTree(UInt,UInt)'
+          with
+          [
+              self=H265Lib::TUQuadTree
+          ]
+  d:\repos\hevc\source\h265lib\data\quadtree.h(100): note: see reference to class template instantiation 'H265Lib::QuadTree<H265Lib::TU,H265Lib::TUQuadTree>' being compiled
   QuadTree.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(96): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(110): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(77): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(137): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\ctu.h(24): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\tu.h(34): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(20): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(20): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(21): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(21): error C2447: '{': missing function header (old-style formal list?)
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(46): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(46): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(47): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\quadtree.cpp(47): error C2447: '{': missing function header (old-style formal list?)
-  Logger.cpp
-  FileIO.cpp
-  Generating Code...
-  Compiling...
-  VideoParameterSet.cpp
-  SequenceParameterSet.cpp
-  PictureParameterSet.cpp
-  PictureEncoder.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(96): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(110): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\ctu.h(24): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(77): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(137): error C2061: syntax error: identifier 'Logs'
-  TU.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\tu.h(34): error C2061: syntax error: identifier 'Logs'
+d:\repos\hevc\source\h265lib\data\quadtree.h(32): error C2065: 'Parameters': undeclared identifier
+  d:\repos\hevc\source\h265lib\data\quadtree.h(31): note: while compiling class template member function 'std::shared_ptr<self> H265Lib::QuadTree<H265Lib::TU,self>::makeSubTree(UInt,UInt)'
+          with
+          [
+              self=H265Lib::TUQuadTree
+          ]
+  d:\repos\hevc\source\h265lib\data\quadtree.h(100): note: see reference to class template instantiation 'H265Lib::QuadTree<H265Lib::TU,H265Lib::TUQuadTree>' being compiled
   Picture.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(96): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(110): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\ctu.h(24): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(77): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(137): error C2061: syntax error: identifier 'Logs'
-  PU.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(77): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(137): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\pu.h(67): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\pu.cpp(14): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\pu.cpp(14): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\pu.cpp(15): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\pu.cpp(15): error C2447: '{': missing function header (old-style formal list?)
-  PB.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\pb.h(67): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\pb.cpp(238): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\pb.cpp(238): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\pb.cpp(239): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\pb.cpp(239): error C2447: '{': missing function header (old-style formal list?)
-  CU.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(77): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(137): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.cpp(25): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\cu.cpp(25): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\cu.cpp(26): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\cu.cpp(26): error C2447: '{': missing function header (old-style formal list?)
-d:\repos\hevc\source\h265lib\data\cu.cpp(51): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\cu.cpp(51): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\cu.cpp(52): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\cu.cpp(52): error C2447: '{': missing function header (old-style formal list?)
+d:\repos\hevc\source\h265lib\data\quadtree.h(32): error C2065: 'Parameters': undeclared identifier
+  d:\repos\hevc\source\h265lib\data\quadtree.h(31): note: while compiling class template member function 'std::shared_ptr<self> H265Lib::QuadTree<H265Lib::TU,self>::makeSubTree(UInt,UInt)'
+          with
+          [
+              self=H265Lib::TUQuadTree
+          ]
+  d:\repos\hevc\source\h265lib\data\quadtree.h(100): note: see reference to class template instantiation 'H265Lib::QuadTree<H265Lib::TU,H265Lib::TUQuadTree>' being compiled
   CTU.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(96): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\quadtree.h(110): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\ctu.h(24): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(77): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\cu.h(137): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\ctu.cpp(22): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\ctu.cpp(22): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\ctu.cpp(23): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\ctu.cpp(23): error C2447: '{': missing function header (old-style formal list?)
-  BlockBase.cpp
-d:\repos\hevc\source\h265lib\data\blockbase.h(39): error C2061: syntax error: identifier 'Logs'
-d:\repos\hevc\source\h265lib\data\blockbase.cpp(43): error C2065: 'Logs': undeclared identifier
-d:\repos\hevc\source\h265lib\data\blockbase.cpp(43): error C2146: syntax error: missing ')' before identifier 'logId'
-d:\repos\hevc\source\h265lib\data\blockbase.cpp(44): error C2143: syntax error: missing ';' before '{'
-d:\repos\hevc\source\h265lib\data\blockbase.cpp(44): error C2447: '{': missing function header (old-style formal list?)
-  Calc.cpp
+d:\repos\hevc\source\h265lib\data\quadtree.h(32): error C2065: 'Parameters': undeclared identifier
+  d:\repos\hevc\source\h265lib\data\quadtree.h(31): note: while compiling class template member function 'std::shared_ptr<self> H265Lib::QuadTree<H265Lib::TU,self>::makeSubTree(UInt,UInt)'
+          with
+          [
+              self=H265Lib::TUQuadTree
+          ]
+  d:\repos\hevc\source\h265lib\data\quadtree.h(100): note: see reference to class template instantiation 'H265Lib::QuadTree<H265Lib::TU,H265Lib::TUQuadTree>' being compiled
   Generating Code...

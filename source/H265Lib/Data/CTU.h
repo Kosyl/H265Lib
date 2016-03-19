@@ -21,6 +21,6 @@ namespace H265Lib
 		std::shared_ptr<CUQuadTree> getCUQuadTree();
 		Bool isPartitioned();
 
-		virtual Void printDescription(Logs logId, Bool recursive = true) override;
+		virtual Void printDescription(LogId logId, Bool recursive = true) override;
 	};
 }

@@ -3,7 +3,7 @@
 namespace H265Lib
 {
 	TB::TB(UShort x, UShort y, UShort size, ImgComp comp, ParametersBundle parameters) :
-		BlockBase(x, y, size, parameters),
+		BlockBase(x, y, size),
 		_plane(comp),
 		//itsScanStrategy(nullptr),
 		_codedSubBlockFlags(),
@@ -43,7 +43,7 @@ namespace H265Lib
 		return false;
 	}
 
-	Void TB::printDescription(Logs logId, Bool recursive)
+	Void TB::printDescription(LogId logId, Bool recursive)
 	{
 		BlockBase::printDescription(logId, recursive);
 	}

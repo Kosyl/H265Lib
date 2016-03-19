@@ -3,7 +3,7 @@
 namespace H265Lib
 {
 	PBIntra::PBIntra(ImgComp comp, UInt x, UInt y, UInt size, ParametersBundle parameters) :
-		BlockBase( x, y, size, parameters)
+		BlockBase( x, y, size)
 		/*itsComp(comp),
 		itsParentTB(parentTB),
 		itsCornerReference(0),
@@ -235,7 +235,7 @@ namespace H265Lib
 	//	itsPredictionDone = true;
 	//}
 
-	Void PBIntra::printDescription( Logs logId, bool recursive)
+	Void PBIntra::printDescription(LogId logId, bool recursive)
 	{
 		////LOG( "OPT" ) << "PBIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", comp: " << itsComp << std::endl;
 	}

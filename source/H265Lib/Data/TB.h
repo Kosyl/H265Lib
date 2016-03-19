@@ -37,6 +37,6 @@ namespace H265Lib
 
 		Bool TB::hasAtLeastOneNonZeroCoeff();
 
-		virtual Void printDescription(Logs logId, Bool recursive = true) override;
+		virtual Void printDescription(LogId logId, Bool recursive = true) override;
 	};
 }

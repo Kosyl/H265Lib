@@ -3,7 +3,7 @@
 namespace H265Lib
 {
 	PUIntra::PUIntra(UInt X, UInt Y, UInt size, ParametersBundle parameters) :
-		BlockBase(X, Y, size, parameters)
+		BlockBase(X, Y, size)
 	{
 	}
 
@@ -11,7 +11,7 @@ namespace H265Lib
 	{
 	}
 
-	Void PUIntra::printDescription( Logs logId, bool recursive)
+	Void PUIntra::printDescription(LogId logId, bool recursive)
 	{
 		////LOG( "PART" ) << "PUIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
 

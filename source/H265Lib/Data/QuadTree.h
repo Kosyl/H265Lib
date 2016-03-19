@@ -41,7 +41,7 @@ namespace H265Lib
 
 	public:
 
-		Position PositionInCTU;
+		H265Lib::Position PositionInCTU;
 
 		QuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters);
 		virtual ~QuadTree() = default;
@@ -93,7 +93,7 @@ namespace H265Lib
 
 		std::shared_ptr<CU> getCU();
 
-		virtual Void printDescription(Logs logId, Bool recursive = true) override;
+		virtual Void printDescription(LogId logId, Bool recursive = true) override;
 	};
 
 	class TUQuadTree : public QuadTree < TU, TUQuadTree >
@@ -107,7 +107,7 @@ namespace H265Lib
 
 		std::shared_ptr<TU> getTU();
 
-		virtual Void printDescription(Logs logId, Bool recursive = true) override;
+		virtual Void printDescription(LogId logId, Bool recursive = true) override;
 
 		std::shared_ptr<TU> getTuContainingPosition(UInt x, UInt y);
 	};

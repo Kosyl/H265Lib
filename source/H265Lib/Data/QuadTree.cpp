@@ -17,7 +17,7 @@ namespace H265Lib
 		return _leaf;
 	}
 
-	Void CUQuadTree::printDescription(Logs logId, Bool recursive)
+	Void CUQuadTree::printDescription(LogId logId, Bool recursive)
 	{
 		//LOG( "PART" ) << "CUQuadTree[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << std::endl;
 		//LOG_TAB );
@@ -43,7 +43,7 @@ namespace H265Lib
 		return _leaf;
 	}
 
-	Void TUQuadTree::printDescription(Logs logId, Bool recursive)
+	Void TUQuadTree::printDescription(LogId logId, Bool recursive)
 	{
 		//LOG( "PART" ) << "TUQuadTree[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << std::endl;
 		//LOG_TAB );

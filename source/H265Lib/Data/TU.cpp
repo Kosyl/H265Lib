@@ -3,7 +3,7 @@
 namespace H265Lib
 {
 	TU::TU(UInt x, UInt y, UInt size, ParametersBundle parameters) :
-		BlockBase(x, y, size, parameters)
+		BlockBase(x, y, size)
 	{
 		/*assert(size == 4 || size == 8 || size == 16 || size == 32);
 		itsTBs.push_back(std::make_shared<TB>(x, y, size, Luma));

@@ -4,7 +4,7 @@
 namespace H265Lib
 {
 	CTU::CTU(UShort x, UShort y, UShort size, ParametersBundle parameters) :
-		BlockBase(x, y, size, parameters),
+		BlockBase(x, y, size),
 		_CUQuadTree(std::make_shared<CUQuadTree>(x, y, size, parameters))
 	{
 	}
@@ -19,7 +19,7 @@ namespace H265Lib
 		return _CUQuadTree != nullptr;
 	}
 
-	Void CTU::printDescription(Logs logId, Bool recursive)
+	Void CTU::printDescription(LogId logId, Bool recursive)
 	{
 	}
 }

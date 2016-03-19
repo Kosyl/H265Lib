@@ -13,9 +13,7 @@ namespace H265Lib
 	{
 
 	};
-
-	using LogId = std::string;
-
+	
 	class Logger
 	{
 	private:
