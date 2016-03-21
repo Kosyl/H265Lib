@@ -1,16 +1,16 @@
 ﻿#pragma once
 #include <Common\TypeDef.h>
 
-namespace H265Lib
+namespace HEVC
 {
 	namespace Constants
 	{
-		static const Int CG_SIZE = 4;
+		static const int CG_SIZE = 4;
 
-		static const Int NUM_COEFFS_IN_CG = CG_SIZE * CG_SIZE;
+		static const int NUM_COEFFS_IN_CG = CG_SIZE * CG_SIZE;
 
-		static const Int COEFF_REMAIN_THRESHOLD = 3;
+		static const int COEFF_REMAIN_THRESHOLD = 3;
 
-		static const Int SDH_THRESHOLD = 4;
+		static const int SDH_THRESHOLD = 4;
 	};
 }

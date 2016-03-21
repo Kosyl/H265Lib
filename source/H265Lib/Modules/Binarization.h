@@ -48,7 +48,7 @@
 //	virtual ~ScanningMode( );
 //
 //	/**
-//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY ) = 0;
+//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY ) = 0;
 //	*
 //	* @brief	Scans.
 //	*
@@ -60,7 +60,7 @@
 //	* @return	Wektor wskaŸników na obiekty CoeffGroup reprezentuj¹ce podbloki 4x4
 //	*/
 //
-//	virtual std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY ) = 0;
+//	virtual std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY ) = 0;
 //
 //};
 //
@@ -89,7 +89,7 @@
 //	~HorizontalScanningMode( );
 //
 //	/**
-//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY ) = 0;
+//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY ) = 0;
 //	*
 //	* @brief	Scans.
 //	*
@@ -101,7 +101,7 @@
 //	* @return	Wektor wskaŸników na obiekty CoeffGroup reprezentuj¹ce podbloki 4x4
 //	*/
 //
-//	std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY );
+//	std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY );
 //
 //};
 //
@@ -130,7 +130,7 @@
 //	~VerticalScanningMode( );
 //
 //	/**
-//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY ) = 0;
+//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY ) = 0;
 //	*
 //	* @brief	Scans.
 //	*
@@ -142,7 +142,7 @@
 //	* @return	Wektor wskaŸników na obiekty CoeffGroup reprezentuj¹ce podbloki 4x4
 //	*/
 //
-//	std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY );
+//	std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY );
 //
 //};
 //
@@ -170,10 +170,10 @@
 //
 //	~DiagonalScanningMode( );
 //
-//	const static UInt coeffIdxInCG[ 2 ][ 16 ];
+//	const static int coeffIdxInCG[ 2 ][ 16 ];
 //
 //	/**
-//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY ) = 0;
+//	* @fn	virtual std::vector<std::shared_ptr<CoeffGroup> > ScanningMode::scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY ) = 0;
 //	*
 //	* @brief	Scans.
 //	*
@@ -185,7 +185,7 @@
 //	* @return	Wektor wskaŸników na obiekty CoeffGroup reprezentuj¹ce podbloki 4x4
 //	*/
 //
-//	std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, UInt size, UInt& out_lastCoeffX, UInt& out_lastCoeffY );
+//	std::vector<std::shared_ptr<CoeffGroup> > scan( Coeff** coeffs, int size, int& out_lastCoeffX, int& out_lastCoeffY );
 //
 //};
 //
@@ -199,9 +199,9 @@
 //{
 //private:
 //
-//	static const UInt MinInGroup[ 10 ];
+//	static const int MinInGroup[ 10 ];
 //
-//	static const UInt GroupIdx[ 32 ];
+//	static const int GroupIdx[ 32 ];
 //
 //	/**
 //	 * @brief	Instancja singletona.
@@ -213,13 +213,13 @@
 //	 * @brief	Flaga mówi¹ca, czy obliczenia dla TB maj¹ zak³adaæ mo¿liwoœæ u¿ycia trybu TransQuantBypass
 //	 */
 //
-//	Bool itsCurrentCUUsesTransQuantBypass;
+//	bool itsCurrentCUUsesTransQuantBypass;
 //
 //	/**
 //	 * @brief	Flaga mówi¹ca, czy obliczany TB pomija transformatê i kwantyzacjê
 //	 */
 //
-//	Bool itsCurrentTUUsesTransformSkip;
+//	bool itsCurrentTUUsesTransformSkip;
 //
 //	/**
 //	* @fn	Binarization::Binarization( );
@@ -255,7 +255,7 @@
 //	~Binarization( );
 //
 //	/**
-//	* @fn	UInt Binarization::countBinsInTB( Coeff** coefficients, UInt size, ScanningMode* scanningMode );
+//	* @fn	int Binarization::countBinsInTB( Coeff** coefficients, int size, ScanningMode* scanningMode );
 //	*
 //	* @brief	Funkcja zlicza iloœæ binów potrzebnych do zakodowania przekazanego bloku wspó³czynników transformacji
 //	*
@@ -266,10 +266,10 @@
 //	* @return	Ilosæ binów która zostanie podana na wejœcie kodera arytmetycznego w wyniku kodowania przekazanego bloku transformacji.
 //	*/
 //
-//	UInt countBinsInTB( Coeff** coefficients, UInt size, ScanningMode* scanningMode );
+//	int countBinsInTB( Coeff** coefficients, int size, ScanningMode* scanningMode );
 //
 //	/**
-//	* @fn	UInt Binarization::countNonZeroCoeffsAndSigns( std::shared_ptr<CoeffGroup> cg );
+//	* @fn	int Binarization::countNonZeroCoeffsAndSigns( std::shared_ptr<CoeffGroup> cg );
 //	*
 //	* @brief	Zlicza wspó³czynników niezerowych i ich znaków w obrêbie CG
 //	*
@@ -279,10 +279,10 @@
 //	* @return	Suma binów wspó³czynników znacz¹cych i ich znaków.
 //	*/
 //
-//	UInt countNonZeroCoeffsAndSigns( std::shared_ptr<CoeffGroup> cg, bool isDCGroup );
+//	int countNonZeroCoeffsAndSigns( std::shared_ptr<CoeffGroup> cg, bool isDCGroup );
 //
 //	/**
-//	* @fn	UInt Binarization::calcC1andC2( std::shared_ptr<CoeffGroup> cg, Coeff* out_remains, UInt numNonZero );
+//	* @fn	int Binarization::calcC1andC2( std::shared_ptr<CoeffGroup> cg, Coeff* out_remains, int numNonZero );
 //	*
 //	* @brief	Oblicza iloœæ binów grup C1 i C2 w obrêbie CG.
 //	*
@@ -293,10 +293,10 @@
 //	* @return	Sumê binów C1 i C2 w CG.
 //	*/
 //
-//	UInt calcC1andC2( std::shared_ptr<CoeffGroup> cg, Coeff* out_remains, UInt numNonZero );
+//	int calcC1andC2( std::shared_ptr<CoeffGroup> cg, Coeff* out_remains, int numNonZero );
 //
 //	/**
-//	* @fn	UInt Binarization::binarizeCoefficientRemainingLevel_NumBits( UInt symbol, UInt &rParam );
+//	* @fn	int Binarization::binarizeCoefficientRemainingLevel_NumBits( int symbol, int &rParam );
 //	*
 //	* @brief	Oblicza iloœæ binów potrzebn¹ do zakodowania reszty.
 //	*
@@ -306,10 +306,10 @@
 //	* @return	Iloœæ bitów potrzebn¹ do zakodowania reszty.
 //	*/
 //
-//	UInt binarizeCoefficientRemainingLevel_NumBits( UInt symbol, UInt &rParam );
+//	int binarizeCoefficientRemainingLevel_NumBits( int symbol, int &rParam );
 //
 //	/**
-//	* @fn	UInt Binarization::binarizeTR_NumBits( UInt val, UInt maxLenBeforeSuffix, UInt riceParam );
+//	* @fn	int Binarization::binarizeTR_NumBits( int val, int maxLenBeforeSuffix, int riceParam );
 //	*
 //	* @brief	Iloœæ binów, na której zosta³aby zakodowana podana wartoœæ w trybie TR
 //	*
@@ -320,10 +320,10 @@
 //	* @return	D³ugoœæ kodu TR dla podanych parametrów.
 //	*/
 //
-//	UInt binarizeTR_NumBits( UInt val, UInt maxLenBeforeSuffix, UInt riceParam );
+//	int binarizeTR_NumBits( int val, int maxLenBeforeSuffix, int riceParam );
 //
 //	/**
-//	* @fn	boost::dynamic_bitset<> Binarization::binarizeTR( UInt val, UInt maxLenBeforeSuffix, UInt riceParam );
+//	* @fn	boost::dynamic_bitset<> Binarization::binarizeTR( int val, int maxLenBeforeSuffix, int riceParam );
 //	*
 //	* @brief	Zakodowanie wartoœci metod¹ TR
 //	*
@@ -334,10 +334,10 @@
 //	* @return	Bitset zer i jedynek reprezentacji TR podanej liczby.
 //	*/
 //
-//	boost::dynamic_bitset<> binarizeTR( UInt val, UInt maxLenBeforeSuffix, UInt riceParam );
+//	boost::dynamic_bitset<> binarizeTR( int val, int maxLenBeforeSuffix, int riceParam );
 //
 //	/**
-//	* @fn	UInt Binarization::binarizeEGk_NumBits( Int val, UInt k );
+//	* @fn	int Binarization::binarizeEGk_NumBits( Int val, int k );
 //	*
 //	* @brief	Iloœæ binów potrzebna do zakodowania podanej wartoœci eksponencjalnym kodem Golomba.
 //	*
@@ -347,10 +347,10 @@
 //	* @return	D³ugoœæ kodu Golomba dla podanej liczby.
 //	*/
 //
-//	UInt binarizeEGk_NumBits( Int val, UInt k );
+//	int binarizeEGk_NumBits( Int val, int k );
 //
 //	/**
-//	* @fn	boost::dynamic_bitset<> Binarization::binarizeFL( UInt val, UInt len );
+//	* @fn	boost::dynamic_bitset<> Binarization::binarizeFL( int val, int len );
 //	*
 //	* @brief	Reprezentacja binowa podanej liczby w kodzie FL.
 //	*
@@ -360,10 +360,10 @@
 //	* @return	Mapê zer i jedynek bêd¹c¹ reprezentacj¹ FL podanej liczby.
 //	*/
 //
-//	boost::dynamic_bitset<> binarizeFL( UInt val, UInt len );
+//	boost::dynamic_bitset<> binarizeFL( int val, int len );
 //
 //	/**
-//	* @fn	UInt Binarization::binarizeLastSignificantXY_NumBits( UInt XorY, UInt transformSize );
+//	* @fn	int Binarization::binarizeLastSignificantXY_NumBits( int XorY, int transformSize );
 //	*
 //	* @brief	Oblicza iloœæ binów potrzebn¹ do zakodowania wspó³rzêdnej ostatniego wspó³czynnika.
 //	*
@@ -373,10 +373,10 @@
 //	* @return	Iloœæ binów potrzebn¹ do zakodowania wspó³rzêdnej.
 //	*/
 //
-//	UInt binarizeLastSignificantXY_NumBits( UInt XorY, UInt transformSIze );
+//	int binarizeLastSignificantXY_NumBits( int XorY, int transformSIze );
 //
 //	/**
-//	* @fn	Void Binarization::binarizeLastSignificantXY_GetPrefixAndSuffix( UInt position, UInt transformSize, UInt& out_prefix, UInt& out_suffix );
+//	* @fn	void Binarization::binarizeLastSignificantXY_GetPrefixAndSuffix( int position, int transformSize, int& out_prefix, int& out_suffix );
 //	*
 //	* @brief	Oblicza wartoœci prefiksu i sufiksu wspó³rzêdnej ostatniego niezerowago wspó³czynnika i zwraca je przez referencje.
 //	*
@@ -387,10 +387,10 @@
 //	*
 //	*/
 //
-//	Void binarizeLastSignificantXY_GetPrefixAndSuffix( UInt position, UInt transformSize, UInt& out_prefix, UInt& out_suffix );
+//	void binarizeLastSignificantXY_GetPrefixAndSuffix( int position, int transformSize, int& out_prefix, int& out_suffix );
 //
 //	/**
-//	* @fn	boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYPrefix( UInt prefix, UInt transformSize );
+//	* @fn	boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYPrefix( int prefix, int transformSize );
 //	*
 //	* @brief	Binaryzacja prefiksu wspó³rzêdnej ostatniego niezerowego wspó³czynnika w bloku.
 //	*
@@ -400,10 +400,10 @@
 //	* @return	Binarny kod prefiksu.
 //	*/
 //
-//	boost::dynamic_bitset<> binarizeLastSignificantXYPrefix( UInt prefix, UInt transformSize );
+//	boost::dynamic_bitset<> binarizeLastSignificantXYPrefix( int prefix, int transformSize );
 //
 //	/**
-//	* @fn	boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYSuffix( UInt suffix, UInt prefix );
+//	* @fn	boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYSuffix( int suffix, int prefix );
 //	*
 //	* @brief	Binaryzacja sufiksu wspó³rzêdnej ostatniego niezerowego wspó³czynnika w bloku.
 //	*
@@ -413,66 +413,66 @@
 //	* @return	Binarny kod sufiksu.
 //	*/
 //
-//	boost::dynamic_bitset<> binarizeLastSignificantXYSuffix( UInt suffix, UInt prefix );
+//	boost::dynamic_bitset<> binarizeLastSignificantXYSuffix( int suffix, int prefix );
 //
 //	/**
-//	* @fn	Bool Binarization::useSDH( );
+//	* @fn	bool Binarization::useSDH( );
 //	*
 //	* @brief	Mówi, czy u¿ywany jest tryb ukrywania znaku SDH.
 //	*
 //	* @return	true, jeœli SDH jest u¿ywane; false w p.p.
 //	*/
 //
-//	Bool useSDH( );
+//	bool useSDH( );
 //
 //	/**
-//	* @fn	Bool Binarization::getCurrentCUUsesTransQuantBypass( ) const
+//	* @fn	bool Binarization::getCurrentCUUsesTransQuantBypass( ) const
 //	*
 //	* @brief	Mówi, czy aktualna CU u¿ywa trybu TransQuantBypass.
 //	*
 //	* @return	true, jeœli TransQuantBypass jest u¿ywane; false w p.p.
 //	*/
 //
-//	Bool getCurrentCUUsesTransQuantBypass( ) const
+//	bool getCurrentCUUsesTransQuantBypass( ) const
 //	{
 //		return itsCurrentCUUsesTransQuantBypass;
 //	}
 //
 //	/**
-//	* @fn	void Binarization::setCurrentCUUsesTransQuantBypass( Bool val )
+//	* @fn	void Binarization::setCurrentCUUsesTransQuantBypass( bool val )
 //	*
 //	* @brief	Ustawia flagê mówi¹c¹ o u¿ywniu SDH (nale¿y to zrobiæ przed binaryzacj¹).
 //	*
 //	* @param	val	Flaga w³¹czenia trybu TransQuantBypass.
 //	*/
 //
-//	void setCurrentCUUsesTransQuantBypass( Bool val )
+//	void setCurrentCUUsesTransQuantBypass( bool val )
 //	{
 //		itsCurrentCUUsesTransQuantBypass = val;
 //	}
 //
 //	/**
-//	* @fn	Bool Binarization::getCurrentTUUsesTransformSkip( ) const
+//	* @fn	bool Binarization::getCurrentTUUsesTransformSkip( ) const
 //	*
 //	* @brief	Mówi, czy aktualna TU u¿ywa trybu pomijania transformacji.
 //	*
 //	* @return	true, jeœli TransformSkip jest u¿ywane; false w p.p.
 //	*/
 //
-//	Bool getCurrentTUUsesTransformSkip( ) const
+//	bool getCurrentTUUsesTransformSkip( ) const
 //	{
 //		return itsCurrentTUUsesTransformSkip;
 //	}
 //
 //	/**
-//	* @fn	void Binarization::setCurrentTUUsesTransformSkip( Bool val )
+//	* @fn	void Binarization::setCurrentTUUsesTransformSkip( bool val )
 //	*
 //	* @brief	Ustawia flagê mówi¹c¹ o u¿ywniu trybu TransformSkip (nale¿y to zrobiæ przed binaryzacj¹).
 //	*
 //	* @param	val	Flaga w³¹czenia trybu TransformSkip.
 //	*/
 //
-//	void setCurrentTUUsesTransformSkip( Bool val )
+//	void setCurrentTUUsesTransformSkip( bool val )
 //	{
 //		itsCurrentTUUsesTransformSkip = val;
 //	}

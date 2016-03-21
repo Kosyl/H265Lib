@@ -7,9 +7,8 @@
 #include <cassert>
 #include <algorithm>
 
-namespace H265Lib
+namespace HEVC
 {
-	
 	template<typename T>
 	class Matrix
 	{
@@ -19,32 +18,47 @@ namespace H265Lib
 			size_t Rows = 0, Columns = 0, Stride = 0, OffsetX = 0, OffsetY = 0;
 		};
 
-		std::shared_ptr<std::vector<T>> _data;
-		MatrixInfo _matrixInfo;
+		std::shared_ptr<std::vector<T>> data;
+		MatrixInfo matrix_info;
+
+		void resize(size_t columns, size_t rows, bool initData)
+		{
+			matrix_info.Rows = rows;
+			matrix_info.Columns = columns;
+			matrix_info.Stride = columns;
+
+			if (initData)
+				initWithDefaults();
+		}
 
 	public:
 		Matrix() :
-			_data(std::make_shared<std::vector<T>>()),
-			_matrixInfo()
+			data(nullptr)
 		{
+			resize(0, 0, false);
 		}
 
 		Matrix(size_t columns, size_t rows) :
-			_data(std::make_shared<std::vector<T>>()),
-			_matrixInfo()
+			data(std::make_shared<std::vector<T>>())
 		{
-			resize(columns, rows);
+			resize(columns, rows, true);
 		}
 
+		Matrix(std::shared_ptr<std::vector<T>> extData, size_t columns, size_t rows) :
+			data(extData)
+		{
+			resize(columns, rows, false);
+		}
+		
 		Matrix(const Matrix& other)
-			: _data(std::make_shared<std::vector<T>>(*(other._data))),
-			_matrixInfo(other._matrixInfo)
+			: data(other.data),
+			matrix_info(other.matrix_info)
 		{
 		}
 
 		Matrix(Matrix&& other)
-			: _data(std::move(other._data)),
-			_matrixInfo(std::move(other._matrixInfo))
+			: data(std::move(other.data)),
+			matrix_info(std::move(other.matrix_info))
 		{
 		}
 
@@ -52,8 +66,8 @@ namespace H265Lib
 		{
 			if (this == &other)
 				return *this;
-			_data = std::make_shared<std::vector<T>>(*(other._data));
-			_matrixInfo = other._matrixInfo;
+			data = other.data;
+			matrix_info = other.matrix_info;
 			return *this;
 		}
 
@@ -61,71 +75,82 @@ namespace H265Lib
 		{
 			if (this == &other)
 				return *this;
-			_data = std::move(other._data);
-			_matrixInfo = std::move(other._matrixInfo);
+			data = std::move(other.data);
+			matrix_info = std::move(other.matrix_info);
 			return *this;
 		}
 
-		std::shared_ptr<Matrix> submatrix(size_t offsetX, size_t offsetY, size_t width, size_t height)
+		Matrix submatrix(size_t offsetX, size_t offsetY, size_t width, size_t height)
 		{
-			auto result = std::make_shared<Matrix>(*this);
-			result->_matrixInfo.Rows = height;
-			result->_matrixInfo.Columns = width;
-			result->_matrixInfo.OffsetX = offsetX;
-			result->_matrixInfo.OffsetY = offsetY;
-			result->_matrixInfo.Stride = _matrixInfo.Stride;
+			Matrix result(*this);
+			result.matrix_info.Rows = height;
+			result.matrix_info.Columns = width;
+			result.matrix_info.OffsetX = offsetX;
+			result.matrix_info.OffsetY = offsetY;
+			result.matrix_info.Stride = matrix_info.Stride;
 
 			return result;
 		}
 
-		void resize(size_t columns, size_t rows)
+		Matrix deepCopy()
 		{
-			_matrixInfo.Rows = rows;
-			_matrixInfo.Columns = columns;
+			Matrix result;
+			result.data = std::make_shared<std::vector<T>>(height()*width());
+			result.matrix_info.Rows = height();
+			result.matrix_info.Columns = width();
+			result.matrix_info.OffsetX = 0;
+			result.matrix_info.OffsetY = 0;
+			result.matrix_info.Stride = width();
 
-			initWithDefaults();
+			for(auto& src: *this)
+			{
+				for(auto& dst: result)
+				{
+					dst = src;
+				}
+			}
 
-			_matrixInfo.Stride = columns;
+			return result;
 		}
 
 		size_t width()
 		{
-			return _matrixInfo.Columns;
+			return matrix_info.Columns;
 		}
 
 		size_t height()
 		{
-			return _matrixInfo.Rows;
+			return matrix_info.Rows;
 		}
 
 		typename std::vector<T>::const_reference at(size_t column, size_t row) const
 		{
-			return (*_data)[(_matrixInfo.OffsetY + row)*_matrixInfo.Stride + column + _matrixInfo.OffsetX];
+			return (*data)[(matrix_info.OffsetY + row)*matrix_info.Stride + column + matrix_info.OffsetX];
 		}
 
 		typename std::vector<T>::reference at(size_t column, size_t row)
 		{
-			return (*_data)[(_matrixInfo.OffsetY + row)*_matrixInfo.Stride + column + _matrixInfo.OffsetX];
+			return (*data)[(matrix_info.OffsetY + row)*matrix_info.Stride + column + matrix_info.OffsetX];
 		}
 
 		typename std::vector<T>::const_reference operator()(size_t column, size_t row) const
 		{
-			return (*_data)[(_matrixInfo.OffsetY + row)*_matrixInfo.Stride + column + _matrixInfo.OffsetX];
+			return (*data)[(matrix_info.OffsetY + row)*matrix_info.Stride + column + matrix_info.OffsetX];
 		}
 
 		typename std::vector<T>::reference operator()(size_t column, size_t row)
 		{
-			return (*_data)[(_matrixInfo.OffsetY + row)*_matrixInfo.Stride + column + _matrixInfo.OffsetX];
+			return (*data)[(matrix_info.OffsetY + row)*matrix_info.Stride + column + matrix_info.OffsetX];
 		}
 
 		void initWithDefaults()
 		{
 			auto total = width()*height();
-			(*_data).resize(total);
-			(*_data).clear();
+			(*data).resize(total);
+			(*data).clear();
 			for (size_t i = 0; i < total; ++i)
 			{
-				(*_data).push_back(T());
+				(*data).push_back(T());
 			}
 		}
 
@@ -161,13 +186,13 @@ namespace H265Lib
 
 			void refreshIdx()
 			{
-				_idx = (_sourceMatrix._matrixInfo.OffsetY + _row)*_sourceMatrix._matrixInfo.Stride + _column + _sourceMatrix._matrixInfo.OffsetX;
+				_idx = (_sourceMatrix.matrix_info.OffsetY + _row)*_sourceMatrix.matrix_info.Stride + _column + _sourceMatrix.matrix_info.OffsetX;
 			}
 
 			void incrementIdx()
 			{
 				++_column;
-				if (_column == _sourceMatrix._matrixInfo.Columns)
+				if (_column == _sourceMatrix.matrix_info.Columns)
 				{
 					_column = 0;
 					++_row;
@@ -202,12 +227,12 @@ namespace H265Lib
 
 			typename std::vector<UnqualifiedType>::reference operator* () const
 			{
-				return (*(_sourceMatrix._data))[_idx];
+				return (*(_sourceMatrix.data))[_idx];
 			}
 
 			typename std::vector<UnqualifiedType>::reference operator-> () const
 			{
-				return (*(_sourceMatrix._data))[_idx];
+				return (*(_sourceMatrix.data))[_idx];
 			}
 
 			operator ForwardIterator<const Type>() const
@@ -216,8 +241,8 @@ namespace H265Lib
 			}
 		};
 
-		friend class ForwardIterator < T > ;
-		friend class ForwardIterator < const T > ;
+		friend class ForwardIterator < T >;
+		friend class ForwardIterator < const T >;
 
 		typedef ForwardIterator<T> iterator;
 		typedef ForwardIterator<const T> const_iterator;
@@ -229,7 +254,7 @@ namespace H265Lib
 
 		iterator end()
 		{
-			return iterator(*this, _matrixInfo.Rows, 0);
+			return iterator(*this, matrix_info.Rows, 0);
 		}
 
 		const_iterator cbegin()
@@ -239,7 +264,7 @@ namespace H265Lib
 
 		const_iterator cend()
 		{
-			return const_iterator(*this, _matrixInfo.Rows, 0);
+			return const_iterator(*this, matrix_info.Rows, 0);
 		}
 
 #pragma endregion

@@ -5,22 +5,18 @@
 #include "QuadTree.h"
 #include "BlockBase.h"
 
-namespace H265Lib
+namespace HEVC
 {
 	class CTU : public BlockBase
 	{
-	private:
-
-		std::shared_ptr<CUQuadTree> _CUQuadTree;
-
 	public:
 
-		CTU(UShort x, UShort y, UShort size, ParametersBundle parameters);
+		CTU(int x, int y, int size);
 		virtual ~CTU() = default;
 
-		std::shared_ptr<CUQuadTree> getCUQuadTree();
-		Bool isPartitioned();
+		std::shared_ptr<CUQuadTree> CUQuadTree;
+		bool isPartitioned();
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 	};
 }

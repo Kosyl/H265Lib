@@ -3,9 +3,9 @@
 #include "Picture.h"
 #include "BlockBase.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	class PUIntra;
+	class Pintra;
 	class TUQuadTree;
 
 	class CU : public BlockBase
@@ -16,7 +16,7 @@ namespace H265Lib
 
 		Short itsQPDeltaForCU;
 
-		Bool itsTransQuantBypassEnabled;
+		bool itsTransQuantBypassEnabled;
 
 		PredictionType itsPredictionType;
 
@@ -26,7 +26,7 @@ namespace H265Lib
 
 	public:
 
-		CU(UShort x, UShort y, UShort size, ParametersBundle parameters);
+		CU(int x, int y, int size);
 
 		virtual ~CU();
 
@@ -35,7 +35,7 @@ namespace H265Lib
 			return itsTransformTree;
 		}
 
-		Void setTransformTree(std::shared_ptr<TUQuadTree> val)
+		void setTransformTree(std::shared_ptr<TUQuadTree> val)
 		{
 			itsTransformTree = val;
 		}
@@ -45,7 +45,7 @@ namespace H265Lib
 			return itsPartitionMode;
 		}
 
-		virtual Void setPartitionMode(Partition val)
+		virtual void setPartitionMode(Partition val)
 		{
 			itsPartitionMode = val;
 		}
@@ -62,78 +62,78 @@ namespace H265Lib
 
 		Short getAbsoluteQP();
 
-		Bool getTransQuantBypassEnabled() const
+		bool getTransQuantBypassEnabled() const
 		{
 			return itsTransQuantBypassEnabled;
 		}
 
-		void setTransQuantBypassEnabled(Bool val)
+		void setTransQuantBypassEnabled(bool val)
 		{
 			itsTransQuantBypassEnabled = val;
 		}
 
-		virtual Void reconstructionLoop() = 0;*/
+		virtual void reconstructionLoop() = 0;*/
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 	};
 
-	class CUIntra : public CU
+	class Cintra : public CU
 	{
 	private:
 
-		//UShort itsIntraMPMs[3];
+		//int itsIntraMPMs[3];
 
-		//std::shared_ptr<PUIntra> itsPUs[4];
+		//std::shared_ptr<Pintra> itsPUs[4];
 
-		//UShort itsChromaPredictionDerivationType;
+		//int itsChromaPredictionDerivationType;
 
 	public:
 
-		CUIntra(UShort x, UShort y, UShort size, ParametersBundle parameters);
+		Cintra(int x, int y, int size);
 
-		virtual ~CUIntra();
+		virtual ~Cintra();
 
-		/*UShort getIntraChromaPredictionDerivationType() const
+		/*int getIntraChromaPredictionDerivationType() const
 		{
 		return itsChromaPredictionDerivationType;
 		}
 
-		void setIntraChromaPredictionDerivationType(UShort val);
+		void setIntraChromaPredictionDerivationType(int val);
 
-		virtual Void setPartitionMode(Partition val)
+		virtual void setPartitionMode(Partition val)
 		{
 		assert(val == Partition::Mode_2Nx2N || val == Partition::Mode_NxN);
 		itsPartitionMode = val;
-		for (UInt i:QT_PARTS)
+		for (int i:QT_PARTS)
 		{
 		if (itsPUs[i] != nullptr)
 		itsPUs[i].reset();
 		}
 		}
 
-		Void addPU(std::shared_ptr<PUIntra> newPU, QTComponent position = QTCOMPONENT_FIRST)
+		void addPU(std::shared_ptr<Pintra> newPU, QTComponent position = QTCOMPONENT_FIRST)
 		{
 		itsPUs[position] = newPU;
 		}
 
-		std::shared_ptr<PUIntra> getPU(QTComponent position = QTCOMPONENT_FIRST)
+		std::shared_ptr<Pintra> getPU(QTComponent position = QTCOMPONENT_FIRST)
 		{
 		return itsPUs[position];
 		}
 
-		Void resetPUs()
+		void resetPUs()
 		{
 		for (Int i = 0; i < 4; ++i)
 		itsPUs[i] = nullptr;
 		}
 
-		Void createPUs(UInt lumaModeIdx = 0);
+		void createPUs(int lumaModeIdx = 0);
 
-		virtual Void reconstructionLoop();
+		virtual void reconstructionLoop();
 
 		Double getTotalCost();
 		*/
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 	};
 }

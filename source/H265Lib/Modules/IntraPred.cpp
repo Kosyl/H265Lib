@@ -34,9 +34,9 @@
 //	return itsInstance;
 //}
 //
-//UShort IntraPred::getFilteringThreshold( ) const
+//int IntraPred::getFilteringThreshold( ) const
 //{
-//	UShort thresh = 10;
+//	int thresh = 10;
 //	switch( itsCurrentPB->getSize( ) )
 //	{
 //	case 8:
@@ -52,7 +52,7 @@
 //	return thresh;
 //}
 //
-//Bool IntraPred::isFilteringRequired( ) const
+//bool IntraPred::isFilteringRequired( ) const
 //{
 //	if( itsCurrentPB->getImgComp( ) != LUMA )
 //		return false;
@@ -78,8 +78,8 @@
 //	Sample* newRefs = new Short[ 2 * itsCurrentPB->getSize( ) ];
 //
 //	Sample prevRef = itsCornerValue, currRef;
-//	UInt limit = 2 * itsCurrentPB->getSize( ) - 1;
-//	for( UInt x = 0; x < limit; ++x, prevRef = currRef )
+//	int limit = 2 * itsCurrentPB->getSize( ) - 1;
+//	for( int x = 0; x < limit; ++x, prevRef = currRef )
 //	{
 //		currRef = refs[ x ];
 //		newRefs[ x ] = filtRef( refs[ x ], prevRef, refs[ x + 1 ] );
@@ -102,7 +102,7 @@
 //	itsCornerValue = filtRef( itsCornerValue, firstLeft, firstTop );
 //}
 //
-//Bool IntraPred::checkSmoothConditions( const IntraDirection dir ) const
+//bool IntraPred::checkSmoothConditions( const IntraDirection dir ) const
 //{
 //	assert( dir != INTRA_DIR_CORNER );
 //	Sample* currRefs = itsReferenceValues[ dir ];
@@ -111,14 +111,14 @@
 //	return cond < limit;
 //}
 //
-//Bool IntraPred::isSmoothingRequired( ) const
+//bool IntraPred::isSmoothingRequired( ) const
 //{
 //	bool doSmoothing = ( itsCurrentPB->getSize( ) == 32 ) && SeqParams( )->getStrongIntraSmoothingEnabled( );
 //	bool smoothCond = checkSmoothConditions( INTRA_DIR_LEFT ) && checkSmoothConditions( INTRA_DIR_TOP );
 //	return doSmoothing && smoothCond;
 //}
 //
-//Sample IntraPred::getSmoothedReferenceAtPosition( const IntraDirection dir, const UShort offset ) const
+//Sample IntraPred::getSmoothedReferenceAtPosition( const IntraDirection dir, const int offset ) const
 //{
 //	Sample lastRef = itsReferenceValues[ dir ][ 2 * itsCurrentPB->getSize( ) - 1 ];
 //	return ( ( 63 - offset ) * itsCornerValue + ( offset + 1 ) * lastRef + 32 ) >> 6;
@@ -131,8 +131,8 @@
 //	Sample* refs = itsReferenceValues[ dir ];
 //	Sample* newRefs = new Short[ 2 * itsCurrentPB->getSize( ) ];
 //
-//	UInt limit = 2 * itsCurrentPB->getSize( ) - 1;
-//	for( UInt x = 0; x < limit; ++x )
+//	int limit = 2 * itsCurrentPB->getSize( ) - 1;
+//	for( int x = 0; x < limit; ++x )
 //		newRefs[ x ] = getSmoothedReferenceAtPosition( dir, x );
 //
 //	newRefs[ limit ] = refs[ limit ];
@@ -214,7 +214,7 @@
 //	itsReferenceValues = new Short*[ 2 ];
 //	itsReferenceValues[ INTRA_DIR_LEFT ] = new Short[ 2 * itsCurrentPB->getSize( ) ]; 
 //	itsReferenceValues[ INTRA_DIR_TOP ] = new Short[ 2 * itsCurrentPB->getSize( ) ];
-//	for( UShort i = 0; i < 2 * itsCurrentPB->getSize( ); ++i )
+//	for( int i = 0; i < 2 * itsCurrentPB->getSize( ); ++i )
 //	{
 //		itsReferenceValues[ INTRA_DIR_LEFT ][ i ] = leftRefs[ i ];
 //		itsReferenceValues[ INTRA_DIR_TOP ][ i ] = topRefs[ i ];

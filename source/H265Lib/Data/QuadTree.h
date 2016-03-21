@@ -2,85 +2,100 @@
 
 #include "Picture.h"
 #include "BlockBase.h"
+#include "Data/CU.h"
+#include "Data/TU.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	class CU;
-	class TU;
-	class CUIntra;
-	class PUIntra;
+	class Cintra;
+	class Pintra;
 
 	template< class T, class self >
 	class QuadTree : public BlockBase
 	{
 	protected:
 
-		Matrix<std::shared_ptr<self>> _subTrees;
-		std::shared_ptr<T> _leaf;
-
-		QTMode _mode;
-
-		void refreshPositionInCTU();
-
-		Void setLeaf(std::shared_ptr<T> rhs)
+		void refreshPositionInCTU(SequenceParameterSet& sps )
 		{
-			_leaf = rhs;
+			auto log2CTUSize = sps.getLog2CTUSize();
+			auto log2MinBlock = sps.getLog2MinTUSize();
+
+			position_in_ctu.x = x >> log2CTUSize >> log2MinBlock;
+			position_in_ctu.y = y >> log2CTUSize >> log2MinBlock;
+
+			position_in_ctu.resolveIdx(sps, Indexing::ZScanByBlock);
 		}
 
-		virtual std::shared_ptr<self> makeSubTree(UInt x, UInt y)
+		virtual std::shared_ptr<self> makeSubTree(int x, int y)
 		{
-			return std::make_shared<self>(x, y, _size / 2, Parameters);
+			return std::make_shared<self>(x, y, size / 2);
 		}
-
-		std::shared_ptr<T> makeLeaf()
+		virtual void createLeaf() = 0;
+		void createSubTrees(int picWidth, int picHeight) 
 		{
-			return std::make_shared<T>(Position.X, Position.Y, _size, Parameters);
-		}
+			subtrees[0][0] = makeSubTree(x, y);
 
-		Void createSubTrees();
+			bool createRight = x + size / 2 < picWidth;
+			bool createLower = y + size / 2 < picHeight;
+
+			if (createRight)
+				subtrees[1][0] = makeSubTree(x + (size / 2), y);
+
+			if (createLower)
+				subtrees[0][1] = makeSubTree(x, y + (size / 2));
+
+			if (createLower && createRight)
+				subtrees[1][1] = makeSubTree(x + (size / 2), y + (size / 2));
+		}
 
 	public:
 
-		H265Lib::Position PositionInCTU;
+		std::shared_ptr<self> subtrees[2][2];
+		std::shared_ptr<T> leaf;
+		QTMode mode;
+		Position position_in_ctu;
 
-		QuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters);
+		QuadTree(int x, int y, int size) :
+			BlockBase(x, y, size)
+		{
+			clear();
+		}
 		virtual ~QuadTree() = default;
 
-		std::shared_ptr<self> getSubTree(TreePart placement)
+		void clear()
 		{
-			switch (placement)
+			for (int i = 0; i < 2; ++i)
 			{
-			case UpperRight:
-				return _subTrees(1, 0);
-			case LowerLeft:
-				return _subTrees(0, 1);
-			case LowerRight:
-				return _subTrees(1, 1);
-			case UpperLeft:
+				for (int j = 0; j < 2; ++j)
+				{
+					subtrees[i][j].reset();
+				}
+			}
+			leaf.reset();
+
+			mode = QTMode::Unset;
+		}
+
+		void rebuild(QTMode val, int picWidth, int picHeight) 
+		{
+			clear();
+			mode = val;
+
+			switch (mode)
+			{
+			case QTMode::Split:
+				createSubTrees(picWidth, picHeight);
+				break;
+			case QTMode::Leaf:
 			default:
-				return _subTrees(0, 0);
+				createLeaf();
+				break;
 			}
 		}
 
-		Matrix<std::shared_ptr<self>>& getSubTrees()
-		{
-			return _subTrees;
-		}
-
-		std::shared_ptr<T> getLeaf()
-		{
-			return _leaf;
-		}
-
-		Void clear();
-
-		QTMode getQTMode() const;
-		void rebuild(QTMode val);
-		Bool isLeaf() const;
-		Bool isSplit() const;
+		bool isLeaf() const { return mode == QTMode::Leaf; }
+		bool isSplit() const { return mode == QTMode::Split; }
 	};
-
-#include "QuadTreeImpl.cpp"
 
 	class CUQuadTree : public QuadTree < CU, CUQuadTree >
 	{
@@ -88,12 +103,17 @@ namespace H265Lib
 
 	public:
 
-		CUQuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters);
+		CUQuadTree(int x, int y, int size);
 		virtual ~CUQuadTree() = default;
 
 		std::shared_ptr<CU> getCU();
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void createLeaf() override
+		{
+			leaf = std::make_shared<CU>(x, y, size);
+		}
+
+		virtual void print(LogId logId, bool recursive = true) override;
 	};
 
 	class TUQuadTree : public QuadTree < TU, TUQuadTree >
@@ -102,13 +122,18 @@ namespace H265Lib
 
 	public:
 
-		TUQuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters);
+		TUQuadTree(int x, int y, int size);
 		virtual ~TUQuadTree() = default;
+
+		virtual void createLeaf() override
+		{
+			leaf = std::make_shared<TU>(x, y, size);
+		}
 
 		std::shared_ptr<TU> getTU();
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 
-		std::shared_ptr<TU> getTuContainingPosition(UInt x, UInt y);
+		std::shared_ptr<TU> getTuContainingPosition(int x, int y);
 	};
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace H265Lib
+namespace HEVC
 {
 	class HRDParameters
 	{

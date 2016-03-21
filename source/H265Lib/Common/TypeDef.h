@@ -3,22 +3,9 @@
 #include <string>
 
 #define interface struct __declspec(novtable)
-
-using Void = void;
-using Bool = bool;
-using Char = char;
-using UChar = unsigned char;
-using Short = short;
-using UShort = unsigned short;
-using Int = int;
-using Long = long;
-using UInt = unsigned int;
-using Double = double;
-using Float = float;
-using String = std::string;
-
-using Pixel = UChar;
-using Sample = Short;
-using Coeff = Int;
+#define clearptr(x) if(x!=nullptr) delete x; x = nullptr
+using Pixel = uint8_t;
+using Sample = uint16_t;
+using Coeff = int32_t;
 
 using LogId = std::string;

@@ -3,7 +3,7 @@
 #include <ParameterSets/SequenceParameterSet.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace ParameterSetTests
 {
@@ -26,7 +26,7 @@ namespace ParameterSetTests
 		TEST_METHOD(Subsampling420_GivesCorrectPictureSizes)
 		{
 			auto sps = SequenceParameterSetBank::instance().createNext();
-			sps->setSubsamplingFormat(SubsamplingFormat::Mode_420);
+			sps->chroma_format_idc = SubsamplingFormat::Mode_420;
 			sps->setPicSize(100, 100);
 
 			Assert::IsTrue(sps->getPicHeight(ImgComp::Luma) == 100);
@@ -40,7 +40,7 @@ namespace ParameterSetTests
 		TEST_METHOD(Subsampling422_GivesCorrectPictureSizes)
 		{
 			auto sps = SequenceParameterSetBank::instance().createNext();
-			sps->setSubsamplingFormat(SubsamplingFormat::Mode_422);
+			sps->chroma_format_idc = SubsamplingFormat::Mode_422;
 			sps->setPicSize(100, 100);
 
 			Assert::IsTrue(sps->getPicHeight(ImgComp::Luma) == 100);
@@ -54,7 +54,7 @@ namespace ParameterSetTests
 		TEST_METHOD(Subsampling444_GivesCorrectPictureSizes)
 		{
 			auto sps = SequenceParameterSetBank::instance().createNext();
-			sps->setSubsamplingFormat(SubsamplingFormat::Mode_444);
+			sps->chroma_format_idc = SubsamplingFormat::Mode_444;
 			sps->setPicSize(100, 100);
 
 			Assert::IsTrue(sps->getPicHeight(ImgComp::Luma) == 100);

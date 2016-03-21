@@ -1,19 +1,19 @@
 #include "PU.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	PUIntra::PUIntra(UInt X, UInt Y, UInt size, ParametersBundle parameters) :
+	PU::PU(int X, int Y, int size) :
 		BlockBase(X, Y, size)
 	{
 	}
 
-	PUIntra::~PUIntra()
+	PU::~PU()
 	{
 	}
 
-	Void PUIntra::printDescription(LogId logId, bool recursive)
+	void PU::print(LogId logId, bool recursive)
 	{
-		////LOG( "PART" ) << "PUIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
+		////LOG( "PART" ) << "Pintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
 
 		////LOG( "PART" ) << "zawarte TU:" << std::endl;
 		//LOG_TAB "PART" );
@@ -21,7 +21,7 @@ namespace H265Lib
 		//LOG_UNTAB "PART" );
 	}
 
-	//UInt PUIntra::getModeForChroma(UInt modeForLuma, UInt chromaPredictionDerivationMode)
+	//int Pintra::getModeForChroma(int modeForLuma, int chromaPredictionDerivationMode)
 	//{
 	//	switch (chromaPredictionDerivationMode)
 	//	{
@@ -41,9 +41,9 @@ namespace H265Lib
 	//	}
 	//}
 
-	//Void PUIntra::reconstructionLoop()
+	//void Pintra::reconstructionLoop()
 	//{
-	//	////LOG( "RECO" ) << "PUIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
+	//	////LOG( "RECO" ) << "Pintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
 	//	//LOG_TAB "RECO" );
 	//	itsTransformArea->reconstructionLoop(shared_from_this());
 	//	//LOG_UNTAB "RECO" );

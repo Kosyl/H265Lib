@@ -26,7 +26,7 @@
 //{
 //}
 //
-//Void Slice::appendCTU( std::shared_ptr<CTU> ctu )
+//void Slice::appendCTU( std::shared_ptr<CTU> ctu )
 //{
 //	//TODO
 //}

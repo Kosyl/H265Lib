@@ -89,19 +89,19 @@
 //	static Long SAD( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
 //
 //	/**
-//	 * @fn	Void RDCost::setDistortionFunction( Long( *newFunc )( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon ) );
+//	 * @fn	void RDCost::setDistortionFunction( Long( *newFunc )( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon ) );
 //	 *
 //	 * @brief	Wybór funkcji licz¹cej zniekszta³cenie.
 //	 *
 //	 * @param [in,out]	newFunc	WskaŸnik na funkcjê licz¹c¹ zniekszta³cenie.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void setDistortionFunction( Long( *newFunc )( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon ) );
+//	void setDistortionFunction( Long( *newFunc )( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon ) );
 //
 //	/**
-//	 * @fn	Double RDCost::calcCost( UInt estBits, UInt QP, Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
+//	 * @fn	Double RDCost::calcCost( int estBits, int QP, Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
 //	 *
 //	 * @brief Obliczenie kosztu.
 //	 *
@@ -113,10 +113,10 @@
 //	 * @return	Obliczony koszt.
 //	 */
 //
-//	Double calcCost( UInt estBits, UInt QP, Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
+//	Double calcCost( int estBits, int QP, Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
 //
 //	/**
-//	 * @fn	Double RDCost::calcCost( UInt estBits, UInt distortion, UInt QP );
+//	 * @fn	Double RDCost::calcCost( int estBits, int distortion, int QP );
 //	 *
 //	 * @brief	Obliczenie kosztu.
 //	 *
@@ -127,10 +127,10 @@
 //	 * @return	Obliczony koszt.
 //	 */
 //
-//	Double calcCost( UInt estBits, UInt distortion, UInt QP );
+//	Double calcCost( int estBits, int distortion, int QP );
 //
 //	/**
-//	 * @fn	UInt RDCost::calcDistortion( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
+//	 * @fn	int RDCost::calcDistortion( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
 //	 *
 //	 * @brief	Oblicza zniekszta³cenie wybrana funkcj¹.
 //	 *
@@ -140,7 +140,7 @@
 //	 * @return	Obliczone zniekszta³cenie.
 //	 */
 //
-//	UInt calcDistortion( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
+//	int calcDistortion( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon );
 //};
 //
 //#endif

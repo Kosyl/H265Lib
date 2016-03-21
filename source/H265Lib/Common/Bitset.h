@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 
-namespace H265Lib
+namespace HEVC
 {
-	class Bitset : public std::vector < bool >
+	class Bitset : public std::vector<bool>
 	{
 	public:
 		Bitset(size_t size);
@@ -13,3 +13,4 @@ namespace H265Lib
 		std::string str();
 	};
 }
+

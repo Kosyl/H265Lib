@@ -10,7 +10,7 @@
 //#include "TU.h"
 //DeblockingFilter* DeblockingFilter::instance = nullptr;
 //
-//UShort DeblockingFilter::BetaPrim[ 52 ] =
+//int DeblockingFilter::BetaPrim[ 52 ] =
 //{
 //	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 //	0, 0, 0, 0, 0, 0, 6, 7, 8, 9,
@@ -20,7 +20,7 @@
 //	62, 64
 //};
 //
-//UShort DeblockingFilter::TcPrim[ 54 ] =
+//int DeblockingFilter::TcPrim[ 54 ] =
 //{
 //	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 //	0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
@@ -30,7 +30,7 @@
 //	18, 20, 22, 24
 //};
 //
-//UShort DeblockingFilter::QPc[ 14 ] =
+//int DeblockingFilter::QPc[ 14 ] =
 //{
 //	29, 30, 31, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37
 //};
@@ -72,7 +72,7 @@
 //	resetMatrices( );
 //}
 //
-//Void DeblockingFilter::resetMatrices( )
+//void DeblockingFilter::resetMatrices( )
 //{
 //	if( itsEdgeFlags != nullptr )
 //		deleteMatrix( itsEdgeFlags, itsCurrentSize );
@@ -81,7 +81,7 @@
 //		deleteMatrix( itsFilterStrength, itsCurrentSize );
 //}
 //
-//Void DeblockingFilter::doFiltering( std::shared_ptr<Picture> pic, EdgeType direction )
+//void DeblockingFilter::doFiltering( std::shared_ptr<Picture> pic, EdgeType direction )
 //{
 //	for( Int i = 0; i < SeqParams( )->getPicHeightInCTUs( ); ++i )
 //	{
@@ -94,7 +94,7 @@
 //	}
 //}
 //
-//Void DeblockingFilter::doFiltering( std::shared_ptr<CUQuadTree> qt, EdgeType direction )
+//void DeblockingFilter::doFiltering( std::shared_ptr<CUQuadTree> qt, EdgeType direction )
 //{
 //	if( qt->getQTMode( ) == QTMODE_LEAF )
 //	{
@@ -110,14 +110,14 @@
 //	}
 //}
 //
-//Void DeblockingFilter::doFiltering( std::shared_ptr<CUIntra> cu, EdgeType direction )
+//void DeblockingFilter::doFiltering( std::shared_ptr<Cintra> cu, EdgeType direction )
 //{
 //	resetMatrices( );
 //	itsCurrentSize = cu->getSize( );
 //	/*//LOG( "FDB" ) << "CU(" << cu->getX( ) << "," << cu->getY( ) << "), " << cu->getSize( ) << "x" << cu->getSize( ) << std::endl;
 //	//LOG_TAB "FDB" );*/
-//	itsEdgeFlags = getEmptyMatrix<Bool>( itsCurrentSize, itsCurrentSize );
-//	itsFilterStrength = getEmptyMatrix<UShort>( itsCurrentSize, itsCurrentSize );
+//	itsEdgeFlags = getEmptyMatrix<bool>( itsCurrentSize, itsCurrentSize );
+//	itsFilterStrength = getEmptyMatrix<int>( itsCurrentSize, itsCurrentSize );
 //
 //	itsShouldFilterCBEdge = checkCUEdge( cu, direction );
 //	fillInTransformEdges( cu->getTransformTree( ), direction );
@@ -131,7 +131,7 @@
 //	//LOG_UNTAB "FDB" );
 //}
 //
-//Bool DeblockingFilter::checkCUEdge( std::shared_ptr<CUIntra> cu, EdgeType direction )
+//bool DeblockingFilter::checkCUEdge( std::shared_ptr<Cintra> cu, EdgeType direction )
 //{
 //	if( direction == EDGE_VER )
 //	{
@@ -140,8 +140,8 @@
 //
 //		if( cu->getX( ) == cu->getParentCTU( )->getX( ) && ( PicParams( )->getLoopFilterOnSlicesEnabled( ) || PicParams( )->getLoopFilterOnTilesEnabled( ) ) )
 //		{
-//			UInt ctuX = cu->getParentCTU( )->getX( );
-//			UInt ctuY = cu->getParentCTU( )->getY( );
+//			int ctuX = cu->getParentCTU( )->getX( );
+//			int ctuY = cu->getParentCTU( )->getY( );
 //
 //			if( ctuX > 0 )
 //			{
@@ -161,8 +161,8 @@
 //
 //		if( cu->getY( ) == cu->getParentCTU( )->getY( ) && ( PicParams( )->getLoopFilterOnSlicesEnabled( ) || PicParams( )->getLoopFilterOnTilesEnabled( ) ) )
 //		{
-//			UInt ctuX = cu->getParentCTU( )->getX( );
-//			UInt ctuY = cu->getParentCTU( )->getY( );
+//			int ctuX = cu->getParentCTU( )->getX( );
+//			int ctuY = cu->getParentCTU( )->getY( );
 //
 //			if( ctuY > 0 )
 //			{
@@ -179,22 +179,22 @@
 //	return true;
 //}
 //
-//Void DeblockingFilter::fillInTransformEdges( std::shared_ptr<TUQuadTree> TUtree, EdgeType direction )
+//void DeblockingFilter::fillInTransformEdges( std::shared_ptr<TUQuadTree> TUtree, EdgeType direction )
 //{
 //	if( TUtree->getQTMode( ) == QTMODE_LEAF )
 //	{
-//		UInt size = TUtree->getSize( );
-//		UInt relativeX = TUtree->getX( ) - TUtree->getParentCU( )->getX( );
-//		UInt relativeY = TUtree->getY( ) - TUtree->getParentCU( )->getY( );
+//		int size = TUtree->getSize( );
+//		int relativeX = TUtree->getX( ) - TUtree->getParentCU( )->getX( );
+//		int relativeY = TUtree->getY( ) - TUtree->getParentCU( )->getY( );
 //
 //		if( direction == EDGE_VER )
 //		{
-//			for( UInt i = 0; i < size; ++i )
+//			for( int i = 0; i < size; ++i )
 //				itsEdgeFlags[ relativeX ][ relativeY + i ] = relativeX == 0 ? itsShouldFilterCBEdge : true;
 //		}
 //		else
 //		{
-//			for( UInt i = 0; i < size; ++i )
+//			for( int i = 0; i < size; ++i )
 //				itsEdgeFlags[ relativeX + i ][ relativeY ] = relativeY == 0 ? itsShouldFilterCBEdge : true;
 //		}
 //	}
@@ -212,15 +212,15 @@
 //	}
 //}
 //
-//Void DeblockingFilter::fillInPredictionEdges( std::shared_ptr<CUIntra>cu, EdgeType direction )
+//void DeblockingFilter::fillInPredictionEdges( std::shared_ptr<Cintra>cu, EdgeType direction )
 //{
 //	PartitionMode mode = cu->getPartitionMode( );
-//	UInt size = cu->getSize( );
-//	Bool partitionAllowsFilter = true;
+//	int size = cu->getSize( );
+//	bool partitionAllowsFilter = true;
 //
 //	if( direction == EDGE_VER )
 //	{
-//		UInt x = 0;
+//		int x = 0;
 //		switch( mode )
 //		{
 //		case PART_Nx2N:
@@ -238,13 +238,13 @@
 //		}
 //		if( partitionAllowsFilter )
 //		{
-//			for( UInt i = 0; i < size; ++i )
+//			for( int i = 0; i < size; ++i )
 //				itsEdgeFlags[ x ][ i ] = true;
 //		}
 //	}
 //	else
 //	{
-//		UInt y = 0;
+//		int y = 0;
 //		switch( mode )
 //		{
 //		case PART_2NxN:
@@ -262,28 +262,28 @@
 //		}
 //		if( partitionAllowsFilter )
 //		{
-//			for( UInt i = 0; i < size; ++i )
+//			for( int i = 0; i < size; ++i )
 //				itsEdgeFlags[ i ][ y ] = true;
 //		}
 //	}
 //}
 //
-//Void DeblockingFilter::calcFilterStrength( std::shared_ptr<CUIntra>cu, EdgeType direction )
+//void DeblockingFilter::calcFilterStrength( std::shared_ptr<Cintra>cu, EdgeType direction )
 //{
 //	Sample** picture = cu->getPicture( )->getReconMatrix( LUMA );
-//	UInt cuX = cu->getX( ), cuY = cu->getY( );
-//	UInt size = cu->getSize( );
-//	UInt xN = ( size / 8 ) - 1;
-//	UInt yN = ( size / 4 ) - 1;
-//	UInt x = 0, y = 0;
+//	int cuX = cu->getX( ), cuY = cu->getY( );
+//	int size = cu->getSize( );
+//	int xN = ( size / 8 ) - 1;
+//	int yN = ( size / 4 ) - 1;
+//	int x = 0, y = 0;
 //	Sample p0, q0;
 //
 //	if( direction == EDGE_HOR )
 //		std::swap( xN, yN );
 //
-//	for( UInt i = 0; i <= xN; ++i )
+//	for( int i = 0; i <= xN; ++i )
 //	{
-//		for( UInt j = 0; j <= yN; ++j )
+//		for( int j = 0; j <= yN; ++j )
 //		{
 //			x = i << ( direction == EDGE_VER ? 3 : 2);
 //			y = j << ( direction == EDGE_VER ? 2 : 3 );
@@ -310,9 +310,9 @@
 //					continue;
 //				}
 //
-//				Bool q0HasNonZeroCoeff = cu->getTransformTree( )->getTuContainingPosition( cuX + x, cuY + y )->getTB( LUMA )->hasAtLeastOneNonZeroCoeff( );
+//				bool q0HasNonZeroCoeff = cu->getTransformTree( )->getTuContainingPosition( cuX + x, cuY + y )->getTB( LUMA )->hasAtLeastOneNonZeroCoeff( );
 //				std::shared_ptr<CU> neighbor = cu->getPicture( )->getCuContainingPosition( cuX + x + ( direction == EDGE_VER ? -1 : 0 ), cuY + y + ( direction == EDGE_HOR ? -1 : 0 ) );
-//				Bool p0HasNonZeroCoeff = neighbor->getTransformTree( )->getTuContainingPosition( cuX + x + ( direction == EDGE_VER ? -1 : 0 ), cuY + y + ( direction == EDGE_HOR ? -1 : 0 ) )->getTB( LUMA )->hasAtLeastOneNonZeroCoeff( );
+//				bool p0HasNonZeroCoeff = neighbor->getTransformTree( )->getTuContainingPosition( cuX + x + ( direction == EDGE_VER ? -1 : 0 ), cuY + y + ( direction == EDGE_HOR ? -1 : 0 ) )->getTB( LUMA )->hasAtLeastOneNonZeroCoeff( );
 //				if( q0HasNonZeroCoeff || p0HasNonZeroCoeff )
 //				{
 //					itsFilterStrength[ x ][ y ] = 1;
@@ -330,14 +330,14 @@
 //	}
 //}
 //
-//Void DeblockingFilter::filtreEdges( std::shared_ptr<CUIntra>cu, EdgeType direction )
+//void DeblockingFilter::filtreEdges( std::shared_ptr<Cintra>cu, EdgeType direction )
 //{
-//	UInt xStep = direction == EDGE_VER ? 8 : 4;
-//	UInt yStep = direction == EDGE_HOR ? 8 : 4;
-//	for( UInt x = 0; x < cu->getSize( ); x += xStep )
+//	int xStep = direction == EDGE_VER ? 8 : 4;
+//	int yStep = direction == EDGE_HOR ? 8 : 4;
+//	for( int x = 0; x < cu->getSize( ); x += xStep )
 //	{
 //		////LOG_TAB "FDB" );
-//		for( UInt y = 0; y< cu->getSize( ); y += yStep )
+//		for( int y = 0; y< cu->getSize( ); y += yStep )
 //		{
 //			if( itsFilterStrength[ x ][ y ] > 0 )
 //			{
@@ -361,9 +361,9 @@
 //		}
 //		////LOG_UNTAB "FDB" );
 //	}
-//	for( UShort x = 0; x < cu->getSize( )/2; x += 4 )
+//	for( int x = 0; x < cu->getSize( )/2; x += 4 )
 //	{
-//		for( UShort y = 0; y < cu->getSize( )/2; y += 4 )
+//		for( int y = 0; y < cu->getSize( )/2; y += 4 )
 //		{
 //			if(
 //				direction == EDGE_VER &&
@@ -387,13 +387,13 @@
 //	}
 //}
 //
-//Void DeblockingFilter::caclDecisions( std::shared_ptr<CUIntra> cu, UInt x, UInt y, EdgeType direction )
+//void DeblockingFilter::caclDecisions( std::shared_ptr<Cintra> cu, int x, int y, EdgeType direction )
 //{
 //	Sample** pic = cu->getPicture( )->getReconMatrix( LUMA );
 //	Sample q0[ 4 ], q3[ 4 ], p0[ 4 ], p3[ 4 ];
 //	if( direction == EDGE_VER )
 //	{
-//		for( UInt i = 0; i < 4; ++i )
+//		for( int i = 0; i < 4; ++i )
 //		{
 //			q0[ i ] = pic[ cu->getX( ) + x + i ][ cu->getY( ) + y ];
 //			q3[ i ] = pic[ cu->getX( ) + x + i ][ cu->getY( ) + y + 3 ];
@@ -403,7 +403,7 @@
 //	}
 //	else
 //	{
-//		for( UInt i = 0; i < 4; ++i )
+//		for( int i = 0; i < 4; ++i )
 //		{
 //			q0[ i ] = pic[ cu->getX( ) + x ][ cu->getY( ) + y + i ];
 //			q3[ i ] = pic[ cu->getX( ) + x + 3 ][ cu->getY( ) + y + i ];
@@ -423,7 +423,7 @@
 //	printTable( p3, 4, //LOG( "FDB" ), 4 );*/
 //
 //	Short QPq = cu->getAbsoluteQP( );
-//	UInt neighborX, neighborY;
+//	int neighborX, neighborY;
 //	if( direction == EDGE_VER )
 //	{
 //		neighborX = cu->getX( ) + x - 1;
@@ -437,12 +437,12 @@
 //	Short QPp = cu->getPicture( )->getCuContainingPosition( neighborX, neighborY )->getAbsoluteQP( );
 //
 //	Short qPl = ( ( QPp + QPq + 1 ) >> 1 );
-//	UInt Q = clipToRange( 0, 51, qPl + cu->getParentCTU( )->getParentSlice( )->getBetaOffset( ) );
-//	UShort betaPrim = DeblockingFilter::BetaPrim[ Q ];
-//	UShort beta = betaPrim * ( 1 << ( SeqParams( )->getBitDepthLuma( ) - 8 ) );
+//	int Q = clipToRange( 0, 51, qPl + cu->getParentCTU( )->getParentSlice( )->getBetaOffset( ) );
+//	int betaPrim = DeblockingFilter::BetaPrim[ Q ];
+//	int beta = betaPrim * ( 1 << ( SeqParams( )->getBitDepthLuma( ) - 8 ) );
 //	Q = clipToRange( 0, 53, qPl + 2 * ( itsFilterStrength[ x ][ y ] - 1 ) + cu->getParentCTU( )->getParentSlice( )->getTcOffset( ) );
-//	UShort tcprim = DeblockingFilter::TcPrim[ Q ];
-//	UShort tc = tcprim * ( 1 << ( SeqParams( )->getBitDepthLuma( ) - 8 ) );
+//	int tcprim = DeblockingFilter::TcPrim[ Q ];
+//	int tc = tcprim * ( 1 << ( SeqParams( )->getBitDepthLuma( ) - 8 ) );
 //
 //	Sample dp0 = std::abs( p0[ 2 ] - 2 * p0[ 1 ] + p0[ 0 ] );
 //	Sample dp3 = std::abs( p3[ 2 ] - 2 * p3[ 1 ] + p3[ 0 ] );
@@ -453,14 +453,14 @@
 //	Sample dp = dp0 + dp3;
 //	Sample dq = dq0 + dq3;
 //	Sample d = dpq0 + dpq3;
-//	UShort dE = 0, dEp = 0, dEq = 0;
+//	int dE = 0, dEp = 0, dEq = 0;
 //	if( d < beta )
 //	{
 //		////LOG( "FDB" ) << "d < beta" << std::endl;
 //		Sample dpq = 2 * dpq0;
-//		Bool dSam0 = decideFilterLuma( p0[ 0 ], p0[ 3 ], q0[ 0 ], q0[ 3 ], dpq, beta, tc );
+//		bool dSam0 = decideFilterLuma( p0[ 0 ], p0[ 3 ], q0[ 0 ], q0[ 3 ], dpq, beta, tc );
 //		dpq = 2 * dpq3;
-//		Bool dSam3 = decideFilterLuma( p3[ 0 ], p3[ 3 ], q3[ 0 ], q3[ 3 ], dpq, beta, tc );
+//		bool dSam3 = decideFilterLuma( p3[ 0 ], p3[ 3 ], q3[ 0 ], q3[ 3 ], dpq, beta, tc );
 //		dE = 1;
 //		if( dSam0 == 1 && dSam3 == 1 )
 //			dE = 2;
@@ -478,7 +478,7 @@
 //	////LOG( "FDB" ) << "B: " << beta << ", tc: " << tc << ", dE: " << dE << ", dEp: " << dEp << ", dEq: " << dEq << std::endl;
 //}
 //
-//Bool DeblockingFilter::decideFilterLuma( Sample p0, Sample p3, Sample q0, Sample q3, Sample dpq, Short beta, Short tc )
+//bool DeblockingFilter::decideFilterLuma( Sample p0, Sample p3, Sample q0, Sample q3, Sample dpq, Short beta, Short tc )
 //{
 //	if(
 //		dpq < ( beta >> 2 ) &&
@@ -490,32 +490,32 @@
 //	return false;
 //}
 //
-//Void DeblockingFilter::doLumaFilteringVertical( std::shared_ptr<CUIntra> cu, UInt x, UInt y )
+//void DeblockingFilter::doLumaFilteringVertical( std::shared_ptr<Cintra> cu, int x, int y )
 //{
 //	Sample** q = getEmptyMatrix<Sample>( 4, 4 );
 //	Sample** p = getEmptyMatrix<Sample>( 4, 4 );
-//	UInt xCU = cu->getX( );
-//	UInt yCU = cu->getY( );
+//	int xCU = cu->getX( );
+//	int yCU = cu->getY( );
 //	Sample** source = cu->getPicture( )->getReconMatrix( LUMA );
 //
-//	for( UInt i = 0; i < 4; ++i )
+//	for( int i = 0; i < 4; ++i )
 //	{
-//		for( UInt j = 0; j < 4; ++j )
+//		for( int j = 0; j < 4; ++j )
 //		{
 //			q[ i ][ j ] = source[ xCU + x + i ][ yCU + y + j ];
 //			p[ i ][ j ] = source[ xCU + x - i - 1 ][ yCU + y + j ];
 //		}
 //	}
 //
-//	for( UInt k = 0; k < 4; ++k )
+//	for( int k = 0; k < 4; ++k )
 //	{
 //		////LOG_TAB "FDB" );
-//		for( UInt i = 0; i < 4; ++i )
+//		for( int i = 0; i < 4; ++i )
 //		{
 //			itsCurrentP[ i ] = p[ i ][ k ];
 //			itsCurrentQ[ i ] = q[ i ][ k ];
 //		}
-//		for( UInt i = 0; i < 3; ++i )
+//		for( int i = 0; i < 3; ++i )
 //		{
 //			itsCurrentPX[ i ] = xCU + x - i - 1;
 //			itsCurrentPY[ i ] = yCU + y + k;
@@ -529,14 +529,14 @@
 //		////LOG_UNTAB "FDB" );
 //		if( itsCurrentNDp > 0 )
 //		{
-//			for( UInt i = 0; i < itsCurrentNDp; ++i )
+//			for( int i = 0; i < itsCurrentNDp; ++i )
 //			{
 //				source[ xCU + x - i - 1 ][ yCU + y + k ] = itsCurrentFilteredP[ i ];
 //			}
 //		}
 //		if( itsCurrentNDq > 0 )
 //		{
-//			for( UInt i = 0; i < itsCurrentNDq; ++i )
+//			for( int i = 0; i < itsCurrentNDq; ++i )
 //			{
 //				source[ xCU + x + i ][ yCU + y + k ] = itsCurrentFilteredQ[ i ];
 //			}
@@ -550,31 +550,31 @@
 //	deleteMatrix( p, 4 );
 //}
 //
-//Void DeblockingFilter::doLumaFilteringHorizontal( std::shared_ptr<CUIntra> cu, UInt x, UInt y )
+//void DeblockingFilter::doLumaFilteringHorizontal( std::shared_ptr<Cintra> cu, int x, int y )
 //{
 //	Sample** q = getEmptyMatrix<Sample>( 4, 4 );
 //	Sample** p = getEmptyMatrix<Sample>( 4, 4 );
-//	UInt xCU = cu->getX( );
-//	UInt yCU = cu->getY( );
+//	int xCU = cu->getX( );
+//	int yCU = cu->getY( );
 //	Sample** source = cu->getPicture( )->getReconMatrix( LUMA );
 //
-//	for( UInt i = 0; i < 4; ++i )
+//	for( int i = 0; i < 4; ++i )
 //	{
-//		for( UInt j = 0; j < 4; ++j )
+//		for( int j = 0; j < 4; ++j )
 //		{
 //			q[ i ][ j ] = source[ xCU + x + j ][ yCU + y + i ];
 //			p[ i ][ j ] = source[ xCU + x + j ][ yCU + y - i - 1 ];
 //		}
 //	}
 //
-//	for( UInt k = 0; k < 4; ++k )
+//	for( int k = 0; k < 4; ++k )
 //	{
-//		for( UInt i = 0; i < 4; ++i )
+//		for( int i = 0; i < 4; ++i )
 //		{
 //			itsCurrentP[ i ] = p[ i ][ k ];
 //			itsCurrentQ[ i ] = q[ i ][ k ];
 //		}
-//		for( UInt i = 0; i < 3; ++i )
+//		for( int i = 0; i < 3; ++i )
 //		{
 //			itsCurrentPX[ i ] = xCU + x + k;
 //			itsCurrentPY[ i ] = yCU + y - i - 1;
@@ -588,14 +588,14 @@
 //		////LOG_UNTAB "FDB" );
 //		if( itsCurrentNDp > 0 )
 //		{
-//			for( UInt i = 0; i < itsCurrentNDp; ++i )
+//			for( int i = 0; i < itsCurrentNDp; ++i )
 //			{
 //				source[ xCU + x + k ][ yCU + y - i - 1 ] = itsCurrentFilteredP[ i ];
 //			}
 //		}
 //		if( itsCurrentNDq > 0 )
 //		{
-//			for( UInt i = 0; i < itsCurrentNDq; ++i )
+//			for( int i = 0; i < itsCurrentNDq; ++i )
 //			{
 //				source[ xCU + x + k ][ yCU + y + i ] = itsCurrentFilteredQ[ i ];
 //			}
@@ -608,7 +608,7 @@
 //	deleteMatrix( p, 4 );
 //}
 //
-//Void DeblockingFilter::filteringProcess( std::shared_ptr<CUIntra> cu )
+//void DeblockingFilter::filteringProcess( std::shared_ptr<Cintra> cu )
 //{
 //	if( itsCurrentdE == 2 )
 //	{
@@ -673,17 +673,17 @@
 //	}
 //}
 //
-//Void DeblockingFilter::doChromaFiltering( std::shared_ptr<CUIntra> cu, UInt x, UInt y, EdgeType direction, ImgComp comp, Short qpOffset )
+//void DeblockingFilter::doChromaFiltering( std::shared_ptr<Cintra> cu, int x, int y, EdgeType direction, ImgComp comp, Short qpOffset )
 //{
 //	Sample** pic = cu->getPicture( )->getReconMatrix( comp );
 //	Sample q[ 2 ][ 4 ], p[ 2 ][ 4 ];
-//	UInt xCB = cu->getX( ) / 2, yCB = cu->getY( ) / 2;
-//	UInt Xq = 0, Yq = 0, Xp = 0, Yp = 0;
+//	int xCB = cu->getX( ) / 2, yCB = cu->getY( ) / 2;
+//	int Xq = 0, Yq = 0, Xp = 0, Yp = 0;
 //	if( direction == EDGE_VER )
 //	{
-//		for( UInt k = 0; k < 4; ++k )
+//		for( int k = 0; k < 4; ++k )
 //		{
-//			for( UInt i = 0; i < 2; ++i )
+//			for( int i = 0; i < 2; ++i )
 //			{
 //				Xq = xCB + x + i;
 //				Yq = yCB + y + k;
@@ -696,9 +696,9 @@
 //	}
 //	else
 //	{
-//		for( UInt k = 0; k < 4; ++k )
+//		for( int k = 0; k < 4; ++k )
 //		{
-//			for( UInt i = 0; i < 2; ++i )
+//			for( int i = 0; i < 2; ++i )
 //			{
 //				Xq = xCB + x + k;
 //				Yq = yCB + y + i;
@@ -711,7 +711,7 @@
 //	}
 //
 //	Short QPq = cu->getAbsoluteQP( );
-//	UInt neighborX, neighborY;
+//	int neighborX, neighborY;
 //	if( direction == EDGE_VER )
 //	{
 //		neighborX = cu->getX( ) + 2 * x - 1;
@@ -726,16 +726,16 @@
 //
 //	Short qPi = ( ( QPp + QPq + 1 ) >> 1 ) + qpOffset;
 //	Short Qpc = DeblockingFilter::getQPc( qPi );
-//	UInt Q = clipToRange( 0, 53, Qpc + 2 + ( cu->getParentCTU( )->getParentSlice( )->getTcOffset( ) << 1 ) );
-//	UShort tcprim = DeblockingFilter::TcPrim[ Q ];
-//	UShort tc = tcprim * ( 1 << ( SeqParams( )->getBitDepthChroma( ) - 8 ) );
+//	int Q = clipToRange( 0, 53, Qpc + 2 + ( cu->getParentCTU( )->getParentSlice( )->getTcOffset( ) << 1 ) );
+//	int tcprim = DeblockingFilter::TcPrim[ Q ];
+//	int tc = tcprim * ( 1 << ( SeqParams( )->getBitDepthChroma( ) - 8 ) );
 //
 //	itsCurrentTc = tc;
 //
 //	Sample newP = 0, newQ = 0; Sample pIn[ 2 ]; Sample qIn[ 2 ];
 //	if( direction == EDGE_VER )
 //	{
-//		for( UInt k = 0; k < 4; ++k )
+//		for( int k = 0; k < 4; ++k )
 //		{
 //			pIn[ 0 ] = p[ 0 ][ k ]; pIn[ 1 ] = p[ 1 ][ k ];
 //			qIn[ 0 ] = q[ 0 ][ k ]; qIn[ 1 ] = q[ 1 ][ k ];
@@ -746,7 +746,7 @@
 //	}
 //	else
 //	{
-//		for( UInt k = 0; k < 4; ++k )
+//		for( int k = 0; k < 4; ++k )
 //		{
 //			pIn[ 0 ] = p[ 0 ][ k ]; pIn[ 1 ] = p[ 1 ][ k ];
 //			qIn[ 0 ] = q[ 0 ][ k ]; qIn[ 1 ] = q[ 1 ][ k ];
@@ -757,7 +757,7 @@
 //	}
 //}
 //
-//Void DeblockingFilter::filterChromaSamples( std::shared_ptr<CUIntra> cu, Sample p[ 2 ], Sample q[ 2 ], UInt xP, UInt yP, UInt xQ, UInt yQ, ImgComp comp, Sample& out_p, Sample& out_q )
+//void DeblockingFilter::filterChromaSamples( std::shared_ptr<Cintra> cu, Sample p[ 2 ], Sample q[ 2 ], int xP, int yP, int xQ, int yQ, ImgComp comp, Sample& out_p, Sample& out_q )
 //{
 //	Int delta = clipToRange( -1 * itsCurrentTc, 1 * itsCurrentTc, ( ( ( q[ 0 ] - p[ 0 ] ) << 2 ) + p[ 1 ] - q[ 1 ] + 4 ) >> 3 );
 //

@@ -2,7 +2,7 @@
 #include <Common/Bitset.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace UnitTests
 {
@@ -12,7 +12,7 @@ namespace UnitTests
 		
 		TEST_METHOD(push_backTest)
 		{
-			H265Lib::Bitset b(5);
+			HEVC::Bitset b(5);
 
 			b.push_back(1);
 
@@ -22,7 +22,7 @@ namespace UnitTests
 
 		TEST_METHOD(emptyBitsetTest)
 		{
-			H265Lib::Bitset b(0);
+			HEVC::Bitset b(0);
 
 			Assert::AreEqual(b.size(), 0u);
 			b.push_back(1);
@@ -33,7 +33,7 @@ namespace UnitTests
 
 		TEST_METHOD(StringifyTest)
 		{
-			H265Lib::Bitset b(5);
+			HEVC::Bitset b(5);
 
 			b[2] = 1;
 
@@ -56,7 +56,7 @@ namespace UnitTests
 
 		TEST_METHOD(CopyCtorTest)
 		{
-			H265Lib::Bitset b(5);
+			HEVC::Bitset b(5);
 
 			b[2] = 1;
 

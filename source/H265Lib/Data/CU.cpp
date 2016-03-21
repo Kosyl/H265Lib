@@ -1,8 +1,8 @@
 #include "CU.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	CU::CU(UShort x, UShort y, UShort size, ParametersBundle parameters) :
+	CU::CU(int x, int y, int size) :
 		BlockBase(x, y, size)
 		/*itsPartitionMode(Partition::Mode_NotSet),
 		itsTransformTree(nullptr),
@@ -22,9 +22,14 @@ namespace H265Lib
 		
 	}
 
-	Void CU::printDescription(LogId logId, Bool recursive)
+	void CU::print(LogId logId, bool recursive)
 	{
 		////LOG( "PART" ) << "CU[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << std::endl;
+	}
+
+	Cintra::Cintra(int x, int y, int size):
+		CU(x,y,size)
+	{
 	}
 
 	/*Short CU::getAbsoluteQP()
@@ -32,11 +37,11 @@ namespace H265Lib
 		return PicParams()->getQP(LUMA) + itsParentCTU->getParentSlice()->getQPDelta(LUMA) + itsQPDeltaForCU;
 	}
 
-	CUIntra::CUIntra(CTU* ctu, UShort x, UShort y, UShort size) :
+	Cintra::Cintra(CTU* ctu, int x, int y, int size) :
 		CU(ctu, x, y, size),
 		itsChromaPredictionDerivationType(0)
 	{
-		for (UInt i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
+		for (int i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 		{
 			itsPUs[i] = nullptr;
 		}
@@ -44,13 +49,13 @@ namespace H265Lib
 		itsPredictionType = PREDICTION_INTRA;
 	}*/
 
-	CUIntra::~CUIntra()
+	Cintra::~Cintra()
 	{
 	}
 
-	Void CUIntra::printDescription(LogId logId, Bool recursive)
+	void Cintra::print(LogId logId, bool recursive)
 	{
-		////LOG( "PART" ) << "CUIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", chromaModeDerivation: " << itsChromaPredictionDerivationType << "; partMode: " << ( itsPartitionMode == PART_NxN ? "NxN" : "2Nx2N" ) << std::endl;
+		////LOG( "PART" ) << "Cintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", chromaModeDerivation: " << itsChromaPredictionDerivationType << "; partMode: " << ( itsPartitionMode == PART_NxN ? "NxN" : "2Nx2N" ) << std::endl;
 		//printMatrix( itsParentPicture->getSamples( Luma ), itsSize, itsSize, //LOG( "PART" ), itsX, itsY, "" );
 
 		/*//LOG( "PART" )  << "PUs:" << std::endl;
@@ -65,7 +70,7 @@ namespace H265Lib
 		////LOG_UNTAB );
 	}
 
-	//Void CUIntra::setIntraChromaPredictionDerivationType(UShort val)
+	//void Cintra::setIntraChromaPredictionDerivationType(int val)
 	//{
 	//	itsChromaPredictionDerivationType = val;
 	//	for (Int i = 0; i < 4; ++i)
@@ -75,9 +80,9 @@ namespace H265Lib
 	//	}
 	//}
 
-	//Void CUIntra::reconstructionLoop()
+	//void Cintra::reconstructionLoop()
 	//{
-	//	/*//LOG( "RECO" ) << "CUIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", chromaModeDerivation: " << itsChromaPredictionDerivationType << "; partMode: " << ( itsPartitionMode == PART_NxN ? "NxN" : "2Nx2N" ) << std::endl;
+	//	/*//LOG( "RECO" ) << "Cintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", chromaModeDerivation: " << itsChromaPredictionDerivationType << "; partMode: " << ( itsPartitionMode == PART_NxN ? "NxN" : "2Nx2N" ) << std::endl;
 	//	//LOG_TAB "RECO" );*/
 
 	//	if (itsPartitionMode == PART_2Nx2N)
@@ -95,28 +100,28 @@ namespace H265Lib
 	//	////LOG_UNTAB"RECO" );
 	//}
 
-	//Void CUIntra::createPUs(UInt lumaModeIdx)
+	//void Cintra::createPUs(int lumaModeIdx)
 	//{
 	//	if (itsPartitionMode == PART_NxN)
 	//	{
 	//		for (QTComponent i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 	//		{
-	//			UInt x = itsX + (itsSize / 2) * (i % 2);
-	//			UInt y = itsY + (itsSize / 2) * (i / 2);
-	//			std::shared_ptr<PUIntra> pu = std::make_shared<PUIntra>(this, x, y, itsSize / 2);
+	//			int x = itsX + (itsSize / 2) * (i % 2);
+	//			int y = itsY + (itsSize / 2) * (i / 2);
+	//			std::shared_ptr<Pintra> pu = std::make_shared<Pintra>(this, x, y, itsSize / 2);
 	//			pu->setLumaModeIdx(lumaModeIdx);
 	//			addPU(pu, i);
 	//		}
 	//	}
 	//	else // PART_2Nx2N
 	//	{
-	//		std::shared_ptr<PUIntra> pu = std::make_shared<PUIntra>(this, itsX, itsY, itsSize);
+	//		std::shared_ptr<Pintra> pu = std::make_shared<Pintra>(this, itsX, itsY, itsSize);
 	//		pu->setLumaModeIdx(lumaModeIdx);
 	//		addPU(pu);
 	//	}
 	//}
 
-	//Double CUIntra::getTotalCost()
+	//Double Cintra::getTotalCost()
 	//{
 	//	Double res = 0.0;
 	//	res += RDCost::getInstance()->calcCost(itsTransformTree->getTotalBins(LUMA), itsTransformTree->getTotalDistortion(LUMA), PicParams()->getQP(LUMA));

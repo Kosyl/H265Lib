@@ -5,7 +5,7 @@
 #include <Data/CTU.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace UnitTests
 {
@@ -17,7 +17,7 @@ namespace UnitTests
 		{
 			Picture p;
 
-			Assert::IsTrue(p.getInputSamples(ImgComp::Luma) == nullptr);
+			//Assert::IsTrue(p.getInputSamples(ImgComp::Luma) == nullptr);
 		}
 
 		TEST_METHOD(ParametersCtor_SetsCorrectPictureSize)
@@ -26,17 +26,17 @@ namespace UnitTests
 			auto pps = PictureParameterSetBank::instance().createNext();
 
 			sps->setPicSize(40, 60);
-			sps->setSubsamplingFormat(SubsamplingFormat::Mode_420);
+			sps->chroma_format_idc = SubsamplingFormat::Mode_420;
 
-			Picture p(ParametersBundle(sps,pps));
+			Picture p;
+			p.initFromParameters(ParametersBundle(sps, pps));
 
-			Assert::IsTrue(p.getInputSamples(ImgComp::Luma) != nullptr);
-			Assert::IsTrue(p.getInputSamples(ImgComp::Luma)->height() == 60);
-			Assert::IsTrue(p.getInputSamples(ImgComp::Luma)->width() == 40);
-			Assert::IsTrue(p.getInputSamples(ImgComp::Cr)->height() == 30);
-			Assert::IsTrue(p.getInputSamples(ImgComp::Cr)->width() == 20);
-			Assert::IsTrue(p.getInputSamples(ImgComp::Cb)->height() == 30);
-			Assert::IsTrue(p.getInputSamples(ImgComp::Cb)->width() == 20);
+			Assert::IsTrue(p.input_samples[Luma].height() == 60);
+			Assert::IsTrue(p.input_samples[Luma].width() == 40);
+			Assert::IsTrue(p.input_samples[Cr].height() == 30);
+			Assert::IsTrue(p.input_samples[Cr].width() == 20);
+			Assert::IsTrue(p.input_samples[Cb].height() == 30);
+			Assert::IsTrue(p.input_samples[Cb].width() == 20);
 		}
 
 		TEST_METHOD(getCTUBySamplePosition_ReturnsCorrectCTU)
@@ -45,26 +45,27 @@ namespace UnitTests
 			auto pps = PictureParameterSetBank::instance().createNext();
 
 			sps->setPicSize(200, 200);
-			sps->setSubsamplingFormat(SubsamplingFormat::Mode_420);
-			sps->setMaxCUSize(64);
+			sps->chroma_format_idc = SubsamplingFormat::Mode_420;
+			sps->max_luma_coding_block_size = 64;
 
-			Picture p(ParametersBundle(sps, pps));
+			Picture p;
+			p.initFromParameters(ParametersBundle(sps, pps));
 
 			auto ctu00 = p.getCTUBySamplePosition(0, 0);
-			Assert::IsTrue(ctu00->Position.X == 0);
-			Assert::IsTrue(ctu00->Position.Y == 0);
+			Assert::IsTrue(ctu00->x == 0);
+			Assert::IsTrue(ctu00->y == 0);
 
 			auto ctu10 = p.getCTUBySamplePosition(75, 0);
-			Assert::IsTrue(ctu10->Position.X == 64);
-			Assert::IsTrue(ctu10->Position.Y == 0);
+			Assert::IsTrue(ctu10->x == 64);
+			Assert::IsTrue(ctu10->y == 0);
 
 			auto ctu01 = p.getCTUBySamplePosition(63, 64);
-			Assert::IsTrue(ctu01->Position.X == 0);
-			Assert::IsTrue(ctu01->Position.Y == 64);
+			Assert::IsTrue(ctu01->x == 0);
+			Assert::IsTrue(ctu01->y == 64);
 
 			auto ctu11 = p.getCTUBySamplePosition(64, 126);
-			Assert::IsTrue(ctu11->Position.X == 64);
-			Assert::IsTrue(ctu11->Position.Y == 64);
+			Assert::IsTrue(ctu11->x == 64);
+			Assert::IsTrue(ctu11->y == 64);
 		}
 	};
 }

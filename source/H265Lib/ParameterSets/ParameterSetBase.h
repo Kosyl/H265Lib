@@ -2,25 +2,25 @@
 
 #include "Common/TypeDef.h"
 
-namespace H265Lib
+namespace HEVC
 {
 	class ParameterSetBase
 	{
 	private:
-		UShort _idx;
+		int _idx;
 
 	public:
 		virtual ~ParameterSetBase()
 		{
 		}
 
-		ParameterSetBase(UShort idx) :
+		ParameterSetBase(int idx) :
 			_idx(idx)
 		{
 
 		}
 
-		UShort getParameterSetIdx()
+		int getParameterSetIdx()
 		{
 			return _idx;
 		}

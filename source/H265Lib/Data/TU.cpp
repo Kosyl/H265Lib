@@ -1,8 +1,8 @@
 #include "TU.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	TU::TU(UInt x, UInt y, UInt size, ParametersBundle parameters) :
+	TU::TU(int x, int y, int size) :
 		BlockBase(x, y, size)
 	{
 		/*assert(size == 4 || size == 8 || size == 16 || size == 32);
@@ -21,5 +21,9 @@ namespace H265Lib
 		itsTBs.push_back(std::make_shared<TB>(x / 2, y / 2, size / 2, Cb));
 		itsTBs.push_back(std::make_shared<TB>(x / 2, y / 2, size / 2, Cr));
 		}*/
+	}
+
+	void TU::print(LogId logId, bool recursive)
+	{
 	}
 }

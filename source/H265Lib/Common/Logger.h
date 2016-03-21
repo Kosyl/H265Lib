@@ -7,7 +7,7 @@
 #include <map>
 #include "Common\Singleton.h"
 
-namespace H265Lib
+namespace HEVC
 {
 	struct NewLineToken
 	{
@@ -18,19 +18,19 @@ namespace H265Lib
 	{
 	private:
 
-		String _logPath;
+		std::string _logPath;
 		std::ostream* _logStream;
 
-		String _spaces;
-		UInt _numTabs;
-		UInt _step;
+		std::string _spaces;
+		int _numTabs;
+		int _step;
 
-		Bool _shouldDeleteStream;
+		bool _shouldDeleteStream;
 
 		template<typename T>
-		Void write(T s);
+		void write(T s);
 		template<>
-		Void write(NewLineToken);
+		void write(NewLineToken);
 
 	public:
 
@@ -61,18 +61,18 @@ namespace H265Lib
 		static const LogId Overview;
 		static const LogId BinOut;
 
-		Void printSpaces();
-		Void increaseSpaces();
-		Void decreaseSpaces();
-		Void setTabLength(Int len);
-		UInt getTabLength();
-		Void setTabStep(UInt len);
+		void printSpaces();
+		void increaseSpaces();
+		void decreaseSpaces();
+		void setTabLength(int len);
+		int getTabLength();
+		void setTabStep(int len);
 
 		std::ostream& getStream();
 		template<typename T>
-		Void printValues(T&& arg);
+		void printValues(T&& arg);
 		template<typename T1, typename... Tn>
-		Void printValues(T1&& arg1, Tn&&... args);
+		void printValues(T1&& arg1, Tn&&... args);
 	};
 
 	class LoggingControl : public Singleton < LoggingControl >
@@ -82,9 +82,9 @@ namespace H265Lib
 		std::vector<std::string> _logNames;
 		std::map<LogId, std::shared_ptr<Logger>> _swapBuffer;
 		std::map<LogId, std::shared_ptr<Logger>> _logs;
-		std::map<LogId, UInt> _muteStack;
+		std::map<LogId, int> _muteStack;
 
-		Void loadSettings();
+		void loadSettings();
 		std::shared_ptr<Logger> createLog(LogId logId, std::string path);
 
 	public:
@@ -100,13 +100,13 @@ namespace H265Lib
 		void turnOn(LogId logId);
 
 		template<typename... Params>
-		Void printlnToLog(LogId id, Params... args);
+		void printlnToLog(LogId id, Params... args);
 		template<typename... Params>
-		Void printToLog(LogId id, Params... args);
+		void printToLog(LogId id, Params... args);
 		template<typename T>
-		Void printArrayToLog(LogId id, const Char* name, T** matrix, size_t sizeX, size_t sizeY);
+		void printArrayToLog(LogId id, const char* name, T** matrix, size_t sizeX, size_t sizeY);
 		template<typename T>
-		Void printArrayToLog1Dto2D(LogId id, const Char* name, T* matrix, size_t sizeX, size_t sizeY, size_t stride);
+		void printArrayToLog1Dto2D(LogId id, const char* name, T* matrix, size_t sizeX, size_t sizeY, size_t stride);
 		template<typename T, template<class> class TMatrix>
 		void printMatrix(LogId logId, TMatrix<T>& matrix);
 		template<typename T, template<class> class TMatrix, template<class> class SptrTMatrix>
@@ -116,7 +116,7 @@ namespace H265Lib
 #pragma region Impl
 
 	template<typename... Params>
-	Void LoggingControl::printlnToLog(LogId id, Params... args)
+	void LoggingControl::printlnToLog(LogId id, Params... args)
 	{
 		auto log = instance()._logs[id];
 		if (log == nullptr)
@@ -127,7 +127,7 @@ namespace H265Lib
 	}
 
 	template<typename... Params>
-	Void LoggingControl::printToLog(LogId id, Params... args)
+	void LoggingControl::printToLog(LogId id, Params... args)
 	{
 		auto log = instance()._logs[id];
 		if (log == nullptr)
@@ -137,7 +137,7 @@ namespace H265Lib
 	}
 
 	template<typename T>
-	Void LoggingControl::printArrayToLog(LogId id, const Char* name, T** matrix, size_t sizeX, size_t sizeY)
+	void LoggingControl::printArrayToLog(LogId id, const char* name, T** matrix, size_t sizeX, size_t sizeY)
 	{
 		auto log = instance()._logs[id];
 		if (log == nullptr)
@@ -157,7 +157,7 @@ namespace H265Lib
 	}
 
 	template<typename T>
-	Void LoggingControl::printArrayToLog1Dto2D(LogId id, const Char* name, T* matrix, size_t sizeX, size_t sizeY, size_t stride)
+	void LoggingControl::printArrayToLog1Dto2D(LogId id, const char* name, T* matrix, size_t sizeX, size_t sizeY, size_t stride)
 	{
 		auto log = instance()._logs[id];
 		if (log == nullptr)
@@ -182,12 +182,12 @@ namespace H265Lib
 		auto log = instance()._logs[logId];
 		if (log == nullptr)
 			return;
-		for (size_t y = 0; y < matrix.rows(); ++y)
+		for (size_t y = 0; y < matrix.height(); ++y)
 		{
 			log->printSpaces();
-			for (size_t x = 0; x < matrix.columns(); ++x)
+			for (size_t x = 0; x < matrix.width(); ++x)
 			{
-				log->printValues(matrix.at(x, y), " ");
+				log->printValues(matrix(x, y), " ");
 			}
 			log->getStream() << std::endl;
 		}
@@ -199,10 +199,10 @@ namespace H265Lib
 		auto log = instance()._logs[logId];
 		if (log == nullptr)
 			return;
-		for (size_t y = 0; y < pmatrix->rows(); ++y)
+		for (size_t y = 0; y < pmatrix->height(); ++y)
 		{
 			log->printSpaces();
-			for (size_t x = 0; x < pmatrix->columns(); ++x)
+			for (size_t x = 0; x < pmatrix->width(); ++x)
 			{
 				log->printValues(pmatrix->at(x, y), " ");
 			}
@@ -211,13 +211,13 @@ namespace H265Lib
 	}
 
 	template<typename T>
-	Void Logger::write(T s)
+	void Logger::write(T s)
 	{
 		*_logStream << s;
 	}
 
 	template<>
-	inline Void Logger::write(NewLineToken)
+	inline void Logger::write(NewLineToken)
 	{
 		*_logStream << std::endl;
 		printSpaces();
@@ -289,13 +289,13 @@ namespace H265Lib
 
 		LogId _logId;
 
-		Void tab(LogId logId);
-		Void untab(LogId logId);
+		void tab(LogId logId);
+		void untab(LogId logId);
 
 	public:
 
 		Indent(LogId inId);
-		Indent(const Char* func, LogId inId);
+		Indent(const char* func, LogId inId);
 
 		~Indent();
 	};

@@ -2,39 +2,31 @@
 
 #include <Common/TypeDef.h>
 #include <ParameterSets/SequenceParameterSet.h>
-#include <Common/Logger.h>
 #include <ParameterSets/ParametersBundle.h>
 
-namespace H265Lib
+namespace HEVC
 {
 	struct Position
 	{
-		UShort X, Y;
-		UInt Idx;
+		int x, y;
+		int idx;
 
 		Position();
-		Position(UShort x, UShort y);
-		Position(UShort x, UShort y, const SequenceParameterSet& sps, Indexing idxType);
+		Position(int x, int y);
 
-		Void resolveIdx(const SequenceParameterSet& sps, Indexing idxType);
+		void resolveIdx(const SequenceParameterSet& sps, Indexing idxType);
 	};
 
-	class BlockBase
+	class BlockBase: public Position
 	{
-	protected:
-
-		UShort _size;
-
 	public:
 
-		Position Position;
-
 		BlockBase();
-		BlockBase(UShort x, UShort y, UShort size);
+		BlockBase(int x, int y, int size);
 		virtual ~BlockBase() = default;
 
-		UShort getSize();
+		int size;
 
-		virtual Void printDescription(LogId logId, Bool recursive = true);
+		virtual void print(LogId logId, bool recursive);
 	};
 }

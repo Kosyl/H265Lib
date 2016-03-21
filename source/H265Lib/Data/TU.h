@@ -3,7 +3,7 @@
 #include <Common/Bitset.h>
 #include <Data/BlockBase.h>
 
-namespace H265Lib
+namespace HEVC
 {
 	class TU : public BlockBase
 	{
@@ -13,11 +13,11 @@ namespace H265Lib
 
 		Int itsQPDeltaFromCU;
 
-		UInt _initQP;
+		int _initQP;
 
-		UInt transformDepth;
+		int transformDepth;
 
-		Bool itsCBFs[3];
+		bool itsCBFs[3];
 
 		std::vector<std::shared_ptr<TB> > itsTBs;
 
@@ -25,13 +25,11 @@ namespace H265Lib
 
 	public:
 
-		TU(UInt x, UInt y, UInt size, ParametersBundle parameters);
+		TU(int x, int y, int size);
 
-		~TU()
-		{
-		}
+		virtual ~TU() = default;
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 
 		/*std::shared_ptr<TB> getTB(ImgComp comp) const
 		{

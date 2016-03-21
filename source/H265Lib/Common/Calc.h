@@ -3,19 +3,31 @@
 #include <algorithm>
 #include "TypeDef.h"
 
-namespace H265Lib
+namespace HEVC
 {
 	namespace Calc
 	{
-		template <typename T> inline T clipToRange(T minVal, T maxVal, T a)
+		template <typename T> 
+		inline T clipToRange(T minVal, T maxVal, T a)
 		{
 			return std::min<T>(std::max<T>(minVal, a), maxVal);
 		}
 
-		Int log2Int(const Int val);
+		template <typename T> 
+		int log2(const T value)
+		{
+			if (value == 0)
+				return 0;
 
-		size_t numBits(const Int value);
+			int log2 = 0, val = value;
+			for (; val != 1; val >>= 1, log2++);
+			return log2;
+		}
 
-		size_t numBits(const UInt value);
+		template <typename T>
+		int numBits(const T value)
+		{
+			return log2(value) + 1;
+		}
 	}
 }

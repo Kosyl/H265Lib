@@ -53,14 +53,14 @@ namespace UnitTests
 
 		TEST_METHOD(goToMarker_markerExists_returnsTrue)
 		{
-			auto result = H265Lib::FileIO::goToMarker(stream, "FILTRE");
+			auto result = HEVC::FileIO::goToMarker(stream, "FILTRE");
 
 			Assert::IsTrue(result);
 		}
 
 		TEST_METHOD(goToMarker_markerDoesntExists_returnsFalse)
 		{
-			auto result = H265Lib::FileIO::goToMarker(stream, "NoSuchMarker");
+			auto result = HEVC::FileIO::goToMarker(stream, "NoSuchMarker");
 
 			Assert::IsFalse(result);
 		}
@@ -69,7 +69,7 @@ namespace UnitTests
 		{
 			size_t width;
 
-			auto result = H265Lib::FileIO::readValue(stream, "WIDTH", width);
+			auto result = HEVC::FileIO::readValue(stream, "WIDTH", width);
 
 			Assert::IsTrue(result);
 			Assert::AreEqual(width, 4u);
@@ -77,7 +77,7 @@ namespace UnitTests
 
 		TEST_METHOD(readMatrix_valueExists_returnsTrue)
 		{
-			auto result = H265Lib::FileIO::readMatrix<int>(stream, "PREDYKCJA");
+			auto result = HEVC::FileIO::readMatrix<int>(stream, "PREDYKCJA");
 
 			Assert::IsTrue(result != nullptr);
 

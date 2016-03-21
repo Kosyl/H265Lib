@@ -55,12 +55,12 @@
 //*	\param isIntra4x4LumaDST_ver czy uzywa DST w pionie (2ga faza)
 //*	\return void
 //*/
-//void Transform::forwardTrans( Sample** const block, Coeff** coeff, const Int& trSize, const Int& bitDepth, const Bool& isIntra4x4LumaDST_hor, const Bool& isIntra4x4LumaDST_ver )
+//void Transform::forwardTrans( Sample** const block, Coeff** coeff, const Int& trSize, const Int& bitDepth, const bool& isIntra4x4LumaDST_hor, const bool& isIntra4x4LumaDST_ver )
 //{
 //	Int i, j, k, iSum;
 //
 //	const Short *iT; // Wskaznik na odpowiednia macierz wspolczynnikow transformaty, wybierany na podstawie rozmiaru i trybu
-//	UShort log2TrSize;
+//	int log2TrSize;
 //
 //	if( trSize == 4 )
 //	{
@@ -148,7 +148,7 @@
 //*	\param isIntra4x4LumaDST_ver czy uzywa DST w pionie (2ga faza)
 //*	\return void
 //*/
-//void Transform::inverseTrans( Coeff** const coeff, Sample** block, const Int& trSize, const Int& bitDepth, const Bool& isIntra4x4LumaDST_hor, const Bool& isIntra4x4LumaDST_ver )
+//void Transform::inverseTrans( Coeff** const coeff, Sample** block, const Int& trSize, const Int& bitDepth, const bool& isIntra4x4LumaDST_hor, const bool& isIntra4x4LumaDST_ver )
 //{
 //	Int i, j, k;
 //	Int iSum;

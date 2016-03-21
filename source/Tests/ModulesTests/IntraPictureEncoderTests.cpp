@@ -3,7 +3,7 @@
 #include <Modules/PictureEncoder.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace UnitTests
 {
@@ -18,45 +18,51 @@ namespace UnitTests
 
 		TEST_METHOD(encodeSamplePicture_PrintResult)
 		{
-			auto pic = std::make_shared<Picture>(ParametersBundle::getDefaultParameters(100,100));
+			auto parameters = ParametersBundle::getDefaultParameters(100, 100);
+			auto pic = std::make_shared<Picture>();
+			pic->initFromParameters(parameters);
 			
 			IntraPictureEncoder encoder;
+			encoder.Parameters = parameters;
 
 			encoder.encodePicture(pic);
 
 			printPictureDescription(*pic);
+
+			Log::flush();
 		}
 
-		Void printPictureDescription(Picture& pic)
+		void printPictureDescription(Picture& pic)
 		{
-			auto widthInCTUs = pic.Parameters.Sps->getPicWidthInCTUs(), heightInCTUs = pic.Parameters.Sps->getPicHeightInCTUs();
+			auto widthInCTUs = pic.width_in_ctus;
+			auto heightInCTUs = pic.height_in_ctus;
 
 			for (auto y = 0; y < heightInCTUs; ++y)
 			{
 				for (auto x = 0; x < widthInCTUs; ++x)
 				{
 					auto ctu = pic.getCTU(x, y);
-					Log::println("CTU: x=", ctu->Position.X, ", y=", ctu->Position.Y, ", size=", ctu->getSize());
-					printCUTreeDescription(ctu->getCUQuadTree());
+					Log::println("CTU: x=", ctu->x, ", y=", ctu->y, ", size=", ctu->size);
+					printCUTreeDescription(ctu->CUQuadTree);
 				}
 			}
 		}
-		Void printCUTreeDescription(std::shared_ptr<CUQuadTree> subTree)
+		void printCUTreeDescription(std::shared_ptr<CUQuadTree> subTree)
 		{
 			Log::tab();
-			if (subTree->getQTMode() == QTMode::Leaf)
+			if (subTree->mode == QTMode::Leaf)
 			{
-				auto leaf = subTree->getLeaf();
-				Log::println("CU: x=", leaf->Position.X, ", y=", leaf->Position.Y, ", size=", leaf->getSize());
+				auto leaf = subTree->leaf;
+				Log::println("CU: x=", leaf->x, ", y=", leaf->y, ", size=", leaf->size);
 			}
 			else
 			{
-				Log::println("CUTree: x=", subTree->Position.X, ", y=", subTree->Position.Y, ", size=", subTree->getSize());
-				for (auto& i : subTree->getSubTrees())
-				{
-					if (i != nullptr)
-						printCUTreeDescription(i);
-				}
+				Log::println("CUTree: x=", subTree->x, ", y=", subTree->y, ", size=", subTree->size);
+				/*	for (auto& i : subTree->subtrees)
+					{
+						if (i != nullptr)
+							printCUTreeDescription(i);
+					}*/
 			}
 			Log::untab();
 		}

@@ -4,39 +4,33 @@
 #include <Data/BlockBase.h>
 #include <Data/ReferenceSamples.h>
 
-namespace H265Lib
+namespace HEVC
 {
 	class TB : public BlockBase
 	{
 	private:
 
-		ImgComp _plane;
-
-		ReferenceSamples _referenceSamples;
-
-		Matrix<Sample> _inputSamples;
-		Matrix<Sample> _prediction;
-		Matrix<Sample> _residuals;
-		Matrix<Coeff> _transformCoefficients;
-		Matrix<Sample> _reconstructedSamples;
-
-		UInt _lastSignificantCoeffX, _lastSignificantCoeffY;
-		Bitset _codedSubBlockFlags;
-		UInt _distortion;
-		UInt _numBins;
-
 	public:
+		ImgComp plane;
 
-		TB(UShort x, UShort y, UShort size, ImgComp comp, ParametersBundle parameters);
+		ReferenceSamples reference_samples;
+
+		Matrix<Sample> input_samples;
+		Matrix<Sample> prediction;
+		Matrix<Sample> residuals;
+		Matrix<Coeff> transform_coefficients;
+		Matrix<Sample> reconstructed_samples;
+
+		int last_sig_coeff_x, last_sig_coeff_y;
+		Bitset coded_sub_block_flags;
+		int distortion;
+		int num_bins;
+
+		TB(int x, int y, int size, ImgComp comp);
 		~TB() = default;
 
-		Matrix<Coeff> getCoefficients() const
-		{
-			return _transformCoefficients;
-		}
+		bool hasAtLeastOneNonZeroCoeff();
 
-		Bool TB::hasAtLeastOneNonZeroCoeff();
-
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 	};
 }

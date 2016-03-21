@@ -6,28 +6,28 @@
 #include <Data/CTU.h>
 #include <Data/CU.h>
 
-namespace H265Lib
+namespace HEVC
 {
 	interface IPictureEncoder
 	{
 		IPictureEncoder() = default;
 		virtual ~IPictureEncoder() = default;
 
-		virtual Void encodePicture(std::shared_ptr<Picture> picture) = 0;
+		virtual void encodePicture(std::shared_ptr<Picture> picture) = 0;
 	};
 
 	class IntraPictureEncoder: public IPictureEncoder
 	{
-
 	protected:
 		std::shared_ptr<Picture> _picture;
-		ParametersBundle Parameters;
 
 	public:
+		ParametersBundle Parameters;
+
 		IntraPictureEncoder();
 		~IntraPictureEncoder();
 
-		virtual Void encodePicture(std::shared_ptr<Picture> picture) override
+		virtual void encodePicture(std::shared_ptr<Picture> picture) override
 		{
 			_picture = picture;
 
@@ -36,9 +36,9 @@ namespace H265Lib
 
 	protected:
 
-		Void processPicture()
+		void processPicture()
 		{
-			auto widthInCTUs = Parameters.Sps->getPicWidthInCTUs(), heightInCTUs = Parameters.Sps->getPicHeightInCTUs();
+			auto widthInCTUs = Parameters.Sps->pic_width_in_ctus, heightInCTUs = Parameters.Sps->pic_height_in_ctus;
 
 			for (auto y = 0; y < heightInCTUs; ++y)
 			{
@@ -49,27 +49,27 @@ namespace H265Lib
 			}
 		}
 
-		Void processCTU(std::shared_ptr<CTU> ctu)
+		void processCTU(std::shared_ptr<CTU> ctu)
 		{
-			divideCUTreeIntoSmallestCUs(ctu->getCUQuadTree());
+			divideCUTreeIntoSmallestCUs(ctu->CUQuadTree);
 		}
 
-		Void divideCUTreeIntoSmallestCUs(std::shared_ptr<CUQuadTree> subTree)
+		void divideCUTreeIntoSmallestCUs(std::shared_ptr<CUQuadTree> subTree)
 		{
-			auto treeSize = subTree->getSize();
-			auto isMinAllowedSize = treeSize <= Parameters.Sps->getMinCUSize();
+			auto treeSize = subTree->size;
+			auto isMinAllowedSize = treeSize <= Parameters.Sps->min_luma_coding_block_size;
 			auto isSmallerThanWholePicture = treeSize <= Parameters.Sps->getPicWidth() && treeSize <= Parameters.Sps->getPicHeight();
 			if (isMinAllowedSize&&isSmallerThanWholePicture)
 			{
-				subTree->rebuild(QTMode::Leaf);
+				subTree->rebuild(QTMode::Leaf, Parameters.Sps->getPicWidth(), Parameters.Sps->getPicHeight());
 			}
 			else
 			{
-				subTree->rebuild(QTMode::Split);
-				for (auto newSubTree : subTree->getSubTrees())
+				subTree->rebuild(QTMode::Split, Parameters.Sps->getPicWidth(), Parameters.Sps->getPicHeight());
+				for (auto newSubTree : subTree->subtrees)
 				{
-					if (newSubTree != nullptr)
-						divideCUTreeIntoSmallestCUs(newSubTree);
+					//if (newSubTree != nullptr)
+						//divideCUTreeIntoSmallestCUs(newSubTree);
 				}
 			}
 		}

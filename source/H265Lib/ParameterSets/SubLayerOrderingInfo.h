@@ -1,12 +1,7 @@
 #pragma once
 #include <Common/TypeDef.h>
 
-namespace H265Lib
+namespace HEVC
 {
-	class SubLayerOrderingInfo
-	{
-		UShort _maxDecPicBuffering;
-		UShort _maxNumReorderPic;
-		UShort _maxLatencyIncrease;
-	};
+	
 }

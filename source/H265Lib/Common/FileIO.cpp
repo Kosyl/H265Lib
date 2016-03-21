@@ -1,14 +1,14 @@
 #include "Common/FileIO.h"
 #include <string>
 
-namespace H265Lib
+namespace HEVC
 {
 	namespace FileIO
 	{
-		Bool goToMarker(std::ifstream& str, std::string key)
+		bool goToMarker(std::ifstream& str, std::string key)
 		{
 			std::string s, log, value;
-			Bool end = false;
+			bool end = false;
 			do
 			{
 				str >> s;
@@ -33,7 +33,7 @@ namespace H265Lib
 		}
 
 		template <typename T>
-		Bool readValue(std::ifstream& str, std::string key, T& out_value)
+		bool readValue(std::ifstream& str, std::string key, T& out_value)
 		{
 			try
 			{
@@ -78,9 +78,9 @@ namespace H265Lib
 				result = std::make_unique<Matrix<T>>(height, width);
 
 				T tmp;
-				for (UInt i = 0; i < height; ++i)
+				for (int i = 0; i < height; ++i)
 				{
-					for (UInt j = 0; j < width; ++j)
+					for (int j = 0; j < width; ++j)
 					{
 						str >> tmp;
 						if (str.eof() || str.fail())
@@ -97,7 +97,7 @@ namespace H265Lib
 		}
 
 
-		template Bool readValue(std::ifstream& str, std::string key, unsigned int& out_value);
+		template bool readValue(std::ifstream& str, std::string key, unsigned int& out_value);
 		template std::unique_ptr<Matrix<int>> readMatrix<int>(std::ifstream& str, std::string key);
 	}
 }

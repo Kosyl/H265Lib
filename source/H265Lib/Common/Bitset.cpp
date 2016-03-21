@@ -1,6 +1,6 @@
 #include "Common/Bitset.h"
 
-namespace H265Lib
+namespace HEVC
 {
 	Bitset::Bitset(size_t size) :
 		vector<bool>(size)

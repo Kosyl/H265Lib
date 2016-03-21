@@ -2,7 +2,7 @@
 #include <Common/Calc.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace UnitTests
 {
@@ -39,24 +39,24 @@ namespace UnitTests
 
 		TEST_METHOD(log2Int_valuesTest)
 		{
-			Assert::AreEqual(Calc::log2Int(0), 0);
-			Assert::AreEqual(Calc::log2Int(1), 0);
-			Assert::AreEqual(Calc::log2Int(2), 1);
-			Assert::AreEqual(Calc::log2Int(3), 1);
-			Assert::AreEqual(Calc::log2Int(4), 2);
-			Assert::AreEqual(Calc::log2Int(5), 2);
-			Assert::AreEqual(Calc::log2Int(8), 3);
+			Assert::AreEqual(Calc::log2(0), 0);
+			Assert::AreEqual(Calc::log2(1), 0);
+			Assert::AreEqual(Calc::log2(2), 1);
+			Assert::AreEqual(Calc::log2(3), 1);
+			Assert::AreEqual(Calc::log2(4), 2);
+			Assert::AreEqual(Calc::log2(5), 2);
+			Assert::AreEqual(Calc::log2(8), 3);
 		}
 
 		TEST_METHOD(numBits_valuesTest)
 		{
-			Assert::AreEqual(Calc::numBits(0), 1u);
-			Assert::AreEqual(Calc::numBits(1), 1u);
-			Assert::AreEqual(Calc::numBits(2), 2u);
-			Assert::AreEqual(Calc::numBits(3), 2u);
-			Assert::AreEqual(Calc::numBits(4), 3u);
-			Assert::AreEqual(Calc::numBits(5), 3u);
-			Assert::AreEqual(Calc::numBits(8), 4u);
+			Assert::AreEqual(Calc::numBits(0), 1);
+			Assert::AreEqual(Calc::numBits(1), 1);
+			Assert::AreEqual(Calc::numBits(2), 2);
+			Assert::AreEqual(Calc::numBits(3), 2);
+			Assert::AreEqual(Calc::numBits(4), 3);
+			Assert::AreEqual(Calc::numBits(5), 3);
+			Assert::AreEqual(Calc::numBits(8), 4);
 		}
 	};
 }

@@ -76,41 +76,41 @@
 //	virtual Sample** calcPred( ) = 0;
 //
 //	/**
-//	 * @fn	virtual Void IntraMode::setPb( PBIntra* PB );
+//	 * @fn	virtual void IntraMode::setPb( PBIntra* PB );
 //	 *
 //	 * @brief	Ustawia aktualny blok predykcji.
 //	 *
 //	 * @param [in]	WskaŸnik na blok predykcji.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	virtual Void setPb( PBIntra* PB );
+//	virtual void setPb( PBIntra* PB );
 //
 //	/**
-//	 * @fn	virtual Void IntraMode::setCorner( const Sample corner );
+//	 * @fn	virtual void IntraMode::setCorner( const Sample corner );
 //	 *
 //	 * @brief Ustawia wartosæ naroznej próbki referencyjnej.
 //	 *
 //	 * @param	corner Wartoœæ próbki.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	virtual Void setCorner( const Sample corner );
+//	virtual void setCorner( const Sample corner );
 //
 //	/**
-//	 * @fn	virtual Void IntraMode::setSideRefs( const IntraDirection dir, Sample* ref );
+//	 * @fn	virtual void IntraMode::setSideRefs( const IntraDirection dir, Sample* ref );
 //	 *
 //	 * @brief	Ustawia podan¹ tablicê próbek jako referencyjne dla danego kierunku.
 //	 *
 //	 * @param	dir					 	Wskazanie, czy s¹ to próbki z lewej czy z góry.
 //	 * @param [in] ref	WskaŸnik na tablicê próbek referencyjnych.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	virtual Void setSideRefs( const IntraDirection dir, Sample* ref );
+//	virtual void setSideRefs( const IntraDirection dir, Sample* ref );
 //
 //};
 //
@@ -172,16 +172,16 @@
 //	 * @brief Flaga mówi¹ca, czy nale¿y dodatkowo odfiltrowaæ lewy i górny fragment sygna³u predykcji.
 //	 */
 //
-//	Bool itsFiltreEdges;
+//	bool itsFiltreEdges;
 //
 //	/**
-//	 * @fn	Void DcMode::calcDcVal( );
+//	 * @fn	void DcMode::calcDcVal( );
 //	 *
 //	 * @brief	Liczy wartoœæ sta³¹ z próbek referencyjnych.
 //	 *
 //	 */
 //
-//	Void calcDcVal( );
+//	void calcDcVal( );
 //
 //	/**
 //	 * @fn	Sample DcMode::getFiltCorner( ) const;
@@ -194,7 +194,7 @@
 //	Sample getFiltCorner( ) const;
 //
 //	/**
-//	 * @fn	Sample DcMode::getFiltEdge( const IntraDirection dir, const UInt offset) const;
+//	 * @fn	Sample DcMode::getFiltEdge( const IntraDirection dir, const int offset) const;
 //	 *
 //	 * @brief	Pobranie wyg³adzonej próbki referencyjnej z danego kierunku i pozycji.
 //	 *
@@ -204,7 +204,7 @@
 //	 * @return	Wartoœæ próbki referencyjnej.
 //	 */
 //
-//	Sample getFiltEdge( const IntraDirection dir, const UInt offset) const;
+//	Sample getFiltEdge( const IntraDirection dir, const int offset) const;
 //public:
 //
 //	/**
@@ -246,7 +246,7 @@
 //private:
 //
 //	/**
-//	* @fn	Sample LinearMode::getFiltEdge( const IntraDirection dir, const UInt offset) const;
+//	* @fn	Sample LinearMode::getFiltEdge( const IntraDirection dir, const int offset) const;
 //	*
 //	* @brief	Pobranie wyg³adzonej próbki referencyjnej z danego kierunku i pozycji.
 //	*
@@ -256,7 +256,7 @@
 //	* @return	Wartoœæ próbki referencyjnej.
 //	*/
 //
-//	Sample getFiltEdge( const IntraDirection dir, const UInt offset );
+//	Sample getFiltEdge( const IntraDirection dir, const int offset );
 //public:
 //
 //	/**
@@ -336,14 +336,14 @@
 //	Int getInvAngle( ) const;
 //
 //	/**
-//	 * @fn	Void AngMode::getRefsArray( );
+//	 * @fn	void AngMode::getRefsArray( );
 //	 *
 //	 * @brief	Gets references array.
 //	 *
 //	 * @return	The references array.
 //	 */
 //
-//	Void getRefsArray( );
+//	void getRefsArray( );
 //public:
 //
 //	/**

@@ -1,6 +1,6 @@
 #include "PictureEncoder.h"
 
-namespace H265Lib
+namespace HEVC
 {
 	IntraPictureEncoder::IntraPictureEncoder() :
 		_picture(nullptr)

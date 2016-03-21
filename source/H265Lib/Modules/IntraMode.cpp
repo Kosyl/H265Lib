@@ -23,17 +23,17 @@
 //	return getEmptyMatrix<Sample>( itsCurrentPB->getSize( ), itsCurrentPB->getSize( ) );
 //}
 //
-//Void IntraMode::setPb( PBIntra *newPb )
+//void IntraMode::setPb( PBIntra *newPb )
 //{
 //	itsCurrentPB = newPb;
 //}
 //
-//Void IntraMode::setCorner( const Sample newCorner )
+//void IntraMode::setCorner( const Sample newCorner )
 //{
 //	itsCornerReference = newCorner;
 //}
 //
-//Void IntraMode::setSideRefs( const IntraDirection dir, Sample *refs )
+//void IntraMode::setSideRefs( const IntraDirection dir, Sample *refs )
 //{
 //	assert( dir != INTRA_DIR_CORNER );
 //
@@ -54,13 +54,13 @@
 //	assert( itsCurrentPB != nullptr );
 //	assert( itsReferenceValues != nullptr && itsReferenceValues[ INTRA_DIR_LEFT ] != nullptr && itsReferenceValues[ INTRA_DIR_TOP ] != nullptr );
 //
-//	UInt size = itsCurrentPB->getSize( );
+//	int size = itsCurrentPB->getSize( );
 //	Int log2PuSize = log2Int( size );
 //
 //	Sample **pred = initPred( );
-//	for( UInt x = 0; x < size; x++ )
+//	for( int x = 0; x < size; x++ )
 //	{
-//		for( UInt y = 0; y < size; y++ )
+//		for( int y = 0; y < size; y++ )
 //		{
 //			Int offset = ( itsReferenceValues[ INTRA_DIR_LEFT ][ y ] + itsReferenceValues[ INTRA_DIR_TOP ][ x ] + 1 ) << log2PuSize;
 //			Int sumLeft = ( x + 1 ) * ( itsReferenceValues[ INTRA_DIR_TOP ][ size ] - itsReferenceValues[ INTRA_DIR_LEFT ][ y ] );
@@ -84,11 +84,11 @@
 //{
 //}
 //
-//Void DcMode::calcDcVal( )
+//void DcMode::calcDcVal( )
 //{
-//	UInt size = itsCurrentPB->getSize( );
+//	int size = itsCurrentPB->getSize( );
 //	itsDCVal = size;
-//	for( UInt x = 0; x < size; ++x )
+//	for( int x = 0; x < size; ++x )
 //		itsDCVal += itsReferenceValues[ INTRA_DIR_LEFT ][ x ] + itsReferenceValues[ INTRA_DIR_TOP ][ x ];
 //	itsDCVal >>= log2Int( size ) + 1;
 //}
@@ -101,7 +101,7 @@
 //		return itsDCVal;
 //}
 //
-//Sample DcMode::getFiltEdge( const IntraDirection dir, const UInt offset ) const
+//Sample DcMode::getFiltEdge( const IntraDirection dir, const int offset ) const
 //{
 //	assert( dir != INTRA_DIR_CORNER );
 //	assert( itsReferenceValues != nullptr && itsReferenceValues[ INTRA_DIR_LEFT ] != nullptr && itsReferenceValues[ INTRA_DIR_TOP ] != nullptr );
@@ -148,7 +148,7 @@
 //{
 //}
 //
-//Sample LinearMode::getFiltEdge( const IntraDirection dir, const UInt offset )
+//Sample LinearMode::getFiltEdge( const IntraDirection dir, const int offset )
 //{
 //	const Sample* mainRefs = itsReferenceValues[ dir ];
 //	const Sample* sideRefs = itsReferenceValues[ ( dir + 1 ) % 2 ];
@@ -218,7 +218,7 @@
 //
 //	Int angle = getAngle( );
 //
-//	Bool modeHor = itsCurrentPB->getModeIdx( ) < 18;
+//	bool modeHor = itsCurrentPB->getModeIdx( ) < 18;
 //
 //	Int size = (Int)itsCurrentPB->getSize( );
 //
@@ -240,7 +240,7 @@
 //		//LOG( "PRED" ) << itsReferenceValues[ INTRA_DIR_LEFT ][ i ] << std::endl;
 //	}*/
 //
-//	UInt start = size;
+//	int start = size;
 //	refsArray[ start++ ] = itsCornerReference;
 //	for( Int x = start; x <= 2 * size; x++ )
 //	{
@@ -294,7 +294,7 @@
 //
 //	Int angle = getAngle( );
 //
-//	Bool modeHor = itsCurrentPB->getModeIdx( ) < 18;
+//	bool modeHor = itsCurrentPB->getModeIdx( ) < 18;
 //
 //	Sample **pred = initPred( );
 //	Int size = itsCurrentPB->getSize( );

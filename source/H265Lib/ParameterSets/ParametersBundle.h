@@ -2,7 +2,7 @@
 
 #include <ParameterSets/PictureParameterSet.h>
 
-namespace H265Lib
+namespace HEVC
 {
 	struct ParametersBundle
 	{
@@ -58,7 +58,7 @@ namespace H265Lib
 
 		}
 
-		static ParametersBundle getDefaultParameters(UShort picWIdth, UShort picHeight)
+		static ParametersBundle getDefaultParameters(int picWIdth, int picHeight)
 		{
 			auto vps = VideoParameterSetBank::instance().createNext();
 			auto sps = SequenceParameterSetBank::instance().createNext();

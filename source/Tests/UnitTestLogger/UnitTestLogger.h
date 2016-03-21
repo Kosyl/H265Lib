@@ -26,18 +26,18 @@ namespace Microsoft {
 
 				std::string _spaces;
 
-				UInt _numTabs;
+				int _numTabs;
 
-				UInt _step;
+				int _step;
 
 				template<typename T>
-				Void write(T s)
+				void write(T s)
 				{
 					_logStream << s;
 				}
 
 				template<>
-				Void write(NewLineToken)
+				void write(NewLineToken)
 				{
 					_logStream << std::endl;
 					printSpaces();
@@ -58,9 +58,9 @@ namespace Microsoft {
 
 				std::stringstream& getStream();
 
-				Void printSpaces();
+				void printSpaces();
 
-				Void finish()
+				void finish()
 				{
 					Logger::WriteMessage(getStream().str().c_str());
 					getStream().str("");
@@ -70,18 +70,18 @@ namespace Microsoft {
 
 				Log();
 
-				Void increaseSpaces();
+				void increaseSpaces();
 
-				Void decreaseSpaces();
+				void decreaseSpaces();
 
-				Void setTabLength(Int len);
+				void setTabLength(int len);
 
-				UInt getTabLength();
+				int getTabLength();
 
-				Void setTabStep(UInt len);
+				void setTabStep(int len);
 
 				template<typename... Params>
-				static Void println(Params... args)
+				static void println(Params... args)
 				{
 					auto& log = instance();
 					log.printSpaces();
@@ -90,7 +90,7 @@ namespace Microsoft {
 				}
 
 				template<typename T, template<class> class TMatrix>
-				static Void printMatrix(TMatrix<T>& matrix)
+				static void printMatrix(TMatrix<T>& matrix)
 				{
 					auto& log = instance();
 					for (size_t y = 0; y < matrix.height(); ++y)
@@ -105,21 +105,27 @@ namespace Microsoft {
 				}
 
 				template<typename... Params>
-				static Void print(Params... args)
+				static void print(Params... args)
 				{
 					auto& log = instance();
 					log.printValues(args...);
 				}
 
-				static Void tab();
+				static void tab();
 
-				static Void untab();
+				static void untab();
+
+				static void flush()
+				{
+					auto& log = instance();
+					log.finish();
+				}
 			};
 
 
 
 			/*template<typename T>
-			Void printArrayToLog(Logs id, const char* name, T** matrix, int sizeX, int sizeY)
+			void printArrayToLog(Logs id, const char* name, T** matrix, int sizeX, int sizeY)
 			{
 			auto log = LoggingControl::instance().logs[id];
 			if (log == nullptr)
@@ -139,7 +145,7 @@ namespace Microsoft {
 			}
 
 			template<typename T>
-			Void printArrayToLog1Dto2D(Logs id, const char* name, T* matrix, int sizeX, int sizeY, int stride)
+			void printArrayToLog1Dto2D(Logs id, const char* name, T* matrix, int sizeX, int sizeY, int stride)
 			{
 			auto log = LoggingControl::instance().logs[id];
 			if (log == nullptr)

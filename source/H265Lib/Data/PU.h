@@ -4,45 +4,45 @@
 #include "CU.h"
 #include <vector>
 
-namespace H265Lib
+namespace HEVC
 {
-	class PUIntra;
+	class Pintra;
 	class TB;
 
-	class PUIntra : public BlockBase
+	class PU : public BlockBase
 	{
 	private:
 
-		/*CUIntra* itsParentCU;
+		/*Cintra* itsParentCU;
 
-		UInt itsLumaModeIdx, itsChromaModeIdx;
+		int itsLumaModeIdx, itsChromaModeIdx;
 
 		std::shared_ptr<TUQuadTree> itsTransformArea;*/
 
 	public:
 
-		PUIntra(UInt X, UInt Y, UInt size, ParametersBundle parameters);
+		PU(int X, int Y, int size);
 
-		~PUIntra();
+		~PU();
 
-		/*Void setLumaModeIdx(const UInt modeIdx)
+		/*void setLumaModeIdx(const int modeIdx)
 		{
 			assert(modeIdx >= 0 && modeIdx <= 34);
 			itsLumaModeIdx = modeIdx;
 			refreshChromaModeIdx();
 		}
 
-		Void refreshChromaModeIdx()
+		void refreshChromaModeIdx()
 		{
-			itsChromaModeIdx = PUIntra::getModeForChroma(itsLumaModeIdx, itsParentCU->getIntraChromaPredictionDerivationType());
+			itsChromaModeIdx = Pintra::getModeForChroma(itsLumaModeIdx, itsParentCU->getIntraChromaPredictionDerivationType());
 		}
 
-		virtual CUIntra* getCu() const
+		virtual Cintra* getCu() const
 		{
 			return itsParentCU;
 		}
 
-		UInt getModeIdx(ImgComp comp) const
+		int getModeIdx(ImgComp comp) const
 		{
 			if (comp == LUMA)
 				return itsLumaModeIdx;
@@ -55,17 +55,17 @@ namespace H265Lib
 			return itsTransformArea;
 		}
 
-		Void setTransformArea(std::shared_ptr<TUQuadTree> val)
+		void setTransformArea(std::shared_ptr<TUQuadTree> val)
 		{
 			itsTransformArea = val;
 		}
 
-		Void reconstructionLoop();
+		void reconstructionLoop();
 
-		static UInt getModeForChroma(UInt modeForLuma, UInt chromaPredictionDerivationMode);*/
+		static int getModeForChroma(int modeForLuma, int chromaPredictionDerivationMode);*/
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 
-		//std::vector<UInt> bestSAD8x8modes;
+		//std::vector<int> bestSAD8x8modes;
 	};
 }

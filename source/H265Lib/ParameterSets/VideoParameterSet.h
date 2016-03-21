@@ -8,86 +8,47 @@
 #include <Common/Matrix.h>
 #include "HRDParameters.h"
 
-namespace H265Lib
+namespace HEVC
 {
+	class SubLayerOrderingInfo
+	{
+		int _maxDecPicBuffering;
+		int _maxNumReorderPic;
+		int _maxLatencyIncrease;
+	};
+
 	class VideoParameterSet: public ParameterSetBase
 	{
-	private:
-		UShort _maxLayers;
-		UShort _maxSublayers;
-		Bool _temporalIdNestingFlag;
-		ProfileTierLevel _profileTierLevel;
-
-		Bool _subLayerOrderingInfoPresent;
-		std::vector<SubLayerOrderingInfo> _subLayerOrderingInfos;
-
-		UShort _maxLayerId;
-		UShort _numLayerSets;
-		std::unique_ptr<Matrix<Bool>> _layerIdIncludedFlags;
-
-		Bool _vpsTimingInfoPresent;
-		UInt _numUnitsInTick;
-		UInt _timeScale;
-		Bool _pocProportionalToTiming;
-		UInt _numTicksPocDiffOne;
-
-		UInt _numHrdParameters;
-		std::vector<UShort> _hrdLayerSetIdxList;
-		std::vector<Bool> _cprmsPresentFlags;
-		std::vector<HRDParameters> _hrdParametersList;
-
-		Bool _extensionFlag;
-
 	public:
+		uint8_t max_layers;
+		uint8_t max_sub_layers;
+		bool temporal_id_nesting_flag;
+		ProfileTierLevel profile_tier_level;
+
+		bool sub_layer_ordering_info_present_flag;
+		std::vector<SubLayerOrderingInfo> sub_layer_ordering_infos;
+
+		int max_layer_id;
+		int num_layer_sets;
+		std::unique_ptr<Matrix<bool>> layer_id_included_flag;
+
+		bool timing_info_present_flag;
+		int num_units_in_tick;
+		int time_scale;
+		bool poc_proportional_to_timing_flag;
+		int num_ticks_poc_diff_one;
+
+		int num_hrd_parameters;
+		std::vector<int> hrd_layer_set_idx;
+		std::vector<bool> cprms_present_flag;
+		std::vector<HRDParameters> hrd_parameters;
+
+		bool extension_flag;
 
 		VideoParameterSet() = delete;
-		VideoParameterSet(UShort idx);
+		VideoParameterSet(int idx);
 
 		virtual ~VideoParameterSet() override;;
-
-		UShort getMaxLayers() const;
-		void setMaxLayers(UShort val);
-		UShort getMaxSublayers() const;
-		void setMaxSublayers(UShort val);
-		Bool getTemporalIdNestingFlag() const;
-		void setTemporalIdNestingFlag(Bool val);
-		const ProfileTierLevel& getProfileTierLevel() const;
-		void setProfileTierLevel(ProfileTierLevel val);
-
-		Bool getSubLayerOrderingInfoPresent() const;
-		void setSubLayerOrderingInfoPresent(Bool val);
-		const std::vector<SubLayerOrderingInfo>& getSubLayerOrderingInfos() const;
-		void setSubLayerOrderingInfos(std::vector<SubLayerOrderingInfo> val);
-
-		UShort getMaxLayerId() const;
-		void setMaxLayerId(UShort val);
-		UShort getNumLayerSets() const;
-		void setNumLayerSets(UShort val);
-		Matrix<Bool>& getLayerIdIncludedFlags();
-
-		Bool getVpsTimingInfoPresent() const;
-		void setVpsTimingInfoPresent(Bool val);
-		UInt getNumUnitsInTick() const;
-		void setNumUnitsInTick(UInt val);
-		UInt getTimeScale() const;
-		void setTimeScale(UInt val);
-		Bool getPocProportionalToTiming() const;
-		void setPocProportionalToTiming(Bool val);
-		UInt getNumTicksPocDiffOne() const;
-		void setNumTicksPocDiffOne(UInt val);
-
-		UInt getNumHrdParameters() const;
-		void setNumHrdParameters(UInt val);
-
-		const std::vector<UShort>& getHrdLayerSetIdxList() const;
-		void setHrdLayerSetIdxList(std::vector<UShort> val);
-		const std::vector<Bool>& getCprmsPresentFlags() const;
-		void setCprmsPresentFlags(std::vector<Bool> val);
-		const std::vector<HRDParameters>& getHrdParametersList() const;
-		void setHrdParametersList(std::vector<HRDParameters> val);
-
-		Bool getExtensionFlag() const;
-		void setExtensionFlag(Bool val);
 
 		void initWithDefaults() override;
 	};

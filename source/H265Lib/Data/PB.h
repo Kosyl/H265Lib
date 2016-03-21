@@ -3,7 +3,7 @@
 #include "BlockBase.h"
 
 
-namespace H265Lib
+namespace HEVC
 {
 	class PBIntra : public BlockBase
 	{
@@ -21,35 +21,35 @@ namespace H265Lib
 
 		Sample itsCornerReference;
 
-		Bool itsReferencesReady;
+		bool itsReferencesReady;
 
-		UInt itsModeIdx;
+		int itsModeIdx;
 
-		Bool calcPuAvail(const Int x, const Int y) const;
+		bool calcPuAvail(const Int x, const Int y) const;
 
-		UShort getReferenceValue(const IntraDirection dir, const UInt offset = 0) const;
+		int getReferenceValue(const IntraDirection dir, const int offset = 0) const;
 
-		Void fillMissingReferences(Bool** sideAvailable, Bool cornerAvailable);
+		void fillMissingReferences(bool** sideAvailable, bool cornerAvailable);
 
-		Bool itsPredictionDone;*/
+		bool itsPredictionDone;*/
 
 	public:
 
-		PBIntra(ImgComp comp, UInt x, UInt y, UInt size, ParametersBundle parameters);
+		PBIntra(ImgComp comp, int x, int y, int size, ParametersBundle parameters);
 
 		~PBIntra();
 
-		/*Void calcAndWritePredictionToCU(std::shared_ptr<PUIntra> mainPU);
+		/*void calcAndWritePredictionToCU(std::shared_ptr<Pintra> mainPU);
 
-		Void calcReferences();
+		void calcReferences();
 
 		ImgComp getImgComp() const;
 
-		UInt getModeIdx() const;
+		int getModeIdx() const;
 
-		UInt getPUIdx() const;
+		int getPUIdx() const;
 
-		Void setModeIdx(UInt mode);
+		void setModeIdx(int mode);
 
 		Sample getCornerReference();
 
@@ -59,12 +59,12 @@ namespace H265Lib
 
 		Sample **getPredForceRef(Sample* leftRefs, Sample* topRefs, Sample corner);
 
-		Bool predictionDone()
+		bool predictionDone()
 		{
 			return itsPredictionDone;
 		}*/
 
-		virtual Void printDescription(LogId logId, Bool recursive = true) override;
+		virtual void print(LogId logId, bool recursive = true) override;
 	};
 
 }

@@ -54,7 +54,7 @@
 //	 * @brief	Bit mówi¹cy, czy pierwszy wspó³æzynnik wiêkszy od 1 jest wiêkszy tak¿e od 2.
 //	 */
 //
-//	Bool itsC2;
+//	bool itsC2;
 //
 //	/**
 //	 * @brief	Mapa znaków ( + -> 0, - -> 1 )
@@ -227,27 +227,27 @@
 //	}
 //
 //	/**
-//	 * @fn	Bool CoeffGroup::getC2( ) const
+//	 * @fn	bool CoeffGroup::getC2( ) const
 //	 *
 //	 * @brief	Zwraca bit C2.
 //	 *
 //	 * @return	Bit C2.
 //	 */
 //
-//	Bool getC2( ) const
+//	bool getC2( ) const
 //	{
 //		return itsC2;
 //	}
 //
 //	/**
-//	 * @fn	void CoeffGroup::setC2( Bool val )
+//	 * @fn	void CoeffGroup::setC2( bool val )
 //	 *
 //	 * @brief	Ustawia bit C2.
 //	 *
 //	 * @param	val	Nowy bit C2.
 //	 */
 //
-//	void setC2( Bool val )
+//	void setC2( bool val )
 //	{
 //		itsC2 = val;
 //	}

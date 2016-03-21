@@ -4,20 +4,20 @@
 #include "CTU.h"
 #include "TU.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	CUQuadTree::CUQuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters) :
-		QuadTree(x, y, size, parameters)
+	CUQuadTree::CUQuadTree(int x, int y, int size) :
+		QuadTree(x, y, size)
 	{
 		assert(size == 8 || size == 16 || size == 32 || size == 64);
 	}
 
 	std::shared_ptr<CU> CUQuadTree::getCU()
 	{
-		return _leaf;
+		return leaf;
 	}
 
-	Void CUQuadTree::printDescription(LogId logId, Bool recursive)
+	void CUQuadTree::print(LogId logId, bool recursive)
 	{
 		//LOG( "PART" ) << "CUQuadTree[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << std::endl;
 		//LOG_TAB );
@@ -32,18 +32,18 @@ namespace H265Lib
 		//LOG_UNTAB );
 	}
 
-	TUQuadTree::TUQuadTree(UInt x, UInt y, UInt size, ParametersBundle parameters) :
-		QuadTree(x, y, size, parameters)
+	TUQuadTree::TUQuadTree(int x, int y, int size) :
+		QuadTree(x, y, size)
 	{
 		assert(size == 4 || size == 8 || size == 16 || size == 32 || size == 64);
 	}
 
 	std::shared_ptr<TU> TUQuadTree::getTU()
 	{
-		return _leaf;
+		return leaf;
 	}
 
-	Void TUQuadTree::printDescription(LogId logId, Bool recursive)
+	void TUQuadTree::print(LogId logId, bool recursive)
 	{
 		//LOG( "PART" ) << "TUQuadTree[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << std::endl;
 		//LOG_TAB );
@@ -58,18 +58,18 @@ namespace H265Lib
 		//LOG_UNTAB );
 	}
 
-	std::shared_ptr<TU> TUQuadTree::getTuContainingPosition(UInt x, UInt y)
+	std::shared_ptr<TU> TUQuadTree::getTuContainingPosition(int x, int y)
 	{
-		if (_mode == QTMode::Leaf)
+		if (mode == QTMode::Leaf)
 		{
-			return _leaf;
+			return leaf;
 		}
 		else
 		{
-			UInt step = _size / 2;
-			Int left, up;
-			left = Position.X + step > x ? 0 : 1;
-			up = Position.Y + step > x ? 0 : 1;
+			int step = size / 2;
+			int left, up;
+			left = x + step > x ? 0 : 1;
+			up = y + step > x ? 0 : 1;
 			TreePart comp;
 			if (left && up)
 				comp = TreePart::UpperLeft;
@@ -80,7 +80,7 @@ namespace H265Lib
 			else
 				comp = TreePart::LowerRight;
 
-			return getSubTree(comp)->getTuContainingPosition(x, y);
+			return subtrees[!!left][!!up]->getTuContainingPosition(x, y);
 		}
 	}
 }

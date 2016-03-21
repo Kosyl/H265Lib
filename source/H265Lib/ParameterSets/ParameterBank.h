@@ -4,15 +4,15 @@
 #include <unordered_map>
 #include <memory>
 
-namespace H265Lib
+namespace HEVC
 {
 	template < typename TParameterClass >
 	class ParameterBank : public Singleton < ParameterBank<TParameterClass> >
 	{
 	private:
-		std::unordered_map<UShort, std::shared_ptr<TParameterClass>> _parameterSets;
-		UShort _lastSetIdx = 0;
-		UShort _nextSetIdx = 0;
+		std::unordered_map<int, std::shared_ptr<TParameterClass>> _parameterSets;
+		int _lastSetIdx = 0;
+		int _nextSetIdx = 0;
 
 	public:
 		std::shared_ptr<TParameterClass> createNext()
@@ -25,7 +25,7 @@ namespace H265Lib
 			return _parameterSets[idx];
 		}
 
-		std::shared_ptr<TParameterClass> getSetByIdx(UShort idx)
+		std::shared_ptr<TParameterClass> getSetByIdx(int idx)
 		{
 			return _parameterSets[idx];
 		}

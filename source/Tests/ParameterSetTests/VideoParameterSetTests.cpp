@@ -3,7 +3,7 @@
 #include "ParameterSets/VideoParameterSet.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace ParameterSetTests
 {
@@ -13,14 +13,14 @@ namespace ParameterSetTests
 
 		TEST_METHOD(DefaultInitTest)
 		{
-			H265Lib::VideoParameterSet vps(1);
-			Assert::IsTrue(vps.getMaxLayers() == 1);
+			HEVC::VideoParameterSet vps(1);
+			Assert::IsTrue(vps.max_layers== 1);
 		}
 
 		TEST_METHOD(VideoParameterBankTest)
 		{
-			auto vps = H265Lib::VideoParameterSetBank::instance().createNext();
-			Assert::IsTrue(vps->getMaxLayers() == 1);
+			auto vps = HEVC::VideoParameterSetBank::instance().createNext();
+			Assert::IsTrue(vps->max_layers == 1);
 		}
 	};
 }

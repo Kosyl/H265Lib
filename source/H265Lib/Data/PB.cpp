@@ -1,8 +1,8 @@
 #include "PB.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	PBIntra::PBIntra(ImgComp comp, UInt x, UInt y, UInt size, ParametersBundle parameters) :
+	PBIntra::PBIntra(ImgComp comp, int x, int y, int size, ParametersBundle parameters) :
 		BlockBase( x, y, size)
 		/*itsComp(comp),
 		itsParentTB(parentTB),
@@ -22,17 +22,17 @@ namespace H265Lib
 		return itsComp;
 	}
 
-	UInt PBIntra::getPUIdx() const
+	int PBIntra::getPUIdx() const
 	{
 		return itsParentTB->getIdx();
 	}
 
-	UInt PBIntra::getModeIdx() const
+	int PBIntra::getModeIdx() const
 	{
 		return itsModeIdx;
 	}
 
-	Void PBIntra::setModeIdx(UInt mode)
+	void PBIntra::setModeIdx(int mode)
 	{
 		itsModeIdx = mode;
 	}
@@ -65,7 +65,7 @@ namespace H265Lib
 	//	return IntraPred::getInstance()->calcPredForceRefs(this, leftRefs, topRefs, corner);
 	//}
 
-	//Bool PBIntra::calcPuAvail(const Int targetPuX, const Int targetPuY) const
+	//bool PBIntra::calcPuAvail(const Int targetPuX, const Int targetPuY) const
 	//{
 	//	Int picWidth = SeqParams()->getPicWidth() / (itsComp == LUMA ? 1 : 2);
 	//	Int picHeight = SeqParams()->getPicHeight() / (itsComp == LUMA ? 1 : 2);
@@ -79,7 +79,7 @@ namespace H265Lib
 	//	return true;
 	//}
 
-	//UShort PBIntra::getReferenceValue(const IntraDirection dir, const UInt offset) const
+	//int PBIntra::getReferenceValue(const IntraDirection dir, const int offset) const
 	//{
 	//	if (dir == INTRA_DIR_LEFT)
 	//		return itsPicRecon[itsX - 1][itsY + offset];
@@ -89,12 +89,12 @@ namespace H265Lib
 	//		return itsPicRecon[itsX + offset][itsY - 1];
 	//}
 
-	//Void PBIntra::calcReferences()
+	//void PBIntra::calcReferences()
 	//{
 
-	//	Bool** sideAvailable = getEmptyMatrix<Bool>(2, 2 * itsSize);
-	//	Bool cornerAvailable = false;
-	//	Bool atLeasOneAvailable = false;
+	//	bool** sideAvailable = getEmptyMatrix<bool>(2, 2 * itsSize);
+	//	bool cornerAvailable = false;
+	//	bool atLeasOneAvailable = false;
 
 	//	Int X = itsX;
 	//	Int Y = itsY;
@@ -106,9 +106,9 @@ namespace H265Lib
 	//		atLeasOneAvailable = true;
 	//	}
 
-	//	UInt offsetLimit = 2 * itsSize;
+	//	int offsetLimit = 2 * itsSize;
 
-	//	for (UInt offset = 0; offset < offsetLimit; ++offset)
+	//	for (int offset = 0; offset < offsetLimit; ++offset)
 	//	{
 	//		//left
 	//		sideAvailable[INTRA_DIR_LEFT][offset] = calcPuAvail(X - 1, Y + offset);
@@ -131,7 +131,7 @@ namespace H265Lib
 	//	{
 	//		Sample def = SeqParams()->getDefaultSampleValue(itsComp);
 	//		itsCornerReference = def;
-	//		for (UInt offset = 0; offset < offsetLimit; ++offset)
+	//		for (int offset = 0; offset < offsetLimit; ++offset)
 	//		{
 	//			itsSideReferences[INTRA_DIR_LEFT][offset] = def;
 	//			itsSideReferences[INTRA_DIR_TOP][offset] = def;
@@ -154,7 +154,7 @@ namespace H265Lib
 	//	itsReferencesReady = true;
 	//}
 
-	//Void PBIntra::fillMissingReferences(Bool** sideAvailable, Bool cornerAvailable)
+	//void PBIntra::fillMissingReferences(bool** sideAvailable, bool cornerAvailable)
 	//{
 	//	if (sideAvailable[INTRA_DIR_LEFT][2 * itsSize - 1] == false)
 	//	{
@@ -177,8 +177,8 @@ namespace H265Lib
 
 	//		if (sideAvailable[INTRA_DIR_LEFT][2 * itsSize - 1] == false)
 	//		{
-	//			UInt idxLimit = 2 * itsSize;
-	//			for (UInt idx = 0; idx < idxLimit; ++idx)
+	//			int idxLimit = 2 * itsSize;
+	//			for (int idx = 0; idx < idxLimit; ++idx)
 	//			{
 	//				//scan top
 	//				if (sideAvailable[INTRA_DIR_TOP][idx])
@@ -201,8 +201,8 @@ namespace H265Lib
 	//		itsCornerReference = itsSideReferences[INTRA_DIR_LEFT][0];
 	//	if (!sideAvailable[INTRA_DIR_TOP][0])
 	//		itsSideReferences[INTRA_DIR_TOP][0] = itsCornerReference;
-	//	UInt idxLimit = 2 * itsSize;
-	//	for (UInt idx = 1; idx < idxLimit; ++idx)
+	//	int idxLimit = 2 * itsSize;
+	//	for (int idx = 1; idx < idxLimit; ++idx)
 	//	{
 	//		if (!sideAvailable[INTRA_DIR_TOP][idx])
 	//		{
@@ -211,7 +211,7 @@ namespace H265Lib
 	//	}
 	//}
 
-	//Void PBIntra::calcAndWritePredictionToCU(std::shared_ptr<PUIntra> mainPU)
+	//void PBIntra::calcAndWritePredictionToCU(std::shared_ptr<Pintra> mainPU)
 	//{
 	//	itsPredictionTarget = mainPU->getCu()->getPredictionMatrix(itsComp);
 	//	itsModeIdx = mainPU->getModeIdx(itsComp);
@@ -219,13 +219,13 @@ namespace H265Lib
 	//	////LOG( "OPT" ) << "predykcja, comp: " << itsComp << ", tryb: " << itsModeIdx << std::endl;
 
 	//	Sample** pred = this->getPred();
-	//	UInt shift = (itsComp == LUMA ? 0 : 1);
-	//	UInt offsetX = itsParentTB->getX() - (mainPU->getCu()->getX() >> shift);
-	//	UInt offsetY = itsParentTB->getY() - (mainPU->getCu()->getY() >> shift);
+	//	int shift = (itsComp == LUMA ? 0 : 1);
+	//	int offsetX = itsParentTB->getX() - (mainPU->getCu()->getX() >> shift);
+	//	int offsetY = itsParentTB->getY() - (mainPU->getCu()->getY() >> shift);
 
-	//	for (UInt x = offsetX; x < offsetX + itsSize; ++x)
+	//	for (int x = offsetX; x < offsetX + itsSize; ++x)
 	//	{
-	//		for (UInt y = offsetY; y < offsetY + itsSize; ++y)
+	//		for (int y = offsetY; y < offsetY + itsSize; ++y)
 	//		{
 	//			itsPredictionTarget[x][y] = pred[x - offsetX][y - offsetY];
 	//		}
@@ -235,7 +235,7 @@ namespace H265Lib
 	//	itsPredictionDone = true;
 	//}
 
-	Void PBIntra::printDescription(LogId logId, bool recursive)
+	void PBIntra::print(LogId logId, bool recursive)
 	{
 		////LOG( "OPT" ) << "PBIntra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", comp: " << itsComp << std::endl;
 	}

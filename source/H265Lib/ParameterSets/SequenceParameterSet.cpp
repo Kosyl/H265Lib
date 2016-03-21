@@ -2,9 +2,9 @@
 #include <Common/Matrix.h>
 #include <Common/Calc.h>
 
-namespace H265Lib
+namespace HEVC
 {
-	SequenceParameterSet::SequenceParameterSet(UShort idx) :
+	SequenceParameterSet::SequenceParameterSet(int idx) :
 		ParameterSetBase(idx)
 	{
 		initWithDefaults();
@@ -15,63 +15,65 @@ namespace H265Lib
 		initWithDefaults();
 	}
 
-	Void SequenceParameterSet::initWithDefaults()
+	void SequenceParameterSet::initWithDefaults()
 	{
-		setMaxSublayers(1);
+		max_sub_layers = 1;
 
-		setSubsamplingFormat(SubsamplingFormat::Mode_420);
-		setSeparateColourPlane(false);
+		chroma_format_idc =SubsamplingFormat::Mode_420;
+		separate_colour_plane_flag = false;
 
 		setConformanceWindow(0, 0, 0, 0);
-		setUseConformanceWindow(false);
+		conformance_window_flag = false;
 
-		setBitDepthLuma(8);
-		setBitDepthChroma(8);
+		bit_depth_luma = 8;
+		bit_depth_chroma = 8;
 
-		setMaxPicOrderCount(1);
+		max_pic_order_cnt =1;
 
-		setSubLayerOrderingInfoPresent(false);
+		sub_layer_ordering_info_present_flag =false;
 
-		setMaxCUSize(64);
-		setMinCUSize(8);
-		setMaxTUSize(32);
-		setMinTUSize(4);
+		max_luma_coding_block_size =64;
+		min_luma_coding_block_size =8;
+		max_luma_transform_block_size = 32;
+		min_luma_transform_block_size = 4;
 		setPicSize(0, 0);
 
-		setMaxTransformHierarchyDepthIntra(3);
-		setMaxTransformHierarchyDepthInter(3);
+		max_transform_hierarchy_depth_intra = 3;
+		max_transform_hierarchy_depth_inter = 3;
 
-		setScalingListEnabled(false);
-		setScalingListDataPresent(false);
+		scaling_list_enabled_flag = false;
+		scaling_list_data_present_flag = false;
 
-		setAMPEnabled(true);
+		amp_enabled_flag = true;
 
-		setSAOEnabled(true);
+		sample_adaptive_offset_enabled_flag = false;
 
-		setPCMEnabled(false);
+		pcm_enabled_flag = false;
 
-		setTemporalMVPEnabled(true);
+		temporal_mvp_enabled_flag = false;
 
-		setStrongIntraSmoothingEnabled(true);
+		strong_intra_smoothing_enabled_flag = true;
 
-		setVuiParametersPresent(false);
+		vui_parameters_present_flag = false;
 
-		setSpsExtension(false);
+		sps_extension_flag = false;
+
+		refresh();
 	}
 
 #pragma region Indexes
 
-	Void SequenceParameterSet::resetZScanArray()
+	void SequenceParameterSet::resetZScanArray()
 	{
-		UInt y, x, m, p, i, tbX, tbY, ctbAddrRs;
-		UInt minTUSize = getLog2MinTUSize(), CTUSize = getLog2CTUSize();
-		UInt PicWidthInCTUs = getPicWidthInCTUs(), PicHeightInCTUs = getPicHeightInCTUs();
+		int y, x, m, p, i, tbX, tbY, ctbAddrRs;
+		int minTUSize = min_luma_transform_block_size, CTUSize = log2_ctu_size;
+		int PicWidthInCTUs = pic_width_in_ctus, PicHeightInCTUs = pic_height_in_ctus;
 
 		if (minTUSize < 2 || CTUSize < 4 || PicHeightInCTUs <= 0 || PicHeightInCTUs <= 0)
 			return;
 
-		UInt yLimit = PicHeightInCTUs << (CTUSize - minTUSize);
-		UInt xLimit = PicWidthInCTUs << (CTUSize - minTUSize);
+		int yLimit = PicHeightInCTUs << (CTUSize - minTUSize);
+		int xLimit = PicWidthInCTUs << (CTUSize - minTUSize);
 
 		_zScanArray = std::make_shared<Matrix<size_t>>(xLimit, yLimit);
 
@@ -93,9 +95,9 @@ namespace H265Lib
 		}
 	}
 
-	UInt SequenceParameterSet::getSmallestBlockRasterIdx(UInt x, UInt y) const
+	int SequenceParameterSet::getSmallestBlockRasterIdx(int x, int y) const
 	{
-		return  ((y / getMinTUSize()) * getPicWidth() / getMinTUSize()) + (x / getMinTUSize());
+		return  ((y / min_luma_transform_block_size) * getPicWidth() / min_luma_transform_block_size) + (x / min_luma_transform_block_size);
 	}
 
 	std::shared_ptr<Matrix<size_t>> SequenceParameterSet::getZScanArrayPtr()
@@ -110,14 +112,14 @@ namespace H265Lib
 
 	size_t SequenceParameterSet::getSmallestBlockZScanIdxByPixel(const size_t pixelX, const size_t pixelY) const
 	{
-		return getSmallestBlockZScanIdxByBlockPosition(pixelX >> getLog2MinTUSize(), pixelY >> getLog2MinTUSize());
+		return getSmallestBlockZScanIdxByBlockPosition(pixelX >> log2_min_transform_block_size, pixelY >> log2_min_transform_block_size);
 	}
 
-	size_t SequenceParameterSet::calcZScanIdxOf4x4BlockIn64x64BlockByPixel(const UInt puX, const UInt puY)
+	size_t SequenceParameterSet::calcZScanIdxOf4x4BlockIn64x64BlockByPixel(const int puX, const int puY)
 	{
-		UInt puXDivBy4 = puX >> getLog2MinTUSize();
-		UInt puYDivBy4 = puY >> getLog2MinTUSize();
-		UInt calcPuIdx = ((puXDivBy4 & 8) << 3) | ((puXDivBy4 & 4) << 2) | ((puXDivBy4 & 2) << 1) | (puXDivBy4 & 1);
+		int puXDivBy4 = puX >> log2_min_transform_block_size;
+		int puYDivBy4 = puY >> log2_min_transform_block_size;
+		int calcPuIdx = ((puXDivBy4 & 8) << 3) | ((puXDivBy4 & 4) << 2) | ((puXDivBy4 & 2) << 1) | (puXDivBy4 & 1);
 		calcPuIdx |= ((puYDivBy4 & 8) << 4) | ((puYDivBy4 & 4) << 3) | ((puYDivBy4 & 2) << 2) | ((puYDivBy4 & 1) << 1);
 		return calcPuIdx;
 	}
@@ -138,643 +140,93 @@ namespace H265Lib
 
 #pragma endregion
 
-#pragma region VPS
-
-	Void SequenceParameterSet::setVideoParameterSetFromBank(UShort idx)
+	void SequenceParameterSet::refresh()
 	{
-		this->_vps = VideoParameterSetBank::instance().getSetByIdx(idx);
-	}
+		log2_max_transform_block_size = Calc::log2(max_luma_transform_block_size);
+		log2_min_transform_block_size = Calc::log2(min_luma_transform_block_size);
+		log2_max_coding_block_size = Calc::log2(max_luma_coding_block_size);
+		log2_min_coding_block_size = Calc::log2(min_luma_coding_block_size);
+		log2_ctu_size = Calc::log2(max_luma_coding_block_size);
+		ctu_size = max_luma_coding_block_size;
 
-	Void SequenceParameterSet::setVideoParameterSet(std::shared_ptr<VideoParameterSet> vps)
-	{
-		this->_vps = vps;
-	}
-
-	std::shared_ptr<VideoParameterSet> SequenceParameterSet::getVideoParameterSet()
-	{
-		return this->_vps;
-	}
-
-#pragma endregion
-
-#pragma region ProfileTierLevel, TamporalIdNesting, Sublayers
-
-	void SequenceParameterSet::setProfileTierLevels(std::vector<ProfileTierLevel> val)
-	{
-		_profileTierLevels = val;
-	}
-
-	const std::vector<ProfileTierLevel>& SequenceParameterSet::getProfileTierLevels() const
-	{
-		return _profileTierLevels;
-	}
-
-	void SequenceParameterSet::setTemporalIdNestingFlag(Bool val)
-	{
-		_temporalIdNestingFlag = val;
-	}
-
-	Bool SequenceParameterSet::getTemporalIdNestingFlag() const
-	{
-		return _temporalIdNestingFlag;
-	}
-
-	void SequenceParameterSet::setMaxSublayers(UShort val)
-	{
-		_maxSublayers = val;
-	}
-
-	UShort SequenceParameterSet::getMaxSublayers() const
-	{
-		return _maxSublayers;
-	}
-
-#pragma endregion
-
-#pragma region Subsampling
-
-	void SequenceParameterSet::setSeparateColourPlane(Bool val)
-	{
-		_separateColourPlane = val;
-	}
-
-	Bool SequenceParameterSet::getSeparateColourPlane() const
-	{
-		return _separateColourPlane;
-	}
-
-	void SequenceParameterSet::setSubsamplingFormat(SubsamplingFormat val)
-	{
-		_subsamplingFormat = val;
-	}
-
-	H265Lib::SubsamplingFormat SequenceParameterSet::getSubsamplingFormat() const
-	{
-		return _subsamplingFormat;
-	}
-
-#pragma endregion
-
-#pragma region PicSize
-
-	Void SequenceParameterSet::setPicSize(UShort width, UShort height)
-	{
-		_picWidth = width;
-		_picHeight = height;
-
+		log2_max_pic_order_cnt = Calc::log2(max_pic_order_cnt);
+	
 		refreshPicSizeInCTUs();
 		resetZScanArray();
 	}
 
-	UShort SequenceParameterSet::getPicWidth(ImgComp plane) const
+#pragma region PicSize
+
+	int SequenceParameterSet::getPicWidth(ImgComp plane) const
 	{
-		if (this->getSubsamplingFormat() == SubsamplingFormat::Mode_444)
+		if (chroma_format_idc == SubsamplingFormat::Mode_444)
 		{
-			return _picWidth;
+			return pic_width_in_luma_samples;
 		}
 		else //422 albo 420
 		{
 			if (plane == ImgComp::Luma)
-				return _picWidth;
+				return pic_width_in_luma_samples;
 			else //chroma
-				return _picWidth / 2;
+				return pic_width_in_luma_samples / 2;
 		}
 	}
 
-	UShort SequenceParameterSet::getPicHeight(ImgComp plane) const
+	int SequenceParameterSet::getPicHeight(ImgComp plane) const
 	{
-		if (this->getSubsamplingFormat() == SubsamplingFormat::Mode_444 || this->getSubsamplingFormat() == SubsamplingFormat::Mode_422)
+		if (chroma_format_idc == SubsamplingFormat::Mode_444 || chroma_format_idc == SubsamplingFormat::Mode_422)
 		{
-			return _picHeight;
+			return pic_height_in_luma_samples;
 		}
 		else //420
 		{
 			if (plane == ImgComp::Luma)
-				return _picHeight;
+				return pic_height_in_luma_samples;
 			else //chroma
-				return _picHeight / 2;
+				return pic_height_in_luma_samples / 2;
 		}
+	}
+
+	void SequenceParameterSet::setPicSize(int width, int height)
+	{
+		pic_width_in_luma_samples = width;
+		pic_height_in_luma_samples = height;
+
+		refreshPicSizeInCTUs();
 	}
 
 	void SequenceParameterSet::refreshPicSizeInCTUs()
 	{
-		_picWidthInCTUs = (_picWidth - 1) / _maxCUSize + 1;
-		_picHeightInCTUs = (_picHeight - 1) / _maxCUSize + 1;
+		pic_width_in_ctus = (pic_width_in_luma_samples - 1) / ctu_size + 1;
+		pic_height_in_ctus = (pic_height_in_luma_samples - 1) / ctu_size + 1;
 	}
 
 #pragma endregion
 
-#pragma region Conformance Window
-
-	void SequenceParameterSet::setConformanceWindow(UShort top, UShort bottom, UShort left, UShort right)
+	void SequenceParameterSet::setConformanceWindow(int top, int bottom, int left, int right)
 	{
-		_conformanceWindowBottom = bottom;
-		_conformanceWindowLeft = left;
-		_conformanceWindowRight = right;
-		_conformanceWindowTop = top;
+		conf_win_bottom_offset = bottom;
+		conf_win_left_offset = left;
+		conf_win_right_offset = right;
+		conf_win_top_offset = top;
 	}
 
-	UShort SequenceParameterSet::getConformanceWindowBottomOffset() const
+	int SequenceParameterSet::getBitDepth(ImgComp comp) const
 	{
-		return _conformanceWindowBottom;
-	}
-
-	UShort SequenceParameterSet::getConformanceWindowTopOffset() const
-	{
-		return _conformanceWindowTop;
-	}
-
-	UShort SequenceParameterSet::getConformanceWindowLeftOffset() const
-	{
-		return _conformanceWindowLeft;
-	}
-
-	UShort SequenceParameterSet::getConformanceWindowRightOffset() const
-	{
-		return _conformanceWindowRight;
-	}
-
-	void SequenceParameterSet::setUseConformanceWindow(Bool val)
-	{
-		_useConformanceWindow = val;
-	}
-
-	Bool SequenceParameterSet::getUseConformanceWindow() const
-	{
-		return _useConformanceWindow;
-	}
-
-#pragma endregion
-
-#pragma region Bit depth
-
-	UShort SequenceParameterSet::getBitDepth(ImgComp comp) const
-	{
-		return comp == ImgComp::Luma ? _bitDepthLuma : _bitDepthChroma;
-	}
-
-	Void SequenceParameterSet::setBitDepthLuma(UShort val)
-	{
-		_bitDepthLuma = val;
-	}
-
-	UShort SequenceParameterSet::getBitDepthLuma() const
-	{
-		return _bitDepthLuma;
-	}
-
-	Void SequenceParameterSet::setBitDepthChroma(UShort val)
-	{
-		_bitDepthChroma = val;
-	}
-
-	UShort SequenceParameterSet::getBitDepthChroma() const
-	{
-		return _bitDepthChroma;
+		return comp == ImgComp::Luma ? bit_depth_luma : bit_depth_chroma;
 	}
 
 	Sample SequenceParameterSet::getDefaultSampleValue(ImgComp comp)
 	{
 		if (comp == ImgComp::Luma)
-			return 1 << (_bitDepthLuma - 1);
+			return 1 << (bit_depth_luma - 1);
 		else
-			return 1 << (_bitDepthChroma - 1);
+			return 1 << (bit_depth_chroma - 1);
 	}
 
-	Sample SequenceParameterSet::clip(ImgComp comp, Int value)
+	Sample SequenceParameterSet::clip(ImgComp comp, Sample value)
 	{
-		UShort maxVal = comp == ImgComp::Luma ? 1 << _bitDepthLuma : 1 << _bitDepthChroma;
+		int maxVal = comp == ImgComp::Luma ? 1 << bit_depth_luma : 1 << bit_depth_chroma;
 		return Calc::clipToRange<Sample>(0, maxVal, value);
 	}
-
-#pragma endregion
-
-#pragma region MaxPicOrderCount
-
-	void SequenceParameterSet::setMaxPicOrderCount(UShort val)
-	{
-		_maxPicOrderCount = val;
-		_log2MaxPicOrderCount = Calc::log2Int(_maxPicOrderCount);
-	}
-
-	UShort SequenceParameterSet::getLog2MaxPicOrderCount() const
-	{
-		return _log2MaxPicOrderCount;
-	}
-
-	UShort SequenceParameterSet::getMaxPicOrderCount() const
-	{
-		return _maxPicOrderCount;
-	}
-
-#pragma endregion
-
-#pragma region SublayerOrderingInfo
-
-	void SequenceParameterSet::setSubLayerOrderingInfos(std::vector<SubLayerOrderingInfo> val)
-	{
-		_subLayerOrderingInfos = val;
-	}
-
-	const std::vector<SubLayerOrderingInfo>& SequenceParameterSet::getSubLayerOrderingInfos() const
-	{
-		return _subLayerOrderingInfos;
-	}
-
-	void SequenceParameterSet::setSubLayerOrderingInfoPresent(Bool val)
-	{
-		_subLayerOrderingInfoPresent = val;
-	}
-
-	Bool SequenceParameterSet::getSubLayerOrderingInfoPresent() const
-	{
-		return _subLayerOrderingInfoPresent;
-	}
-
-#pragma endregion
-
-#pragma region CU Size
-
-	UShort SequenceParameterSet::getCTUSize() const
-	{
-		return getMaxCUSize();
-	}
-
-	Void SequenceParameterSet::setMaxCUSize(UShort val)
-	{
-		_maxCUSize = val;
-		_log2MaxCUSize = Calc::log2Int(val);
-		_log2CTUSize = Calc::log2Int(val);
-		refreshPicSizeInCTUs();
-	}
-
-	UShort SequenceParameterSet::getMaxCUSize() const
-	{
-		return _maxCUSize;
-	}
-
-	UShort SequenceParameterSet::getPicWidthInCTUs() const
-	{
-		return _picWidthInCTUs;
-	}
-
-	UShort SequenceParameterSet::getPicHeightInCTUs() const
-	{
-		return _picHeightInCTUs;
-	}
-
-	Void SequenceParameterSet::setMinCUSize(UShort val)
-	{
-		_minCUSize = val;
-		_log2MinCUSize = Calc::log2Int(val);
-	}
-
-	UShort SequenceParameterSet::getMinCUSize() const
-	{
-		return _minCUSize;
-	}
-
-	UShort SequenceParameterSet::getLog2CTUSize() const
-	{
-		return _log2CTUSize;
-	}
-
-	UShort SequenceParameterSet::getLog2MaxCUSize() const
-	{
-		return _log2MaxCUSize;
-	}
-
-	UShort SequenceParameterSet::getLog2MinCUSize() const
-	{
-		return _log2MinCUSize;
-	}
-
-#pragma endregion
-
-#pragma region TU Size
-
-	Void SequenceParameterSet::setMaxTUSize(UShort val)
-	{
-		_maxTUSize = val;
-		_log2MaxTUSize = Calc::log2Int(val);
-	}
-
-	UShort SequenceParameterSet::getMaxTUSize() const
-	{
-		return _maxTUSize;
-	}
-
-	Void SequenceParameterSet::setMinTUSize(UShort val)
-	{
-		_minTUSize = val;
-		_log2MinTUSize = Calc::log2Int(val);
-	}
-
-	UShort SequenceParameterSet::getMinTUSize() const
-	{
-		return _minTUSize;
-	}
-
-	UShort SequenceParameterSet::getLog2MaxTUSize() const
-	{
-		return _log2MaxTUSize;
-	}
-
-	UShort SequenceParameterSet::getLog2MinTUSize() const
-	{
-		return _log2MinTUSize;
-	}
-
-#pragma endregion
-
-#pragma region Max Transform Hierarchy Depth
-
-	void SequenceParameterSet::setMaxTransformHierarchyDepthIntra(UShort val)
-	{
-		_maxTransformHierarchyDepthIntra = val;
-	}
-
-	UShort SequenceParameterSet::getMaxTransformHierarchyDepthIntra() const
-	{
-		return _maxTransformHierarchyDepthIntra;
-	}
-
-	void SequenceParameterSet::setMaxTransformHierarchyDepthInter(UShort val)
-	{
-		_maxTransformHierarchyDepthInter = val;
-	}
-
-	UShort SequenceParameterSet::getMaxTransformHierarchyDepthInter() const
-	{
-		return _maxTransformHierarchyDepthInter;
-	}
-
-#pragma endregion
-
-#pragma region Scaling List
-
-	void SequenceParameterSet::setScalingListData(ScalingListData val)
-	{
-		_scalingListData = val;
-	}
-
-	const ScalingListData& SequenceParameterSet::getScalingListData() const
-	{
-		return _scalingListData;
-	}
-
-	void SequenceParameterSet::setScalingListDataPresent(Bool val)
-	{
-		_scalingListDataPresent = val;
-	}
-
-	Bool SequenceParameterSet::getScalingListDataPresent() const
-	{
-		return _scalingListDataPresent;
-	}
-
-	void SequenceParameterSet::setScalingListEnabled(Bool val)
-	{
-		_scalingListEnabled = val;
-	}
-
-	Bool SequenceParameterSet::getScalingListEnabled() const
-	{
-		return _scalingListEnabled;
-	}
-
-#pragma endregion
-
-#pragma region AMP
-
-	void SequenceParameterSet::setAMPEnabled(Bool val)
-	{
-		_AMPEnabled = val;
-	}
-
-	Bool SequenceParameterSet::getAMPEnabled() const
-	{
-		return _AMPEnabled;
-	}
-
-#pragma endregion
-
-#pragma region SAO
-
-	Void SequenceParameterSet::setSAOEnabled(Bool val)
-	{
-		_SAOEnabled = val;
-	}
-
-	Bool SequenceParameterSet::getSAOEnabled() const
-	{
-		return _SAOEnabled;
-	}
-
-#pragma endregion
-
-#pragma region PCM
-
-	void SequenceParameterSet::setMinCUSizePCM(UShort val)
-	{
-		_minCUSizePCM = val;
-	}
-
-	UShort SequenceParameterSet::getMinCUSizePCM() const
-	{
-		return _minCUSizePCM;
-	}
-
-	void SequenceParameterSet::setMaxCUSizePCM(UShort val)
-	{
-		_maxCUSizePCM = val;
-	}
-
-	UShort SequenceParameterSet::getMaxCUSizePCM() const
-	{
-		return _maxCUSizePCM;
-	}
-
-	UShort SequenceParameterSet::getLog2MinCUSizePCM() const
-	{
-		return _log2MinCUSizePCM;
-	}
-
-	UShort SequenceParameterSet::getLog2MaxCUSizePCM() const
-	{
-		return _log2MaxCUSizePCM;
-	}
-
-	void SequenceParameterSet::setPCMbitDepthLuma(UShort val)
-	{
-		_PCMbitDepthLuma = val;
-	}
-
-	UShort SequenceParameterSet::getPCMbitDepthLuma() const
-	{
-		return _PCMbitDepthLuma;
-	}
-
-	void SequenceParameterSet::setPCMbitDepthChroma(UShort val)
-	{
-		_PCMbitDepthChroma = val;
-	}
-
-	UShort SequenceParameterSet::getPCMbitDepthChroma() const
-	{
-		return _PCMbitDepthChroma;
-	}
-
-	void SequenceParameterSet::setPCMEnabled(Bool val)
-	{
-		_PCMEnabled = val;
-	}
-
-	Bool SequenceParameterSet::getPCMEnabled() const
-	{
-		return _PCMEnabled;
-	}
-
-	void SequenceParameterSet::setLoopFilterDisabledForPCM(Bool val)
-	{
-		_loopFilterDisabledForPCM = val;
-	}
-
-	Bool SequenceParameterSet::getLoopFilterDisabledForPCM() const
-	{
-		return _loopFilterDisabledForPCM;
-	}
-
-#pragma endregion
-
-#pragma region Reference pics
-
-	void SequenceParameterSet::setLongTermRefPicsPOCList(std::vector<UShort> val)
-	{
-		_longTermRefPicsPOCList = val;
-	}
-
-	const std::vector<UShort>& SequenceParameterSet::getLongTermRefPicsPOCList() const
-	{
-		return _longTermRefPicsPOCList;
-	}
-
-	void SequenceParameterSet::setLTReferenceUsedByCurrentPicture(std::vector<Bool> val)
-	{
-		_LTReferenceUsedByCurrentPicture = val;
-	}
-
-	const std::vector<Bool>& SequenceParameterSet::getLTReferenceUsedByCurrentPicture() const
-	{
-		return _LTReferenceUsedByCurrentPicture;
-	}
-
-	void SequenceParameterSet::setNumLongTermRefPics(UShort val)
-	{
-		_numLongTermRefPics = val;
-	}
-
-	UShort SequenceParameterSet::getNumLongTermRefPics() const
-	{
-		return _numLongTermRefPics;
-	}
-
-	void SequenceParameterSet::setLongTermRefPicsPresent(Bool val)
-	{
-		_longTermRefPicsPresent = val;
-	}
-
-	Bool SequenceParameterSet::getLongTermRefPicsPresent() const
-	{
-		return _longTermRefPicsPresent;
-	}
-
-	void SequenceParameterSet::setShortTermRefPicSets(std::vector<ShortTermReferencePictureSet> val)
-	{
-		_shortTermRefPicSets = val;
-	}
-
-	const std::vector<ShortTermReferencePictureSet>& SequenceParameterSet::getShortTermRefPicSets() const
-	{
-		return _shortTermRefPicSets;
-	}
-
-	void SequenceParameterSet::setNumShortTermReferencePictureSets(UShort val)
-	{
-		_numShortTermReferencePictureSets = val;
-	}
-
-	UShort SequenceParameterSet::getNumShortTermReferencePictureSets() const
-	{
-		return _numShortTermReferencePictureSets;
-	}
-
-#pragma endregion
-
-#pragma region TemporalMVP
-
-	void SequenceParameterSet::setTemporalMVPEnabled(Bool val)
-	{
-		_temporalMVPEnabled = val;
-	}
-
-	Bool SequenceParameterSet::getTemporalMVPEnabled() const
-	{
-		return _temporalMVPEnabled;
-	}
-
-#pragma endregion
-
-#pragma region Intra smoothing
-
-	Void SequenceParameterSet::setStrongIntraSmoothingEnabled(Bool val)
-	{
-		_strongIntraSmoothingEnabled = val;
-	}
-
-	Bool SequenceParameterSet::getStrongIntraSmoothingEnabled() const
-	{
-		return _strongIntraSmoothingEnabled;
-	}
-
-#pragma endregion
-
-#pragma region VUI
-
-	void SequenceParameterSet::setVuiParameters(VUIParameters val)
-	{
-		_vuiParameters = val;
-	}
-
-	const VUIParameters& SequenceParameterSet::getVuiParameters() const
-	{
-		return _vuiParameters;
-	}
-
-	void SequenceParameterSet::setVuiParametersPresent(Bool val)
-	{
-		_vuiParametersPresent = val;
-	}
-
-	Bool SequenceParameterSet::getVuiParametersPresent() const
-	{
-		return _vuiParametersPresent;
-	}
-
-#pragma endregion
-
-#pragma region Extensions
-
-	void SequenceParameterSet::setSpsExtension(Bool val)
-	{
-		_spsExtension = val;
-	}
-
-	Bool SequenceParameterSet::getSpsExtension() const
-	{
-		return _spsExtension;
-	}
-
-#pragma endregion
-
 }

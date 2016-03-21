@@ -29,19 +29,19 @@
 //{
 //}
 //
-//Void RDCost::setDistortionFunction( Long( *newFunc )( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon ) )
+//void RDCost::setDistortionFunction( Long( *newFunc )( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon ) )
 //{
 //	itsDistortionFunction = newFunc;
 //}
 //
-//Double RDCost::calcCost( UInt estBits, UInt QP, Submatrix<Sample> picOrig, Submatrix<Sample> picRecon )
+//Double RDCost::calcCost( int estBits, int QP, Submatrix<Sample> picOrig, Submatrix<Sample> picRecon )
 //{
 //	Double lambda = RDCost::lambda[ QP ];
 //	Long dist = itsDistortionFunction(  picOrig, picRecon );
 //	return ( ( (Double)dist ) + lambda * ( (Double)estBits ) );
 //}
 //
-//Double RDCost::calcCost( UInt estBits, UInt distortion, UInt QP )
+//Double RDCost::calcCost( int estBits, int distortion, int QP )
 //{
 //	Double lambda = RDCost::lambda[ QP ];
 //	return ( ( (Double)distortion ) + lambda * ( (Double)estBits ) );
@@ -59,9 +59,9 @@
 //	Long res = 0;
 //	Int v1, v2;
 //
-//	for( UInt i = 0; i < picOrig.size( ); ++i )
+//	for( int i = 0; i < picOrig.size( ); ++i )
 //	{
-//		for( UInt j = 0; j < picOrig.size( ); ++j )
+//		for( int j = 0; j < picOrig.size( ); ++j )
 //		{
 //			v1 = picOrig[ i ][ j ];
 //			v2 = picRecon[ i ][ j ];
@@ -79,9 +79,9 @@
 //	Long res = 0;
 //	Int v1, v2;
 //
-//	for( UInt i = 0; i < picOrig.size( ); ++i )
+//	for( int i = 0; i < picOrig.size( ); ++i )
 //	{
-//		for( UInt j = 0; j < picOrig.size( ); ++j )
+//		for( int j = 0; j < picOrig.size( ); ++j )
 //		{
 //			v1 = picOrig[ i ][ j ];
 //			v2 = picRecon[ i ][ j ];
@@ -91,7 +91,7 @@
 //	return res;
 //}
 //
-//UInt RDCost::calcDistortion( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon )
+//int RDCost::calcDistortion( Submatrix<Sample> picOrig, Submatrix<Sample> picRecon )
 //{
 //	return itsDistortionFunction( picOrig, picRecon );
 //}

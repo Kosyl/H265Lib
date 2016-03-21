@@ -3,7 +3,7 @@
 #include <Data/BlockBase.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace UnitTests
 {
@@ -15,9 +15,9 @@ namespace UnitTests
 		{
 			Position p;
 
-			Assert::IsTrue(p.X == 0);
-			Assert::IsTrue(p.Y == 0);
-			Assert::IsTrue(p.Idx == 0);
+			Assert::IsTrue(p.x == 0);
+			Assert::IsTrue(p.y == 0);
+			Assert::IsTrue(p.idx == 0);
 		}
 
 		TEST_METHOD(indexingTest)
@@ -35,7 +35,7 @@ namespace UnitTests
 			for (auto p : pos)
 			{
 				p.resolveIdx(*sps, Indexing::ZScanByPixel);
-				Log::println("(", p.X, ",", p.Y, ") -> ", p.Idx);
+				Log::println("(", p.x, ",", p.y, ") -> ", p.idx);
 			}
 		}
 	};

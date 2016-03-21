@@ -1,6 +1,6 @@
 #pragma once
 
-namespace H265Lib
+namespace HEVC
 {
 	class Slice
 	{
@@ -13,30 +13,30 @@ namespace H265Lib
 		//	SliceMode itsSliceType;
 		//
 		//	/**
-		//	 * @property	Bool itsSAOLumaEnabled, itsSAOChromaEnabled
+		//	 * @property	bool itsSAOLumaEnabled, itsSAOChromaEnabled
 		//	 *
 		//	 * @brief	Zezwolenie na filtracjê SAO próbek luminancji i chrominancji.
 		//	 */
 		//
-		//	Bool itsSAOLumaEnabled, itsSAOChromaEnabled;
+		//	bool itsSAOLumaEnabled, itsSAOChromaEnabled;
 		//
 		//	/**
 		//	 * @brief	Zezwolenie na u¿ycie filtru deblokuj¹cego.
 		//	 */
 		//
-		//	Bool itsDeblockingFilterEnabled;
+		//	bool itsDeblockingFilterEnabled;
 		//
 		//	/**
 		//	 * @brief	Zezwolenie na u¿ycie filtru deblokuj¹cego oraz SAO.
 		//	 */
 		//
-		//	Bool itsLoopFilterEnabled;
+		//	bool itsLoopFilterEnabled;
 		//
 		//	/**
 		//	 * @brief	Indeks porz¹dkowy.
 		//	 */
 		//
-		//	UInt itsSliceIdx;
+		//	int itsSliceIdx;
 		//
 		//	/**
 		//	 * @brief	Zmiana QP wzglêdem wartoœci bazowej z parametrów obrazu.
@@ -56,7 +56,7 @@ namespace H265Lib
 		//	 * @brief	W³¹cza/wy³¹cza synchronizacjê kodera entropijnego na tym plastrze.
 		//	 */
 		//
-		//	Bool itsECSyncEnabled;
+		//	bool itsECSyncEnabled;
 		//
 		//	/**
 		//	 * @brief	Zmiana parametru Beta w filtrze deblokuj¹cym.
@@ -131,120 +131,120 @@ namespace H265Lib
 		//	}
 		//
 		//	/**
-		//	 * @fn	Void Slice::setSliceType( SliceMode type )
+		//	 * @fn	void Slice::setSliceType( SliceMode type )
 		//	 *
 		//	 * @brief	Ustawia tryb plastra.
 		//	 *
 		//	 * @param	type	Typ plastra.
 		//	 *
-		//	 * @return	Void.
+		//	 * @return	void.
 		//	 */
 		//
-		//	Void setSliceType( SliceMode type )
+		//	void setSliceType( SliceMode type )
 		//	{
 		//		itsSliceType = type;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Bool Slice::getSAOChromaEnabled( ) const
+		//	 * @fn	bool Slice::getSAOChromaEnabled( ) const
 		//	 *
 		//	 * @brief	Zezwolenie na u¿ycie SAO dla chrominancji.
 		//	 */
 		//
-		//	Bool getSAOChromaEnabled( ) const
+		//	bool getSAOChromaEnabled( ) const
 		//	{
 		//		return itsSAOChromaEnabled;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Void Slice::setSAOChromaEnabled( Bool val )
+		//	 * @fn	void Slice::setSAOChromaEnabled( bool val )
 		//	 *
 		//	 * @brief	Ustawia zezwolenie na u¿ycie SAO dla chrominancji.
 		//	 *
 		//	 * @param	val	true zezwala, false blokuje SAO dla chrominancji.
 		//	 *
-		//	 * @return	Void.
+		//	 * @return	void.
 		//	 */
 		//
-		//	Void setSAOChromaEnabled( Bool val )
+		//	void setSAOChromaEnabled( bool val )
 		//	{
 		//		itsSAOChromaEnabled = val;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Bool Slice::getSAOLumaEnabled( ) const
+		//	 * @fn	bool Slice::getSAOLumaEnabled( ) const
 		//	 *
 		//	 * @brief	Zezwolenie na u¿ycie SAO dla luminancji.
 		//	 */
 		//
-		//	Bool getSAOLumaEnabled( ) const
+		//	bool getSAOLumaEnabled( ) const
 		//	{
 		//		return itsSAOLumaEnabled;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Void Slice::setSAOLumaEnabled( Bool val )
+		//	 * @fn	void Slice::setSAOLumaEnabled( bool val )
 		//	 *
 		//	 * @brief	Ustawia zezwolenie na u¿ycie SAO dla luminancji.
 		//	 *
 		//	 * @param	val	true zezwala, false blokuje SAO dla luminancji.
 		//	 *
-		//	 * @return	Void.
+		//	 * @return	void.
 		//	 */
 		//
-		//	Void setSAOLumaEnabled( Bool val )
+		//	void setSAOLumaEnabled( bool val )
 		//	{
 		//		itsSAOLumaEnabled = val;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Bool Slice::getsLoopFilterEnabled( ) const
+		//	 * @fn	bool Slice::getsLoopFilterEnabled( ) const
 		//	 *
 		//	 * @brief		Zezwolenie na u¿ycie FDB i SAO.
 		//	 */
 		//
-		//	Bool getsLoopFilterEnabled( ) const
+		//	bool getsLoopFilterEnabled( ) const
 		//	{
 		//		return itsLoopFilterEnabled;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Void Slice::setLoopFilterEnabled( Bool val )
+		//	 * @fn	void Slice::setLoopFilterEnabled( bool val )
 		//	 *
 		//	 * @brief	Ustawia zezwolenie na u¿ycie FDB i SAO.
 		//	 *
 		//	 * @param	val	true zezwala, false u¿ycie FDB i SAO.
 		//	 *
-		//	 * @return	Void.
+		//	 * @return	void.
 		//	 */
 		//
-		//	Void setLoopFilterEnabled( Bool val )
+		//	void setLoopFilterEnabled( bool val )
 		//	{
 		//		itsLoopFilterEnabled = val;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Bool Slice::getDeblockingFilterEnabled( ) const
+		//	 * @fn	bool Slice::getDeblockingFilterEnabled( ) const
 		//	 *
 		//	 * @brief	Zezwolenie na u¿ycie FDB.
 		//	 */
 		//
-		//	Bool getDeblockingFilterEnabled( ) const
+		//	bool getDeblockingFilterEnabled( ) const
 		//	{
 		//		return itsDeblockingFilterEnabled;
 		//	}
 		//
 		//	/**
-		//	 * @fn	Void Slice::setDeblockingFilterEnabled( Bool val )
+		//	 * @fn	void Slice::setDeblockingFilterEnabled( bool val )
 		//	 *
 		//	 * @brief	Ustawia zezwolenie na u¿ycie FDB.
 		//	 *
 		//	 * @param	val	true zezwala, false u¿ycie FDB.
 		//	 *
-		//	 * @return	Void.
+		//	 * @return	void.
 		//	 */
 		//
-		//	Void setDeblockingFilterEnabled( Bool val )
+		//	void setDeblockingFilterEnabled( bool val )
 		//	{
 		//		itsDeblockingFilterEnabled = val;
 		//	}
@@ -274,25 +274,25 @@ namespace H265Lib
 		//	}
 		//
 		//	/**
-		//	 * @fn	UInt Slice::getSliceIdx( ) const
+		//	 * @fn	int Slice::getSliceIdx( ) const
 		//	 *
 		//	 * @brief	Indeks plastra.
 		//	 */
 		//
-		//	UInt getSliceIdx( ) const
+		//	int getSliceIdx( ) const
 		//	{
 		//		return itsSliceIdx;
 		//	}
 		//
 		//	/**
-		//	 * @fn	void Slice::setSliceIdx( UInt val )
+		//	 * @fn	void Slice::setSliceIdx( int val )
 		//	 *
 		//	 * @brief	Ustawia indeks plastra.
 		//	 *
 		//	 * @param	val	Nowy indeks.
 		//	 */
 		//
-		//	void setSliceIdx( UInt val )
+		//	void setSliceIdx( int val )
 		//	{
 		//		itsSliceIdx = val;
 		//	}
@@ -347,15 +347,15 @@ namespace H265Lib
 		//#pragma endregion
 		//
 		//	/**
-		//	 * @fn	Void Slice::appendCTU( std::shared_ptr<CTU> ctu );
+		//	 * @fn	void Slice::appendCTU( std::shared_ptr<CTU> ctu );
 		//	 *
 		//	 * @brief	Dodaje do plastra nowe CTU.
 		//	 *
 		//	 * @param	ctu	Nowe CTU.
 		//	 *
-		//	 * @return	Void.
+		//	 * @return	void.
 		//	 */
 		//
-		//	Void appendCTU( std::shared_ptr<CTU> ctu );
+		//	void appendCTU( std::shared_ptr<CTU> ctu );
 	};
 }

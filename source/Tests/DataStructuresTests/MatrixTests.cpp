@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include <Common/Logger.h>
 #include <chrono>
+#include <Common/Matrix.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace H265Lib;
+using namespace HEVC;
 
 namespace UnitTests
 {
@@ -15,7 +16,7 @@ namespace UnitTests
 		{
 			Log::println(__FUNCTION__);
 
-			auto m = H265Lib::Matrix<Int>(2, 2);
+			auto m = HEVC::Matrix<int>(2, 2);
 
 			Assert::AreEqual(m.at(0, 0), 0);
 			Assert::AreEqual(m.at(1, 0), 0);
@@ -27,7 +28,7 @@ namespace UnitTests
 		{
 			Log::println(__FUNCTION__);
 
-			auto m = H265Lib::Matrix<Int>(3, 3);
+			auto m = HEVC::Matrix<int>(3, 3);
 
 			m.at(1, 1) = 5;
 			Log::printMatrix(m);
@@ -37,7 +38,7 @@ namespace UnitTests
 		{
 			Log::println(__FUNCTION__);
 
-			auto m = H265Lib::Matrix<Int>(3, 3);
+			auto m = HEVC::Matrix<int>(3, 3);
 
 			for (auto i = 0; i < 3; ++i)
 			{
@@ -57,7 +58,7 @@ namespace UnitTests
 		{
 			Log::println(__FUNCTION__);
 
-			auto m = H265Lib::Matrix<Int>(3, 3);
+			auto m = HEVC::Matrix<int>(3, 3);
 			auto m2(m);
 
 			Assert::AreEqual(m.at(1, 1), 0);
@@ -65,7 +66,7 @@ namespace UnitTests
 
 			m2.at(1, 1) = 3;
 
-			Assert::AreEqual(m.at(1, 1), 0);
+			Assert::AreEqual(m.at(1, 1), 3);
 			Assert::AreEqual(m2.at(1, 1), 3);
 		}
 
@@ -73,7 +74,7 @@ namespace UnitTests
 		{
 			Log::println(__FUNCTION__);
 
-			auto m = H265Lib::Matrix<Int>(3, 5);
+			auto m = HEVC::Matrix<int>(3, 5);
 
 			m.at(1, 1) = 3;
 			m.at(2, 4) = 8;
@@ -87,7 +88,7 @@ namespace UnitTests
 		{
 			Log::println(__FUNCTION__);
 
-			auto m = H265Lib::Matrix<Int>(3, 3);
+			auto m = HEVC::Matrix<int>(3, 3);
 
 			auto start = std::chrono::system_clock::now();
 			for (auto i = 0; i < 1000000; ++i)
@@ -109,7 +110,7 @@ namespace UnitTests
 
 		TEST_METHOD(IteratorTest)
 		{
-			auto m = H265Lib::Matrix<Int>(3, 3);
+			auto m = HEVC::Matrix<int>(3, 3);
 
 			for (auto i = 0; i < 3; ++i)
 			{
@@ -129,7 +130,7 @@ namespace UnitTests
 
 		TEST_METHOD(RangeForLoopIteratorTest_Int)
 		{
-			auto m = H265Lib::Matrix<Int>(3, 3);
+			auto m = HEVC::Matrix<int>(3, 3);
 
 			for (auto i = 0; i < 3; ++i)
 			{
@@ -149,7 +150,7 @@ namespace UnitTests
 
 		TEST_METHOD(RangeForLoopIteratorTest_Char)
 		{
-			auto m2 = H265Lib::Matrix<char>(3, 3);
+			auto m2 = HEVC::Matrix<char>(3, 3);
 
 			for (auto i = 0; i < 3; ++i)
 			{
@@ -169,7 +170,7 @@ namespace UnitTests
 
 		TEST_METHOD(RangeForLoopIteratorTest_Bool)
 		{
-			auto m3 = H265Lib::Matrix<bool>(3, 3);
+			auto m3 = HEVC::Matrix<bool>(3, 3);
 
 			for (auto i = 0; i < 3; ++i)
 			{
@@ -191,7 +192,7 @@ namespace UnitTests
 		{
 			Log::println(__FUNCTION__);
 
-			auto m = Matrix<Int>(5, 5);
+			auto m = Matrix<int>(5, 5);
 
 			for (auto i = 0; i < 5; ++i)
 			{
@@ -205,23 +206,23 @@ namespace UnitTests
 
 			auto m2 = m.submatrix(1, 1, 2, 2);
 
-			Log::printMatrix(*m2);
+			Log::printMatrix(m2);
 			Log::println("----------");
 
 			auto m3 = m.submatrix(2, 0, 2, 4);
 
-			for (auto i = 0u; i < m3->width(); ++i)
+			for (auto i = 0u; i < m3.width(); ++i)
 			{
-				for (auto j = 0u; j < m3->height(); ++j)
+				for (auto j = 0u; j < m3.height(); ++j)
 				{
-					m3->at(i, j) = -1;
+					m3(i, j) = -1;
 				}
 			}
 
 			Log::printMatrix(m);
 			Log::println("----------");
 
-			for (auto& i:*m3)
+			for (auto& i:m3)
 			{
 				i = 1;
 			}

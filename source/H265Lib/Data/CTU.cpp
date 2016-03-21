@@ -1,25 +1,20 @@
 #include "CTU.h"
 #include "CU.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	CTU::CTU(UShort x, UShort y, UShort size, ParametersBundle parameters) :
+	CTU::CTU(int x, int y, int size) :
 		BlockBase(x, y, size),
-		_CUQuadTree(std::make_shared<CUQuadTree>(x, y, size, parameters))
+		CUQuadTree(std::make_shared<HEVC::CUQuadTree>(x, y, size))
 	{
 	}
 
-	std::shared_ptr<CUQuadTree> CTU::getCUQuadTree()
+	bool CTU::isPartitioned()
 	{
-		return _CUQuadTree;
+		return CUQuadTree != nullptr;
 	}
 
-	Bool CTU::isPartitioned()
-	{
-		return _CUQuadTree != nullptr;
-	}
-
-	Void CTU::printDescription(LogId logId, Bool recursive)
+	void CTU::print(LogId logId, bool recursive)
 	{
 	}
 }

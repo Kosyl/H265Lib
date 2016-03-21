@@ -6,7 +6,7 @@
 #include <ParameterSets/PictureParameterSet.h>
 #include <ParameterSets/ParametersBundle.h>
 
-namespace H265Lib
+namespace HEVC
 {
 	class CTU;
 	class CU;
@@ -16,47 +16,37 @@ namespace H265Lib
 	{
 	protected:
 
-		UShort _widthLuma{ 0 }, _widthChroma{ 0 }, _heightLuma{ 0 }, _heightChroma{ 0 };
-		UShort _widthInCTUs{ 0 }, _heightInCTUs{ 0 };
-		UShort _ctuSize{ 0 };
-		Bool _tilesEnabled{ false };
 
-		std::shared_ptr<Matrix<Sample>> _inputSamplesY{ nullptr };
-		std::shared_ptr<Matrix<Sample>> _inputSamplesCb{ nullptr };
-		std::shared_ptr<Matrix<Sample>> _inputSamplesCr{ nullptr };
+		std::vector<std::shared_ptr<Slice>> slices{ 0 };
+		Matrix<std::shared_ptr<CTU>> CTUs{ 0,0 };
 
-		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesY{ nullptr };
-		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesCb{ nullptr };
-		std::shared_ptr<Matrix<Sample>> _reconstructedSamplesCr{ nullptr };
-
-		Matrix<UShort> _tilesMap{ 0,0 };
-		Matrix<UShort> _slicesMap{ 0,0 };
-
-		std::vector<std::shared_ptr<Slice>> _slices{ 0 };
-		Matrix<std::shared_ptr<CTU>> _CTUs{ 0,0 };
-
-		Void setSize(UShort width, UShort height, UShort chromaWidth, UShort chromaHeight);
-		Void initCTUs();
+		void setSize(int width, int height, int chromaWidth, int chromaHeight);
+		void initCTUs();
 
 	public:
+		Matrix<Sample> input_samples[3];
+		Matrix<Sample> reconstructed_samples[3];
+
+		Matrix<int> tiles_map{ 0,0 };
+		Matrix<int> slices_map{ 0,0 };
+
+		int width_luma{ 0 }, width_chroma{ 0 }, height_luma{ 0 }, height_chroma{ 0 };
+		int width_in_ctus{ 0 }, height_in_ctus{ 0 };
+		int ctu_size{ 0 };
+		bool tiles_enabled{ false };
 
 		Picture();
-		Picture(ParametersBundle parameters);
 
-		Void initFromParameters(ParametersBundle parameters);
-		Void loadFrameFromYuv(std::ifstream& yuvFile);
-		Void resetSampleBuffers();
+		void initFromParameters(ParametersBundle parameters);
+		void loadFrameFromYuv(std::ifstream& yuvFile);
 
-		std::shared_ptr<Matrix<Sample>> getInputSamples(const ImgComp comp);
-		std::shared_ptr<Matrix<Sample>> getReconstructionMatrix(const ImgComp comp);
+		std::shared_ptr<CTU> getCTU(int ctuX, int ctuY);
+		std::shared_ptr<CTU> getCTUBySamplePosition(int sampleX, int sampleY);
+		std::shared_ptr<CU> getCuContainingPosition(int sampleX, int sampleY);
 
-		std::shared_ptr<CTU> getCTU(UShort ctuX, UShort ctuY);
-		std::shared_ptr<CTU> getCTUBySamplePosition(UShort sampleX, UShort sampleY);
-		std::shared_ptr<CU> getCuContainingPosition(UShort sampleX, UShort sampleY);
+		int getWidth(const ImgComp comp) const;
+		int getHeight(const ImgComp comp) const;
 
-		UShort getWidth(const ImgComp comp) const;
-		UShort getHeight(const ImgComp comp) const;
-
-		Void printDescription(LogId logId, Bool recursive = true, Bool printSamples = false);
+		void printDescription(LogId logId, bool recursive = true, bool printSamples = false);
 	};
 }

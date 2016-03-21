@@ -10,9 +10,9 @@ namespace Microsoft {
 				return _logStream;
 			}
 
-			Void Log::printSpaces()
+			void Log::printSpaces()
 			{
-				for (UInt i = 0; i < _numTabs; ++i)
+				for (int i = 0; i < _numTabs; ++i)
 					_logStream << "  ";
 			}
 
@@ -23,17 +23,17 @@ namespace Microsoft {
 			{
 			}
 
-			Void Log::increaseSpaces()
+			void Log::increaseSpaces()
 			{
 				setTabLength(_numTabs + 1);
 			}
 
-			Void Log::decreaseSpaces()
+			void Log::decreaseSpaces()
 			{
 				setTabLength(_numTabs - 1);
 			}
 
-			Void Log::setTabLength(Int len)
+			void Log::setTabLength(int len)
 			{
 				if (len >= 0)
 				{
@@ -43,18 +43,18 @@ namespace Microsoft {
 					setTabLength(0);
 			}
 
-			UInt Log::getTabLength()
+			int Log::getTabLength()
 			{
 				return _numTabs;
 			}
 
-			Void Log::setTabStep(UInt len)
+			void Log::setTabStep(int len)
 			{
 				_step = len;
 				setTabLength(_numTabs);
 			}
 
-			Void Log::tab()
+			void Log::tab()
 			{
 				auto& log = Log::instance();
 				log.printSpaces();
@@ -62,7 +62,7 @@ namespace Microsoft {
 				log.increaseSpaces();
 			}
 
-			Void Log::untab()
+			void Log::untab()
 			{
 				auto& log = Log::instance();
 				log.decreaseSpaces();

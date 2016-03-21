@@ -1,7 +1,8 @@
 #include "Data/BlockBase.h"
+#include "Common/Logger.h"
 #include <cassert>
 
-namespace H265Lib
+namespace HEVC
 {
 	Position::Position() :
 		Position(0, 0)
@@ -9,21 +10,15 @@ namespace H265Lib
 
 	}
 
-	Position::Position(UShort x, UShort y):
-		X(x), Y(y), Idx(0)
+	Position::Position(int x, int y):
+		x(x), y(y), idx(0)
 	{
 
 	}
 
-	Position::Position(UShort x, UShort y, const SequenceParameterSet& sps, Indexing idxType):
-		X(x), Y(y), Idx(sps.calcIdx(x, y, idxType))
+	void Position::resolveIdx(const SequenceParameterSet& sps, Indexing idxType)
 	{
-
-	}
-
-	Void Position::resolveIdx(const SequenceParameterSet& sps, Indexing idxType)
-	{
-		this->Idx = sps.calcIdx(this->X, this->Y, idxType);
+		this->idx = sps.calcIdx(this->x, this->y, idxType);
 	}
 
 	BlockBase::BlockBase():
@@ -32,20 +27,15 @@ namespace H265Lib
 
 	}
 
-	BlockBase::BlockBase(UShort x, UShort y, UShort size) :
+	BlockBase::BlockBase(int x, int y, int size) :
 		Position(x, y),
-		_size(size)
+		size(size)
 	{
 		assert(size > 0 && size % 4 == 0);
 	}
 
-	Void BlockBase::printDescription(LogId logId, Bool recursive)
+	void BlockBase::print(LogId logId, bool recursive)
 	{
-		LOGLN(logId, "(", this->Position.X, ",", this->Position.Y, "), size=", this->_size);
-	}
-
-	UShort BlockBase::getSize()
-	{
-		return _size;
+		LOGLN(logId, "(", x, ",", y, "), size=", size);
 	}
 }

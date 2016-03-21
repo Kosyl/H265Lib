@@ -1,25 +1,21 @@
 #include "TB.h"
 
-namespace H265Lib
+namespace HEVC
 {
-	TB::TB(UShort x, UShort y, UShort size, ImgComp comp, ParametersBundle parameters) :
+	TB::TB(int x, int y, int size, ImgComp comp) :
 		BlockBase(x, y, size),
-		_plane(comp),
-		//itsScanStrategy(nullptr),
-		_codedSubBlockFlags(),
-		_lastSignificantCoeffX(0),
-		_lastSignificantCoeffY(0),
-		_referenceSamples(size)
+		plane(comp),
+		reference_samples(size)
 	{
 	}
 
-	/*Void TB::assignScanStrategy()
+	/*void TB::assignScanStrategy()
 	{
 	assert(itsHelperPB != nullptr && itsHelperPB->predictionDone());
 	itsScanStrategy = new DiagonalScanningMode();
 	if (itsSize == 4 || (itsSize == 8 && itsComp == LUMA))
 	{
-	UInt mode = itsHelperPB->getModeIdx();
+	int mode = itsHelperPB->getModeIdx();
 	if (mode >= 6 && mode <= 14)
 	{
 	delete itsScanStrategy;
@@ -33,9 +29,9 @@ namespace H265Lib
 	}
 	}*/
 
-	Bool TB::hasAtLeastOneNonZeroCoeff()
+	bool TB::hasAtLeastOneNonZeroCoeff()
 	{
-		for (auto& coeff : _transformCoefficients)
+		for (auto& coeff : transform_coefficients)
 		{
 			if (coeff != 0)
 				return true;
@@ -43,8 +39,8 @@ namespace H265Lib
 		return false;
 	}
 
-	Void TB::printDescription(LogId logId, Bool recursive)
+	void TB::print(LogId logId, bool recursive)
 	{
-		BlockBase::printDescription(logId, recursive);
+		BlockBase::print(logId, recursive);
 	}
 }

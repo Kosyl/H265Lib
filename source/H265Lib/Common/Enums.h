@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-namespace H265Lib
+namespace HEVC
 {
 	enum class PredictionType
 	{
@@ -10,7 +10,10 @@ namespace H265Lib
 
 	enum ImgComp
 	{
-		Luma = 0, Cb = 1, Cr = 2
+		Luma = 0,
+		Chroma = 1,
+		Cb = 1,
+		Cr = 2
 	};
 
 	enum EdgeType

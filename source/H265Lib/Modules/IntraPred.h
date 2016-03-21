@@ -62,24 +62,24 @@
 //	IntraPred( );
 //
 //	/**
-//	 * @fn	UShort IntraPred::getFilteringThreshold( ) const;
+//	 * @fn	int IntraPred::getFilteringThreshold( ) const;
 //	 *
 //	 * @brief	Pobranie progu filtracji.
 //	 *
 //	 * @return	Próg filtracji.
 //	 */
 //
-//	UShort getFilteringThreshold( ) const;
+//	int getFilteringThreshold( ) const;
 //
 //	/**
-//	 * @fn	Bool IntraPred::isFilteringRequired( ) const;
+//	 * @fn	bool IntraPred::isFilteringRequired( ) const;
 //	 *
 //	 * @brief	Sprawdzenie, czy na danym bloku trzeba wykonaæ filtracjê próbek referencyjnych.
 //	 *
 //	 * @return	Prawda, jeœli filtracja jest wymagana; fa³sz w p.p.
 //	 */
 //
-//	Bool isFilteringRequired( ) const;
+//	bool isFilteringRequired( ) const;
 //
 //	/**
 //	 * @fn	Sample IntraPred::filtRef( const Sample mainRef, const Sample leftRef, const Sample rightRef ) const;
@@ -96,29 +96,29 @@
 //	Sample filtRef( const Sample mainRef, const Sample leftRef, const Sample rightRef ) const;
 //
 //	/**
-//	 * @fn	Void IntraPred::filterSideRefs( const IntraDirection referenceDirection );
+//	 * @fn	void IntraPred::filterSideRefs( const IntraDirection referenceDirection );
 //	 *
 //	 * @brief	Filtracja wszystkich próbek referencyjnych po zadanej stronie.
 //	 *
 //	 * @param	referenceDirection	Strona , po której fróbki zostan¹ odfiltrowane.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void filterSideRefs( const IntraDirection referenceDirection );
+//	void filterSideRefs( const IntraDirection referenceDirection );
 //
 //	/**
-//	 * @fn	Void IntraPred::doReferenceFiltering( );
+//	 * @fn	void IntraPred::doReferenceFiltering( );
 //	 *
 //	 * @brief	Filtracja próbek referencyjnych.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void doReferenceFiltering( );
+//	void doReferenceFiltering( );
 //
 //	/**
-//	 * @fn	Bool IntraPred::checkSmoothConditions( const IntraDirection direction ) const;
+//	 * @fn	bool IntraPred::checkSmoothConditions( const IntraDirection direction ) const;
 //	 *
 //	 * @brief	Sprawdzenie mo¿liwoœci silnej filtracji próbek w zadanym kierunku.
 //	 *
@@ -127,20 +127,20 @@
 //	 * @return	true, jesli potrzebna jest silna filtracja; false w p.p.
 //	 */
 //
-//	Bool checkSmoothConditions( const IntraDirection direction ) const;
+//	bool checkSmoothConditions( const IntraDirection direction ) const;
 //
 //	/**
-//	 * @fn	Bool IntraPred::isSmoothingRequired( ) const;
+//	 * @fn	bool IntraPred::isSmoothingRequired( ) const;
 //	 *
 //	 * @brief	Sprawdzenie koniecznoœci silnej filtracji próbek.
 //	 *
 //	 * @return	true jeœli nale¿y je wyg³adziæ, false w p.p..
 //	 */
 //
-//	Bool isSmoothingRequired( ) const;
+//	bool isSmoothingRequired( ) const;
 //
 //	/**
-//	 * @fn	Sample IntraPred::getSmoothedReferenceAtPosition( const IntraDirection dir, const UShort offset ) const;
+//	 * @fn	Sample IntraPred::getSmoothedReferenceAtPosition( const IntraDirection dir, const int offset ) const;
 //	 *
 //	 * @brief	Pobranie silnie wyg³adzonej próbki na danej pozycji.
 //	 *
@@ -150,29 +150,29 @@
 //	 * @return	Silnie wyg³adzona próbka na zadanej pozycji.
 //	 */
 //
-//	Sample getSmoothedReferenceAtPosition( const IntraDirection dir, const UShort offset ) const;
+//	Sample getSmoothedReferenceAtPosition( const IntraDirection dir, const int offset ) const;
 //
 //	/**
-//	 * @fn	Void IntraPred::smoothSideRefs( const IntraDirection dir );
+//	 * @fn	void IntraPred::smoothSideRefs( const IntraDirection dir );
 //	 *
 //	 * @brief	Silna filtracja próbek w danym kierunku
 //	 *
 //	 * @param	dir	Kierunek rozwa¿anych próbek
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void smoothSideRefs( const IntraDirection dir );
+//	void smoothSideRefs( const IntraDirection dir );
 //
 //	/**
-//	 * @fn	Void IntraPred::doReferenceSmoothing( );
+//	 * @fn	void IntraPred::doReferenceSmoothing( );
 //	 *
 //	 * @brief	Bazowa metoda wyg³adzaj¹ca do wywo³ania przy zliczaniu bitów.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void doReferenceSmoothing( );
+//	void doReferenceSmoothing( );
 //
 //	/**
 //	 * @fn	IntraMode* IntraPred::getPredictionStrategy( );

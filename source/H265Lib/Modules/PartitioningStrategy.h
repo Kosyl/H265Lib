@@ -48,16 +48,16 @@
 //	}
 //
 //	/**
-//	 * @fn	virtual Void PartitioningStrategy::doPartitioning( std::shared_ptr<CTU> ctu ) = 0;
+//	 * @fn	virtual void PartitioningStrategy::doPartitioning( std::shared_ptr<CTU> ctu ) = 0;
 //	 *
 //	 * @brief	Partycjonowanie na poziomie CTU.
 //	 *
 //	 * @param	ctu	WskaŸnik na CTU.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	virtual Void doPartitioning(std::shared_ptr<CTU> ctu) = 0;
+//	virtual void doPartitioning(std::shared_ptr<CTU> ctu) = 0;
 //};
 //
 ///**
@@ -96,19 +96,19 @@
 //	 * @brief	QP dla sk³adowcyh obrazu.
 //	 */
 //
-//	UInt QP[3];
+//	int QP[3];
 //
 //	/**
 //	 * @brief	Aktualnie dzielona CU.
 //	 */
 //
-//	std::shared_ptr<CUIntra> currentCU;
+//	std::shared_ptr<Cintra> currentCU;
 //
 //	/**
 //	 * @brief	Aktualnie dzielona PU.
 //	 */
 //
-//	std::shared_ptr<PUIntra> currentPU;
+//	std::shared_ptr<Pintra> currentPU;
 //
 //public:
 //
@@ -138,16 +138,16 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::doPartitioning( std::shared_ptr<CTU> ctu )
+//	 * @fn	void OptimalPartitioning::doPartitioning( std::shared_ptr<CTU> ctu )
 //	 *
 //	 * @brief	Partycjonowanie na poziomie CTU.
 //	 *
 //	 * @param	ctu CTU do podzia³u.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void doPartitioning(std::shared_ptr<CTU> ctu)
+//	void doPartitioning(std::shared_ptr<CTU> ctu)
 //	{
 //		QP[LUMA] = PicParams()->getQP(LUMA) + ctu->getParentSlice()->getQPDelta(LUMA);
 //		QP[CB] = PicParams()->getQP(CB) + ctu->getParentSlice()->getQPDelta(CB);
@@ -157,16 +157,16 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::optimizePartitions( std::shared_ptr<CUQuadTree> CUtree )
+//	 * @fn	void OptimalPartitioning::optimizePartitions( std::shared_ptr<CUQuadTree> CUtree )
 //	 *
 //	 * @brief	Partycjonowanie na poziomie drzewa CU. Sprawdzenie optymalnej wersji NxN i optymalnej 2Nx2N.
 //	 *
 //	 * @param	CUtree	Drzewo jednostek kodowych.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void optimizePartitions(std::shared_ptr<CUQuadTree> CUtree)
+//	void optimizePartitions(std::shared_ptr<CUQuadTree> CUtree)
 //	{
 //		bool canMakeSinglePartition =
 //			CUtree->getSize() <= SeqParams()->getCTUSize() &&
@@ -181,10 +181,10 @@
 //		{
 //			Double costSinglePart = std::numeric_limits<Double>::max(), costQuadPart = std::numeric_limits<Double>::max();
 //
-//			std::shared_ptr<CUIntra> singlePart = nullptr;
+//			std::shared_ptr<Cintra> singlePart = nullptr;
 //
 //			//jedna part.
-//			singlePart = std::make_shared<CUIntra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize());
+//			singlePart = std::make_shared<Cintra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize());
 //
 //			//LOG( "OPT" ) << "sprawdzam single" << std::endl;
 //
@@ -198,7 +198,7 @@
 //			//LOG( "OPT" ) << "sprawdzam multi" << std::endl;
 //			//LOG_TAB "OPT" );
 //			CUtree->createSubTrees();
-//			for (UInt i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
+//			for (int i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 //			{
 //				if (CUtree->getSubTree((QTComponent)i) != nullptr)
 //					optimizePartitions(CUtree->getSubTree((QTComponent)i));
@@ -222,8 +222,8 @@
 //		else if (canMakeSinglePartition)
 //		{
 //			//LOG( "OPT" ) << "mozliwa tylko single" << std::endl;
-//			std::shared_ptr<CUIntra> singlePart = nullptr;
-//			singlePart = std::make_shared<CUIntra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize());
+//			std::shared_ptr<Cintra> singlePart = nullptr;
+//			singlePart = std::make_shared<Cintra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize());
 //			//LOG_TAB "OPT" );
 //			optimizePartitions(singlePart);
 //			//LOG_UNTAB "OPT" );
@@ -235,7 +235,7 @@
 //			//LOG( "OPT" ) << "mozliwa tylko multi" << std::endl;
 //			CUtree->createSubTrees();
 //			//LOG_TAB "OPT" );
-//			for (UInt i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
+//			for (int i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 //			{
 //				if (CUtree->getSubTree((QTComponent)i) != nullptr)
 //					optimizePartitions(CUtree->getSubTree((QTComponent)i));
@@ -245,16 +245,16 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::optimizePartitions( std::shared_ptr<CUIntra> cu )
+//	 * @fn	void OptimalPartitioning::optimizePartitions( std::shared_ptr<Cintra> cu )
 //	 *
 //	 * @brief	Partycjonowanie na poziomie CU. (sprawdzenie NxN vs 2Nx2N)
 //	 *
 //	 * @param	cu	CU do otymalizacji.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void optimizePartitions(std::shared_ptr<CUIntra> cu)
+//	void optimizePartitions(std::shared_ptr<Cintra> cu)
 //	{
 //		//LOG( "OPT" ) << "CU(" << cu->getX( ) << "," << cu->getY( ) << ") " << cu->getSize( ) << "x" << cu->getSize( ) << ", optymalizacja Luma" << std::endl;
 //
@@ -263,7 +263,7 @@
 //		//proba dla 2Nx2N, zawsze mozna
 //		cu->setPartitionMode(PART_2Nx2N);
 //		cu->createPUs();
-//		std::shared_ptr<PUIntra> pu = cu->getPU();
+//		std::shared_ptr<Pintra> pu = cu->getPU();
 //		cu->getTransformTree()->setQTMode(QTMODE_LEAF);
 //		pu->setTransformArea(cu->getTransformTree());
 //
@@ -276,7 +276,7 @@
 //		bool canMakeQuadPUPart = cu->getSize() == SeqParams()->getMinCUSize();
 //		if (canMakeQuadPUPart)
 //		{
-//			UInt multiPartBits = 0, multiPartDistortion = 0;
+//			int multiPartBits = 0, multiPartDistortion = 0;
 //			//LOG( "OPT" ) << "sprawdzam NxN" << std::endl;
 //			//LOG_TAB "OPT" );
 //			cu->setPartitionMode(PART_NxN);
@@ -325,24 +325,24 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::optimizeCUForChroma( std::shared_ptr<CUIntra> cu )
+//	 * @fn	void OptimalPartitioning::optimizeCUForChroma( std::shared_ptr<Cintra> cu )
 //	 *
 //	 * @brief Dobór optymalnego trybu predykcji chrominancji (bez zmiany wyników uzyskanych z optymalizacji luminancji).
 //	 *
 //	 * @param	cu	CU, w którym wybieramy tryb predykcji chrominancji.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void optimizeCUForChroma(std::shared_ptr<CUIntra> cu)
+//	void optimizeCUForChroma(std::shared_ptr<Cintra> cu)
 //	{
 //		//LOG( "OPT" ) << "CU(" << cu->getX( ) << "," << cu->getY( ) << ") " << cu->getSize( ) << "x" << cu->getSize( ) << ", optymalizacja CHROMA" << std::endl;
 //
-//		UInt bestChromaMode = -1;
+//		int bestChromaMode = -1;
 //		Double bestChromaCost = std::numeric_limits<Double>::max();
 //
-//		//for( UShort i = 0; i < 5; ++i )
-//		for (UShort i = 0; i < 2; ++i)
+//		//for( int i = 0; i < 5; ++i )
+//		for (int i = 0; i < 2; ++i)
 //		{
 //			//LOG( "OPT" ) << "proba dla trybu chroma " << i << std::endl;
 //
@@ -371,25 +371,25 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::optimizePUForLuma( std::shared_ptr<PUIntra> pu )
+//	 * @fn	void OptimalPartitioning::optimizePUForLuma( std::shared_ptr<Pintra> pu )
 //	 *
 //	 * @brief	Wybór najlepszego trybu predykcji (spoœród 1 i 2 - ze wzglêdu na szybkoœæ dzia³ania)
 //	 *
 //	 * @param	pu	Aktualna PU.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void optimizePUForLuma(std::shared_ptr<PUIntra> pu)
+//	void optimizePUForLuma(std::shared_ptr<Pintra> pu)
 //	{
 //		//LOG( "OPT" ) << "PU(" << pu->getX( ) << "," << pu->getY( ) << ") " << pu->getSize( ) << "x" << pu->getSize( ) << ", optymalizacja Luma" << std::endl;
 //
 //		currentPU = pu;
-//		UInt bestLumaMode = -1;
+//		int bestLumaMode = -1;
 //		Double bestLumaCost = std::numeric_limits<Double>::max();
 //
-//		//for( UInt lumaMode = 0; lumaMode < 36; ++lumaMode )
-//		for (UInt lumaMode = 0; lumaMode < 2; ++lumaMode)
+//		//for( int lumaMode = 0; lumaMode < 36; ++lumaMode )
+//		for (int lumaMode = 0; lumaMode < 2; ++lumaMode)
 //		{
 //			pu->setLumaModeIdx(lumaMode);
 //			//LOG( "OPT" ) << "sprawdzam tryb " << lumaMode << std::endl;
@@ -417,25 +417,25 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::optimizeTUTreeForLuma( std::shared_ptr<TUQuadTree> TUTree )
+//	 * @fn	void OptimalPartitioning::optimizeTUTreeForLuma( std::shared_ptr<TUQuadTree> TUTree )
 //	 *
 //	 * @brief	Optymalizacja drzewa TU (NxN vs 2Nx2N).
 //	 *
 //	 * @param	TUTree	Aktualne drzewo TU.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void optimizeTUTreeForLuma(std::shared_ptr<TUQuadTree> TUTree)
+//	void optimizeTUTreeForLuma(std::shared_ptr<TUQuadTree> TUTree)
 //	{
 //		//LOG( "OPT" ) << "TUTree(" << TUTree->getX( ) << "," << TUTree->getY( ) << ") " << TUTree->getSize( ) << "x" << TUTree->getSize( ) << ", optymalizacja Luma" << std::endl;
 //
-//		UInt multiPartDistortion = 0;
-//		UInt multiPartBins = 0;
+//		int multiPartDistortion = 0;
+//		int multiPartBins = 0;
 //
 //		bool atLeastOneQuad = false;
 //
-//		Bool canMakeQuadPart = TUTree->getSize() > SeqParams()->getMinTUSize();
+//		bool canMakeQuadPart = TUTree->getSize() > SeqParams()->getMinTUSize();
 //		if (canMakeQuadPart)
 //		{
 //			//LOG( "OPT" ) << "proba dla multi" << std::endl;
@@ -459,8 +459,8 @@
 //		std::shared_ptr<TU> leaf = std::make_shared<TU>(TUTree->getParentCU(), TUTree->getX(), TUTree->getY(), TUTree->getSize());
 //		std::shared_ptr<TB> tb = leaf->getTB(LUMA);
 //		tb->transformAndReconstruct(currentPU);
-//		UInt singlePartDistortion = tb->getDistortion();
-//		UInt singlePartBins = tb->getNumBins();
+//		int singlePartDistortion = tb->getDistortion();
+//		int singlePartBins = tb->getNumBins();
 //
 //		Double singleCost = RDCost::getInstance()->calcCost(singlePartBins, singlePartDistortion, QP[LUMA]);
 //		Double multiCost = RDCost::getInstance()->calcCost(multiPartBins, multiPartDistortion, QP[LUMA]);
@@ -486,24 +486,24 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::optimizeTUTreeForChroma( std::shared_ptr<TUQuadTree> TUTree )
+//	 * @fn	void OptimalPartitioning::optimizeTUTreeForChroma( std::shared_ptr<TUQuadTree> TUTree )
 //	 *
 //	 * @brief	Przeprowadzanie pêtli rekonstrukcji dla chrominancji w celu policzenia kosztu.
 //	 *
 //	 * @param	TUTree	Aktualne drzewo TU.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void optimizeTUTreeForChroma(std::shared_ptr<TUQuadTree> TUTree)
+//	void optimizeTUTreeForChroma(std::shared_ptr<TUQuadTree> TUTree)
 //	{
 //		//LOG( "OPT" ) << "TUTree(" << TUTree->getX( ) << "," << TUTree->getY( ) << ") " << TUTree->getSize( ) << "x" << TUTree->getSize( ) << ", optymalizacja CHROMA" << std::endl;
 //
 //		if (TUTree->getQTMode() == QTMODE_SPLIT)
 //		{
 //			//LOG( "OPT" ) << "QTMODE_SPLIT" << std::endl;
-//			UInt multiPartDistortionCr = 0, multiPartDistortionCb = 0;
-//			UInt multiPartBinsCr = 0, multiPartBinsCb = 0;
+//			int multiPartDistortionCr = 0, multiPartDistortionCb = 0;
+//			int multiPartBinsCr = 0, multiPartBinsCb = 0;
 //
 //			if (TUTree->getSize() > 8)
 //			{
@@ -565,20 +565,20 @@
 //	}
 //
 //	/**
-//	 * @fn	Void OptimalPartitioning::optimizePUsForChroma( std::shared_ptr<CUIntra> cu )
+//	 * @fn	void OptimalPartitioning::optimizePUsForChroma( std::shared_ptr<Cintra> cu )
 //	 *
 //	 * @brief	Przekazanie optymalizacji do drzewa TU przez wszystkie PU w danym CU.
 //	 *
 //	 * @param	cu	Aktualne CU.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void optimizePUsForChroma(std::shared_ptr<CUIntra> cu)
+//	void optimizePUsForChroma(std::shared_ptr<Cintra> cu)
 //	{
 //		for (QTComponent i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 //		{
-//			std::shared_ptr<PUIntra> pu = cu->getPU(i);
+//			std::shared_ptr<Pintra> pu = cu->getPU(i);
 //			if (pu != nullptr)
 //			{
 //				currentPU = pu;
@@ -623,13 +623,13 @@
 //	Int currentTUSize;
 //
 //	/**
-//	 * @property	Bool cuParamsReady, tuParamsReady
+//	 * @property	bool cuParamsReady, tuParamsReady
 //	 *
 //	 * @brief	Flagi mówi¹ce, czy ustalono ju¿ partycje wed³ug wczytanych informacji (nowe informacje nie bêd¹ wczytywane, dopóki aktualne nie zostan¹ u¿yte).
 //	 *
 //	 */
 //
-//	Bool cuParamsReady, tuParamsReady;
+//	bool cuParamsReady, tuParamsReady;
 //
 //public:
 //
@@ -659,31 +659,31 @@
 //	}
 //
 //	/**
-//	 * @fn	virtual Void FDBTestPartitions::doPartitioning( std::shared_ptr<CTU> ctu )
+//	 * @fn	virtual void FDBTestPartitions::doPartitioning( std::shared_ptr<CTU> ctu )
 //	 *
 //	 * @brief	Partycjonowanie na poziomie CTU.
 //	 *
 //	 * @param	ctu	Aktualne CTU.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	virtual Void doPartitioning(std::shared_ptr<CTU> ctu)
+//	virtual void doPartitioning(std::shared_ptr<CTU> ctu)
 //	{
 //		doPartitioning(ctu->getCUQuadTree());
 //	}
 //
 //	/**
-//	 * @fn	Void FDBTestPartitions::doPartitioning( std::shared_ptr<CUQuadTree> CUtree )
+//	 * @fn	void FDBTestPartitions::doPartitioning( std::shared_ptr<CUQuadTree> CUtree )
 //	 *
 //	 * @brief	Partycjonowanie na poziomie drzewa jednostek kodowych.
 //	 *
 //	 * @param	CUtree	Drzewo jednostek kodowych.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void doPartitioning(std::shared_ptr<CUQuadTree> CUtree)
+//	void doPartitioning(std::shared_ptr<CUQuadTree> CUtree)
 //	{
 //		if (!cuParamsReady)
 //		{
@@ -696,7 +696,7 @@
 //		}
 //		if (CUtree->getSize() == currentCUSize && CUtree->getX() == currentCUX && CUtree->getY() == currentCUY)
 //		{
-//			CUtree->setLeaf(std::make_shared<CUIntra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize()));
+//			CUtree->setLeaf(std::make_shared<Cintra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize()));
 //			CUtree->getLeaf()->setIntraChromaPredictionDerivationType(0);
 //			CUtree->setQTMode(QTMODE_LEAF);
 //			doPartitioning(CUtree->getLeaf());
@@ -706,7 +706,7 @@
 //		{
 //			CUtree->createSubTrees();
 //
-//			for (UInt i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
+//			for (int i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 //			{
 //				if (CUtree->getSubTree((QTComponent)i) != nullptr)
 //					doPartitioning(CUtree->getSubTree((QTComponent)i));
@@ -715,16 +715,16 @@
 //	}
 //
 //	/**
-//	 * @fn	Void FDBTestPartitions::doPartitioning( std::shared_ptr<CUIntra> cu )
+//	 * @fn	void FDBTestPartitions::doPartitioning( std::shared_ptr<Cintra> cu )
 //	 *
 //	 * @brief	Partycjonowanie CU.
 //	 *
 //	 * @param	cu	Aktualne CU.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void doPartitioning(std::shared_ptr<CUIntra> cu)
+//	void doPartitioning(std::shared_ptr<Cintra> cu)
 //	{
 //		goToMarker(*itsStream, "CUSTRUCT");
 //		tuParamsReady = false;
@@ -748,16 +748,16 @@
 //	}
 //
 //	/**
-//	 * @fn	Void FDBTestPartitions::doPartitioning( std::shared_ptr<TUQuadTree> TUTree )
+//	 * @fn	void FDBTestPartitions::doPartitioning( std::shared_ptr<TUQuadTree> TUTree )
 //	 *
 //	 * @brief	Partycjonowanie na poziomie drzewa TU.
 //	 *
 //	 * @param	TUTree	Drzewo jednostek transformacji.
 //	 *
-//	 * @return	Void.
+//	 * @return	void.
 //	 */
 //
-//	Void doPartitioning(std::shared_ptr<TUQuadTree> TUTree)
+//	void doPartitioning(std::shared_ptr<TUQuadTree> TUTree)
 //	{
 //		if (!tuParamsReady)
 //		{
@@ -809,19 +809,19 @@
 //	* @brief	QP dla sk³adowcyh obrazu.
 //	*/
 //
-//	UInt QP[3];
+//	int QP[3];
 //
 //	/**
 //	* @brief	Aktualnie dzielona CU.
 //	*/
 //
-//	std::shared_ptr<CUIntra> currentCU;
+//	std::shared_ptr<Cintra> currentCU;
 //
 //	/**
 //	* @brief	Aktualnie dzielona PU.
 //	*/
 //
-//	std::shared_ptr<PUIntra> currentPU;
+//	std::shared_ptr<Pintra> currentPU;
 //
 //public:
 //
@@ -851,16 +851,16 @@
 //	}
 //
 //	/**
-//	* @fn	Void OptimalPartitioning::doPartitioning( std::shared_ptr<CTU> ctu )
+//	* @fn	void OptimalPartitioning::doPartitioning( std::shared_ptr<CTU> ctu )
 //	*
 //	* @brief	Partycjonowanie na poziomie CTU.
 //	*
 //	* @param	ctu CTU do podzia³u.
 //	*
-//	* @return	Void.
+//	* @return	void.
 //	*/
 //
-//	Void doPartitioning(std::shared_ptr<CTU> ctu)
+//	void doPartitioning(std::shared_ptr<CTU> ctu)
 //	{
 //		QP[LUMA] = PicParams()->getQP(LUMA) + ctu->getParentSlice()->getQPDelta(LUMA);
 //		QP[CB] = PicParams()->getQP(CB) + ctu->getParentSlice()->getQPDelta(CB);
@@ -869,15 +869,15 @@
 //		doPreselection(ctu->getCUQuadTree());
 //	}
 //
-//	Void doPreselection(std::shared_ptr<CUQuadTree> CUtree)
+//	void doPreselection(std::shared_ptr<CUQuadTree> CUtree)
 //	{
 //		bool canMakeSinglePartition = CUtree->getSize() == 8;
 //
 //		//preselekcja
 //		if (canMakeSinglePartition)
 //		{
-//			std::shared_ptr<CUIntra> singlePart = nullptr;
-//			singlePart = std::make_shared<CUIntra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize());
+//			std::shared_ptr<Cintra> singlePart = nullptr;
+//			singlePart = std::make_shared<Cintra>(CUtree->getParentCTU(), CUtree->getX(), CUtree->getY(), CUtree->getSize());
 //			doPreselection(singlePart);
 //			CUtree->clear();
 //			CUtree->setLeaf(singlePart);
@@ -885,7 +885,7 @@
 //		else
 //		{
 //			CUtree->createSubTrees();
-//			for (UInt i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
+//			for (int i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 //			{
 //				if (CUtree->getSubTree((QTComponent)i) != nullptr)
 //					doPreselection(CUtree->getSubTree((QTComponent)i));
@@ -894,22 +894,22 @@
 //	}
 //
 //	/**
-//	* @fn	Void OptimalPartitioning::optimizePartitions( std::shared_ptr<CUIntra> cu )
+//	* @fn	void OptimalPartitioning::optimizePartitions( std::shared_ptr<Cintra> cu )
 //	*
 //	* @brief	Partycjonowanie na poziomie CU. (sprawdzenie NxN vs 2Nx2N)
 //	*
 //	* @param	cu	CU do otymalizacji.
 //	*
-//	* @return	Void.
+//	* @return	void.
 //	*/
 //
-//	Void doPreselection(std::shared_ptr<CUIntra> cu)
+//	void doPreselection(std::shared_ptr<Cintra> cu)
 //	{
 //		currentCU = cu;
 //
 //		cu->setPartitionMode(PART_2Nx2N);
 //		cu->createPUs();
-//		std::shared_ptr<PUIntra> pu = cu->getPU();
+//		std::shared_ptr<Pintra> pu = cu->getPU();
 //		cu->getTransformTree()->setQTMode(QTMODE_LEAF);
 //		pu->setTransformArea(cu->getTransformTree());
 //
@@ -917,24 +917,24 @@
 //	}
 //
 //	/**
-//	* @fn	Void OptimalPartitioning::optimizeCUForChroma( std::shared_ptr<CUIntra> cu )
+//	* @fn	void OptimalPartitioning::optimizeCUForChroma( std::shared_ptr<Cintra> cu )
 //	*
 //	* @brief Dobór optymalnego trybu predykcji chrominancji (bez zmiany wyników uzyskanych z optymalizacji luminancji).
 //	*
 //	* @param	cu	CU, w którym wybieramy tryb predykcji chrominancji.
 //	*
-//	* @return	Void.
+//	* @return	void.
 //	*/
 //
-//	Void optimizeCUForChroma(std::shared_ptr<CUIntra> cu)
+//	void optimizeCUForChroma(std::shared_ptr<Cintra> cu)
 //	{
 //		//LOG( "OPT" ) << "CU(" << cu->getX( ) << "," << cu->getY( ) << ") " << cu->getSize( ) << "x" << cu->getSize( ) << ", optymalizacja CHROMA" << std::endl;
 //
-//		UInt bestChromaMode = -1;
+//		int bestChromaMode = -1;
 //		Double bestChromaCost = std::numeric_limits<Double>::max();
 //
-//		//for( UShort i = 0; i < 5; ++i )
-//		for (UShort i = 0; i < 2; ++i)
+//		//for( int i = 0; i < 5; ++i )
+//		for (int i = 0; i < 2; ++i)
 //		{
 //			//LOG( "OPT" ) << "proba dla trybu chroma " << i << std::endl;
 //
@@ -963,29 +963,29 @@
 //	}
 //
 //	/**
-//	* @fn	Void OptimalPartitioning::optimizePUForLuma( std::shared_ptr<PUIntra> pu )
+//	* @fn	void OptimalPartitioning::optimizePUForLuma( std::shared_ptr<Pintra> pu )
 //	*
 //	* @brief	Wybór najlepszego trybu predykcji (spoœród 1 i 2 - ze wzglêdu na szybkoœæ dzia³ania)
 //	*
 //	* @param	pu	Aktualna PU.
 //	*
-//	* @return	Void.
+//	* @return	void.
 //	*/
 //
-//	Void doPreselection(std::shared_ptr<PUIntra> pu)
+//	void doPreselection(std::shared_ptr<Pintra> pu)
 //	{
 //		currentPU = pu;
 //		PBIntra* pb = new PBIntra(pu->getPicture(), LUMA, pu->getX(), pu->getY(), pu->getSize());
 //		pb->basePredictionOnOriginalPicture(true);
 //
-//		UInt modes[19] = { 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 33, 34 };
+//		int modes[19] = { 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 33, 34 };
 //		Double costs[19];
-//		std::map<double, std::vector<UInt>> results;
-//		std::map<UInt, Sample**> predictions;
+//		std::map<double, std::vector<int>> results;
+//		std::map<int, Sample**> predictions;
 //
 //		for (int modeIdx = 0; modeIdx < 19; ++modeIdx)
 //		{
-//			UInt lumaMode = modes[modeIdx];
+//			int lumaMode = modes[modeIdx];
 //			pb->setModeIdx(lumaMode);
 //
 //			Sample** pred = IntraPred::getInstance()->calcPred(pb);
@@ -1014,7 +1014,7 @@
 //
 //
 //
-//		for (UInt modeIdx = 0; modeIdx < 19; ++modeIdx)
+//		for (int modeIdx = 0; modeIdx < 19; ++modeIdx)
 //		{
 //			for (int i = 0; i < pu->getSize(); ++i)
 //			{
@@ -1029,25 +1029,25 @@
 //	}
 //
 //	/**
-//	* @fn	Void OptimalPartitioning::optimizeTUTreeForLuma( std::shared_ptr<TUQuadTree> TUTree )
+//	* @fn	void OptimalPartitioning::optimizeTUTreeForLuma( std::shared_ptr<TUQuadTree> TUTree )
 //	*
 //	* @brief	Optymalizacja drzewa TU (NxN vs 2Nx2N).
 //	*
 //	* @param	TUTree	Aktualne drzewo TU.
 //	*
-//	* @return	Void.
+//	* @return	void.
 //	*/
 //
-//	Void optimizeTUTreeForLuma(std::shared_ptr<TUQuadTree> TUTree)
+//	void optimizeTUTreeForLuma(std::shared_ptr<TUQuadTree> TUTree)
 //	{
 //		//LOG( "OPT" ) << "TUTree(" << TUTree->getX( ) << "," << TUTree->getY( ) << ") " << TUTree->getSize( ) << "x" << TUTree->getSize( ) << ", optymalizacja Luma" << std::endl;
 //
-//		UInt multiPartDistortion = 0;
-//		UInt multiPartBins = 0;
+//		int multiPartDistortion = 0;
+//		int multiPartBins = 0;
 //
 //		bool atLeastOneQuad = false;
 //
-//		Bool canMakeQuadPart = TUTree->getSize() > SeqParams()->getMinTUSize();
+//		bool canMakeQuadPart = TUTree->getSize() > SeqParams()->getMinTUSize();
 //		if (canMakeQuadPart)
 //		{
 //			//LOG( "OPT" ) << "proba dla multi" << std::endl;
@@ -1071,8 +1071,8 @@
 //		std::shared_ptr<TU> leaf = std::make_shared<TU>(TUTree->getParentCU(), TUTree->getX(), TUTree->getY(), TUTree->getSize());
 //		std::shared_ptr<TB> tb = leaf->getTB(LUMA);
 //		tb->transformAndReconstruct(currentPU);
-//		UInt singlePartDistortion = tb->getDistortion();
-//		UInt singlePartBins = tb->getNumBins();
+//		int singlePartDistortion = tb->getDistortion();
+//		int singlePartBins = tb->getNumBins();
 //
 //		Double singleCost = RDCost::getInstance()->calcCost(singlePartBins, singlePartDistortion, QP[LUMA]);
 //		Double multiCost = RDCost::getInstance()->calcCost(multiPartBins, multiPartDistortion, QP[LUMA]);
@@ -1098,24 +1098,24 @@
 //	}
 //
 //	/**
-//	* @fn	Void OptimalPartitioning::optimizeTUTreeForChroma( std::shared_ptr<TUQuadTree> TUTree )
+//	* @fn	void OptimalPartitioning::optimizeTUTreeForChroma( std::shared_ptr<TUQuadTree> TUTree )
 //	*
 //	* @brief	Przeprowadzanie pêtli rekonstrukcji dla chrominancji w celu policzenia kosztu.
 //	*
 //	* @param	TUTree	Aktualne drzewo TU.
 //	*
-//	* @return	Void.
+//	* @return	void.
 //	*/
 //
-//	Void optimizeTUTreeForChroma(std::shared_ptr<TUQuadTree> TUTree)
+//	void optimizeTUTreeForChroma(std::shared_ptr<TUQuadTree> TUTree)
 //	{
 //		//LOG( "OPT" ) << "TUTree(" << TUTree->getX( ) << "," << TUTree->getY( ) << ") " << TUTree->getSize( ) << "x" << TUTree->getSize( ) << ", optymalizacja CHROMA" << std::endl;
 //
 //		if (TUTree->getQTMode() == QTMODE_SPLIT)
 //		{
 //			//LOG( "OPT" ) << "QTMODE_SPLIT" << std::endl;
-//			UInt multiPartDistortionCr = 0, multiPartDistortionCb = 0;
-//			UInt multiPartBinsCr = 0, multiPartBinsCb = 0;
+//			int multiPartDistortionCr = 0, multiPartDistortionCb = 0;
+//			int multiPartBinsCr = 0, multiPartBinsCb = 0;
 //
 //			if (TUTree->getSize() > 8)
 //			{
@@ -1177,20 +1177,20 @@
 //	}
 //
 //	/**
-//	* @fn	Void OptimalPartitioning::optimizePUsForChroma( std::shared_ptr<CUIntra> cu )
+//	* @fn	void OptimalPartitioning::optimizePUsForChroma( std::shared_ptr<Cintra> cu )
 //	*
 //	* @brief	Przekazanie optymalizacji do drzewa TU przez wszystkie PU w danym CU.
 //	*
 //	* @param	cu	Aktualne CU.
 //	*
-//	* @return	Void.
+//	* @return	void.
 //	*/
 //
-//	Void optimizePUsForChroma(std::shared_ptr<CUIntra> cu)
+//	void optimizePUsForChroma(std::shared_ptr<Cintra> cu)
 //	{
 //		for (QTComponent i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
 //		{
-//			std::shared_ptr<PUIntra> pu = cu->getPU(i);
+//			std::shared_ptr<Pintra> pu = cu->getPU(i);
 //			if (pu != nullptr)
 //			{
 //				currentPU = pu;

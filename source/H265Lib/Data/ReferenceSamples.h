@@ -3,7 +3,7 @@
 #include <Common/TypeDef.h>
 #include <vector>
 
-namespace H265Lib
+namespace HEVC
 {
 	struct ReferenceSamples
 	{

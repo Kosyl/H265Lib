@@ -7,14 +7,14 @@
 #include <fstream>
 #include <memory>
 
-namespace H265Lib
+namespace HEVC
 {
 	namespace FileIO
 	{
-		Bool goToMarker(std::ifstream& str, std::string key);
+		bool goToMarker(std::ifstream& str, std::string key);
 
 		template <typename T>
-		Bool readValue(std::ifstream& str, std::string key, T& out_value);
+		bool readValue(std::ifstream& str, std::string key, T& out_value);
 
 		template <typename T>
 		std::unique_ptr<Matrix<T>> readMatrix(std::ifstream& str, std::string key);

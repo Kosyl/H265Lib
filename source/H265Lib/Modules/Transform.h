@@ -40,7 +40,7 @@
 //	~Transform( );
 //
 //	/**
-//	 * @fn	void Transform::forwardTrans(Sample** const block, Coeff** coeff, const Int& trSize, const Int& bitDepth, const Bool& isIntra4x4LumaDST_hor, const Bool& isIntra4x4LumaDST_ver);
+//	 * @fn	void Transform::forwardTrans(Sample** const block, Coeff** coeff, const Int& trSize, const Int& bitDepth, const bool& isIntra4x4LumaDST_hor, const bool& isIntra4x4LumaDST_ver);
 //	 *
 //	 * @brief	Transformacja prosta.
 //	 *
@@ -52,10 +52,10 @@
 //	 * @param	isIntra4x4LumaDST_ver	U¿ycie trybu DST w kierunku pionowym.
 //	 */
 //
-//	void forwardTrans( Sample** const block, Coeff** coeff, const Int& trSize, const Int& bitDepth, const Bool& isIntra4x4LumaDST_hor, const Bool& isIntra4x4LumaDST_ver );
+//	void forwardTrans( Sample** const block, Coeff** coeff, const Int& trSize, const Int& bitDepth, const bool& isIntra4x4LumaDST_hor, const bool& isIntra4x4LumaDST_ver );
 //
 //	/**
-//	 * @fn	void Transform::inverseTrans( Coeff** const coeff, Sample** block, const Int& trSize, const Int& bitDepth, const Bool& isIntra4x4LumaDST_hor, const Bool& isIntra4x4LumaDST_ver );
+//	 * @fn	void Transform::inverseTrans( Coeff** const coeff, Sample** block, const Int& trSize, const Int& bitDepth, const bool& isIntra4x4LumaDST_hor, const bool& isIntra4x4LumaDST_ver );
 //	 *
 //	 * @brief	Transformacja odwrotna.
 //	 *
@@ -67,7 +67,7 @@
 //	 * @param	isIntra4x4LumaDST_ver	U¿ycie trybu DST w kierunku pionowym.
 //	 */
 //
-//	void inverseTrans( Coeff** const coeff, Sample** block, const Int& trSize, const Int& bitDepth, const Bool& isIntra4x4LumaDST_hor, const Bool& isIntra4x4LumaDST_ver );
+//	void inverseTrans( Coeff** const coeff, Sample** block, const Int& trSize, const Int& bitDepth, const bool& isIntra4x4LumaDST_hor, const bool& isIntra4x4LumaDST_ver );
 //
 //	/**
 //	 * @brief	Tablica tymczasowa przechowuj¹ca wynik transformaty poziomej do wgl¹du.

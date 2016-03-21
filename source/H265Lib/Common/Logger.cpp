@@ -1,7 +1,7 @@
 #include "Logger.h"
 #include <fstream>
 
-namespace H265Lib
+namespace HEVC
 {
 	const LogId Logger::Off{ "Off" };
 	const LogId Logger::Console{ "Console" };
@@ -95,7 +95,7 @@ namespace H265Lib
 		return Logger::createFileLogger(path);
 	}
 
-	Void Indent::tab(LogId key)
+	void Indent::tab(LogId key)
 	{
 		auto log = LoggingControl::instance().getLog(key);
 		if (log == nullptr)
@@ -105,7 +105,7 @@ namespace H265Lib
 		log->increaseSpaces();
 	}
 
-	Void Indent::untab(LogId key)
+	void Indent::untab(LogId key)
 	{
 		auto log = LoggingControl::instance().getLog(key);
 		if (log == nullptr)
@@ -124,7 +124,7 @@ namespace H265Lib
 		tab(key);
 	}
 
-	Indent::Indent(const Char* func, LogId key) :
+	Indent::Indent(const char* func, LogId key) :
 		_logId(key)
 	{
 		auto log = LoggingControl::instance().getLog(key);
@@ -183,9 +183,9 @@ namespace H265Lib
 		return std::make_shared<Logger>();
 	}
 
-	Void Logger::printSpaces()
+	void Logger::printSpaces()
 	{
-		for (UInt i = 0; i < _numTabs; ++i)
+		for (int i = 0; i < _numTabs; ++i)
 			*_logStream << "  ";
 	}
 
@@ -199,17 +199,17 @@ namespace H265Lib
 		_logStream = nullptr;
 	}
 
-	Void Logger::increaseSpaces()
+	void Logger::increaseSpaces()
 	{
 		setTabLength(_numTabs + 1);
 	}
 
-	Void Logger::decreaseSpaces()
+	void Logger::decreaseSpaces()
 	{
 		setTabLength(_numTabs - 1);
 	}
 
-	Void Logger::setTabLength(Int len)
+	void Logger::setTabLength(int len)
 	{
 		if (len >= 0)
 		{
@@ -219,12 +219,12 @@ namespace H265Lib
 			setTabLength(0);
 	}
 
-	UInt Logger::getTabLength()
+	int Logger::getTabLength()
 	{
 		return _numTabs;
 	}
 
-	Void Logger::setTabStep(UInt len)
+	void Logger::setTabStep(int len)
 	{
 		_step = len;
 		setTabLength(_numTabs);
