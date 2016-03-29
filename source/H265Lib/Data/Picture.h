@@ -37,7 +37,7 @@ namespace HEVC
 
 		Picture();
 
-		void initFromParameters(ParametersBundle parameters);
+		void initFromParameters(std::shared_ptr<SequenceParameterSet> parameters);
 		void loadFrameFromYuv(std::ifstream& yuvFile);
 
 		std::shared_ptr<CTU> getCTU(int ctuX, int ctuY);

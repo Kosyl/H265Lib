@@ -153,6 +153,18 @@
     <ClInclude Include="..\source\H265Lib\Data\TU.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\H265Lib\ParameterSets\EncoderParameters.h">
+      <Filter>ParameterSets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Modules\SequenceEncoder.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Modules\SyntaxWriter.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\H265Lib\Modules\PrimitiveBinaryEncoder.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265Lib\ParameterSets\PictureParameterSet.cpp">
@@ -241,6 +253,21 @@
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\Data\TU.cpp">
       <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\ParameterSets\EncoderParameters.cpp">
+      <Filter>ParameterSets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Modules\SequenceEncoder.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Modules\SyntaxWriter.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Modules\PrimitiveBinaryEncoder.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\ParameterSets\ProfileTierLevel.cpp">
+      <Filter>ParameterSets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

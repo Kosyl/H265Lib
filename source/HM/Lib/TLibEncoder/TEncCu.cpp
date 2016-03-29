@@ -257,8 +257,8 @@ Void TEncCu::compressCU(TComDataCU*& rpcCU)
  */
 Void TEncCu::encodeCU(TComDataCU* pcCU)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, "(", pcCU->getCUPelX(), ",", pcCU->getCUPelY(), ")");
+// 	LOG_FUNCTION_INDENT(Logger::BinOut);
+// 	LOGLN(Logger::BinOut, "(", pcCU->getCUPelX(), ",", pcCU->getCUPelY(), ")");
 	if (pcCU->getSlice()->getPPS()->getUseDQP())
 	{
 		setdQPFlag(true);
@@ -366,7 +366,7 @@ Void TEncCu::xCompressCU(TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, UInt ui
 Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, UInt uiDepth )
 #endif
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 	TComPic* pcPic = rpcBestCU->getPic();
 
 	// get Original YUV data from picture
@@ -910,7 +910,7 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, UInt u
  */
 Void TEncCu::finishCU(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 
 	TComPic* pcPic = pcCU->getPic();
 	TComSlice * pcSlice = pcCU->getPic()->getSlice(pcCU->getPic()->getCurrSliceIdx());
@@ -1032,10 +1032,10 @@ Int TEncCu::xComputeQP(TComDataCU* pcCU, UInt uiDepth)
 //TUTAJ
 Void TEncCu::xEncodeCU(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, "(", pcCU->getCUPelX() + g_auiRasterToPelX[g_auiZscanToRaster[uiAbsPartIdx]], ",", pcCU->getCUPelY() + g_auiRasterToPelY[g_auiZscanToRaster[uiAbsPartIdx]], ")");
-	LOGLN(Logs::BinOut, "size: ", (int)pcCU->getWidth(uiAbsPartIdx), ", x: ", pcCU->getCUPelX(), ", y: ", pcCU->getCUPelY());
-	TComPic* pcPic = pcCU->getPic();
+// 	LOG_FUNCTION_INDENT(Logger::BinOut);
+// 	LOGLN(Logger::BinOut, "(", pcCU->getCUPelX() + g_auiRasterToPelX[g_auiZscanToRaster[uiAbsPartIdx]], ",", pcCU->getCUPelY() + g_auiRasterToPelY[g_auiZscanToRaster[uiAbsPartIdx]], ")");
+// 	LOGLN(Logger::BinOut, "size: ", (int)pcCU->getWidth(uiAbsPartIdx), ", x: ", pcCU->getCUPelX(), ", y: ", pcCU->getCUPelY());
+ 	TComPic* pcPic = pcCU->getPic();
 
 	Bool bBoundary = false;
 	UInt uiLPelX = pcCU->getCUPelX() + g_auiRasterToPelX[g_auiZscanToRaster[uiAbsPartIdx]];
@@ -1059,7 +1059,7 @@ Void TEncCu::xEncodeCU(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 
 	if (((uiDepth < pcCU->getDepth(uiAbsPartIdx)) && (uiDepth < (g_uiMaxCUDepth - g_uiAddCUDepth))) || bBoundary)
 	{
-		LOGLN(Logs::BinOut, "CU rozbita, koduje 4 mniejsze");
+		//LOGLN(Logger::BinOut, "CU rozbita, koduje 4 mniejsze");
 		UInt uiQNumParts = (pcPic->getNumPartInCU() >> (uiDepth << 1)) >> 2;
 		if ((g_uiMaxCUWidth >> uiDepth) == pcCU->getSlice()->getPPS()->getMinCuDQPSize() && pcCU->getSlice()->getPPS()->getUseDQP())
 		{
@@ -1093,7 +1093,7 @@ Void TEncCu::xEncodeCU(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 
 	if (pcCU->isSkipped(uiAbsPartIdx))
 	{
-		LOGLN(Logs::BinOut, "skipped");
+		//LOGLN(Logger::BinOut, "skipped");
 		m_pcEntropyCoder->encodeMergeIndex(pcCU, uiAbsPartIdx);
 		finishCU(pcCU, uiAbsPartIdx, uiDepth);
 		return;
@@ -1104,7 +1104,7 @@ Void TEncCu::xEncodeCU(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 
 	if (pcCU->isIntra(uiAbsPartIdx) && pcCU->getPartitionSize(uiAbsPartIdx) == SIZE_2Nx2N)
 	{
-		LOGLN(Logs::BinOut, "intra && size2Nx2X");
+		//LOGLN(Logger::BinOut, "intra && size2Nx2X");
 		m_pcEntropyCoder->encodeIPCMInfo(pcCU, uiAbsPartIdx);
 
 		if (pcCU->getIPCMFlag(uiAbsPartIdx))
@@ -1415,7 +1415,7 @@ Void TEncCu::xCheckRDCostInter(TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, P
 
 Void TEncCu::xCheckRDCostIntra(TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, PartSize eSize)
 {
-	LOG_SCOPE_MUTE(Logs::BinOut);
+	//LOG_SCOPE_MUTE(Logger::BinOut);
 	UInt uiDepth = rpcTempCU->getDepth(0);
 
 	rpcTempCU->setSkipFlagSubParts(false, 0, uiDepth);

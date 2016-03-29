@@ -17,8 +17,6 @@ namespace HEVC
 	{
 	private:
 
-	
-
 		void resetZScanArray();
 
 	public:
@@ -111,6 +109,7 @@ namespace HEVC
 		int getBitDepth(ImgComp comp) const;
 		Sample clip(ImgComp comp, Sample value);
 		Sample getDefaultSampleValue(ImgComp comp);
+		void configure(EncoderParameters configuration);
 	};
 
 	class SequenceParameterSetBank : public ParameterBank < SequenceParameterSet >

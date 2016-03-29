@@ -804,7 +804,7 @@ Void TEncSlice::calCostSliceI(TComPic*& rpcPic)
 
 Void TEncSlice::compressSlice(TComPic*& rpcPic)
 {
-	LOG_SCOPE_MUTE(Logs::BinOut);
+	//LOG_SCOPE_MUTE(Logger::BinOut);
 	UInt  uiCUAddr;
 	UInt   uiStartCUAddr;
 	UInt   uiBoundingCUAddr;
@@ -1289,7 +1289,7 @@ Void TEncSlice::compressSlice(TComPic*& rpcPic)
  */
 Void TEncSlice::encodeSlice(TComPic*& rpcPic, TComOutputBitstream* pcSubstreams)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 	UInt       uiCUAddr;
 	UInt       uiStartCUAddr;
 	UInt       uiBoundingCUAddr;

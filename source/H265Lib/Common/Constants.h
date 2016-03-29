@@ -12,5 +12,7 @@ namespace HEVC
 		static const int COEFF_REMAIN_THRESHOLD = 3;
 
 		static const int SDH_THRESHOLD = 4;
+
+		static const int NUM_PROFILES = 32;
 	};
 }

@@ -36,7 +36,7 @@
 	*/
 
 #include "ContextModel3DBuffer.h"
-#include "Logger.h"
+//#include "Logger.h"
 
 //! \ingroup TLibCommon
 //! \{
@@ -68,8 +68,8 @@ ContextModel3DBuffer::ContextModel3DBuffer(UInt uiSizeZ, UInt uiSizeY, UInt uiSi
  */
 Void ContextModel3DBuffer::initBuffer(SliceType sliceType, Int qp, UChar* ctxModel)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "sliceType: ", sliceType, ", qp: ", qp);
+// 	LOG_FUNCTION_INDENT(Logs::Overview);
+// 	LOGLN(Logs::Overview, "sliceType: ", sliceType, ", qp: ", qp);
 	ctxModel += sliceType * m_sizeXYZ;
 
 	for (Int n = 0; n < m_sizeXYZ; n++)

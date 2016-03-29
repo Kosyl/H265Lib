@@ -37,7 +37,7 @@
 
 #include "TEncBinCoderCABACCounter.h"
 #include "TLibCommon/TComRom.h"
-#include "Logger.h"
+//#include "Logger.h"
 #include <fstream>
 
 #if FAST_BIT_EST
@@ -56,16 +56,16 @@ TEncBinCABACCounter::~TEncBinCABACCounter()
 
 Void TEncBinCABACCounter::finish()
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "counter");
+	//LOG_FUNCTION_INDENT(Logger::Overview);
+	//LOGLN(Logger::Overview, "counter");
 	m_pcTComBitIf->write(0, UInt(m_fracBits >> 15));
 	m_fracBits &= 32767;
 }
 
 UInt TEncBinCABACCounter::getNumWrittenBits()
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "counter");
+	//LOG_FUNCTION_INDENT(Logger::Overview);
+	//LOGLN(Logger::Overview, "counter");
 	return m_pcTComBitIf->getNumberOfWrittenBits() + UInt(m_fracBits >> 15);
 }
 
@@ -77,8 +77,8 @@ UInt TEncBinCABACCounter::getNumWrittenBits()
  */
 Void TEncBinCABACCounter::encodeBin(UInt binValue, ContextModel &rcCtxModel)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "counter");
+	//LOG_FUNCTION_INDENT(Logger::Overview);
+	//LOGLN(Logger::Overview, "counter");
 	m_uiBinsCoded += m_binCountIncrement;
 
 	m_fracBits += rcCtxModel.getEntropyBits(binValue);
@@ -94,8 +94,8 @@ Void TEncBinCABACCounter::encodeBin(UInt binValue, ContextModel &rcCtxModel)
 Void TEncBinCABACCounter::encodeBinEP(UInt binValue)
 {
 
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "counter");
+	//LOG_FUNCTION_INDENT(Logger::Overview);
+	//LOGLN(Logger::Overview, "counter");
 	m_uiBinsCoded += m_binCountIncrement;
 	m_fracBits += 32768;
 }
@@ -108,8 +108,8 @@ Void TEncBinCABACCounter::encodeBinEP(UInt binValue)
  */
 Void TEncBinCABACCounter::encodeBinsEP(UInt binValues, Int numBins)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "counter");
+	//LOG_FUNCTION_INDENT(Logger::Overview);
+	//LOGLN(Logger::Overview, "counter");
 
 	m_uiBinsCoded += numBins & -m_binCountIncrement;
 	m_fracBits += 32768 * numBins;
@@ -122,8 +122,8 @@ Void TEncBinCABACCounter::encodeBinsEP(UInt binValues, Int numBins)
  */
 Void TEncBinCABACCounter::encodeBinTrm(UInt binValue)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "counter");
+	//LOG_FUNCTION_INDENT(Logger::Overview);
+	//LOGLN(Logger::Overview, "counter");
 	m_uiBinsCoded += m_binCountIncrement;
 	m_fracBits += ContextModel::getEntropyBitsTrm(binValue);
 }

@@ -37,7 +37,7 @@
 
 #include "TLibCommon/NAL.h"
 #include "TLibCommon/TComBitStream.h"
-#include "Logger.h"
+//#include "Logger.h"
 #include "NALwrite.h"
 
 using namespace std;
@@ -49,7 +49,7 @@ static const Char emulation_prevention_three_byte[] = { 3 };
 
 Void writeNalUnitHeader(ostream& out, OutputNALUnit& nalu)       // nal_unit_header()
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	TComOutputBitstream bsNALUHeader;
 
 	bsNALUHeader.write(0, 1);                    // forbidden_zero_bit
@@ -65,7 +65,7 @@ Void writeNalUnitHeader(ostream& out, OutputNALUnit& nalu)       // nal_unit_hea
  */
 void write(ostream& out, OutputNALUnit& nalu)
 {
-	LOG_SCOPE_INDENT(Logs::BinOut,"NALU write");
+	//LOG_SCOPE_INDENT(Logger::BinOut,"NALU write");
 	writeNalUnitHeader(out, nalu);
 	/* write out rsbp_byte's, inserting any required
 	 * emulation_prevention_three_byte's */
@@ -134,7 +134,7 @@ void write(ostream& out, OutputNALUnit& nalu)
  */
 void writeRBSPTrailingBits(TComOutputBitstream& bs)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	bs.write(1, 1);
 	bs.writeAlignZero();
 }

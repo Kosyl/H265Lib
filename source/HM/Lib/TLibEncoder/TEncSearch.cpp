@@ -39,7 +39,7 @@
 #include "TLibCommon/TComRom.h"
 #include "TLibCommon/TComMotionInfo.h"
 #include "TEncSearch.h"
-#include "Logger.h"
+//#include "Logger.h"
 #include <math.h>
 
 #include <fstream>
@@ -1094,20 +1094,20 @@ Int        default0Save1Load2)
 
 		/////////////////////////////
 		/////////////////////////////
-
-		Pel* tmpO = piOrg;
-		Pel* tmpP = piPred;
-		Pel* tmpR = piResi;
-
-		LOGLN(Logs::LumaPrediction, "*** block ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::LumaPrediction, tmpO, uiHeight, uiWidth, uiStride);
-
-		LOGLN(Logs::LumaPrediction, "*** prediction ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::LumaPrediction, tmpP, uiHeight, uiWidth, uiStride);
-
-		LOGLN(Logs::LumaPrediction, "*** residuals " , uiHeight , "x" , uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::LumaPrediction, tmpR, uiHeight, uiWidth, uiStride);
-
+// 
+// 		Pel* tmpO = piOrg;
+// 		Pel* tmpP = piPred;
+// 		Pel* tmpR = piResi;
+// 
+// 		LOGLN(Logger::LumaPrediction, "*** block ", uiHeight, "x", uiHeight, " ***");
+// 		LOG_MATRIX_1D(Logger::LumaPrediction, tmpO, uiHeight, uiWidth, uiStride);
+// 
+// 		LOGLN(Logger::LumaPrediction, "*** prediction ", uiHeight, "x", uiHeight, " ***");
+// 		LOG_MATRIX_1D(Logger::LumaPrediction, tmpP, uiHeight, uiWidth, uiStride);
+// 
+// 		LOGLN(Logger::LumaPrediction, "*** residuals " , uiHeight , "x" , uiHeight, " ***");
+// 		LOG_MATRIX_1D(Logger::LumaPrediction, tmpR, uiHeight, uiWidth, uiStride);
+// 
 
 		/////////////////////////////
 		/////////////////////////////
@@ -1195,14 +1195,14 @@ Int        default0Save1Load2)
 		////////////////////////////////
 		////////////////////////////////
 
-		LOGLN(Logs::LumaReco, "*** prediction ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::LumaReco, tmpP, uiHeight, uiWidth, uiStride);
-
-		LOGLN(Logs::LumaReco, "*** residuals ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::LumaReco, tmpRs, uiHeight, uiWidth, uiStride);
-
-		LOGLN(Logs::LumaReco, "*** reconstructed " , uiHeight , "x" , uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::LumaReco, tmpR, uiHeight, uiWidth, uiStride);
+// 		LOGLN(Logger::LumaReco, "*** prediction ", uiHeight, "x", uiHeight, " ***");
+// 		LOG_MATRIX_1D(Logger::LumaReco, tmpP, uiHeight, uiWidth, uiStride);
+// 
+// 		LOGLN(Logger::LumaReco, "*** residuals ", uiHeight, "x", uiHeight, " ***");
+// 		LOG_MATRIX_1D(Logger::LumaReco, tmpRs, uiHeight, uiWidth, uiStride);
+// 
+// 		LOGLN(Logger::LumaReco, "*** reconstructed " , uiHeight , "x" , uiHeight, " ***");
+// 		LOG_MATRIX_1D(Logger::LumaReco, tmpR, uiHeight, uiWidth, uiStride);
 
 		/////////////////////////////
 		/////////////////////////////
@@ -1331,18 +1331,18 @@ Int        default0Save1Load2)
 
 		///////////////////////////////////
 		///////////////////////////////////
-		Pel* tmpO = piOrg;
-		Pel* tmpP = piPred;
-		Pel* tmpR = piResi;
-
-		LOGLN(Logs::ChromaPred, "*** block ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::ChromaPred, tmpO, uiHeight, uiWidth, uiStride);
-
-		LOGLN(Logs::ChromaPred, "*** prediction ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::ChromaPred, tmpP, uiHeight, uiWidth, uiStride);
-
-		LOGLN(Logs::ChromaPred, "*** residuals " , uiHeight , "x" , uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::ChromaPred, tmpR, uiHeight, uiWidth, uiStride);
+// 		Pel* tmpO = piOrg;
+// 		Pel* tmpP = piPred;
+// 		Pel* tmpR = piResi;
+// 
+// 		LOGLN(Logger::ChromaPred, "*** block ", uiHeight, "x", uiHeight, " ***");
+// 		LOG_ARRAY_1D(Logger::ChromaPred, tmpO, uiHeight, uiWidth, uiStride);
+// 
+// 		LOGLN(Logger::ChromaPred, "*** prediction ", uiHeight, "x", uiHeight, " ***");
+// 		LOG_ARRAY_1D(Logger::ChromaPred, tmpP, uiHeight, uiWidth, uiStride);
+// 
+// 		LOGLN(Logger::ChromaPred, "*** residuals ", uiHeight, "x", uiHeight, " ***");
+// 		LOG_ARRAY_1D(Logger::ChromaPred, tmpR, uiHeight, uiWidth, uiStride);
 
 		////////////////////////////////
 		////////////////////////////////
@@ -1438,15 +1438,15 @@ Int        default0Save1Load2)
 		////////////////////////////
 		////////////////////////////
 
-		LOGLN(Logs::ChromaPred, "*** prediction ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::ChromaPred, tmpP, uiHeight, uiWidth, uiStride);
+	/*	LOGLN(Logger::ChromaPred, "*** prediction ", uiHeight, "x", uiHeight, " ***");
+		LOG_MATRIX_1D(Logger::ChromaPred, tmpP, uiHeight, uiWidth, uiStride);
 
-		LOGLN(Logs::ChromaPred, "*** residuals ", uiHeight, "x", uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::ChromaPred, tmpRs, uiHeight, uiWidth, uiStride);
+		LOGLN(Logger::ChromaPred, "*** residuals ", uiHeight, "x", uiHeight, " ***");
+		LOG_MATRIX_1D(Logger::ChromaPred, tmpRs, uiHeight, uiWidth, uiStride);
 
-		LOGLN(Logs::ChromaPred, "*** reconstructed " , uiHeight , "x" , uiHeight, " ***");
-		LOG_MATRIX_1D(Logs::ChromaPred, tmpR, uiHeight, uiWidth, uiStride);
-
+		LOGLN(Logger::ChromaPred, "*** reconstructed " , uiHeight , "x" , uiHeight, " ***");
+		LOG_MATRIX_1D(Logger::ChromaPred, tmpR, uiHeight, uiWidth, uiStride);
+*/
 		//////////////////////////
 		//////////////////////////
 	}
@@ -2571,7 +2571,7 @@ Bool        bLumaOnly)
 
 		////////////////////////////
 		////////////////////////////
-		LOGLN(Logs::RDO, "numModesForFullRD: " , numModesForFullRD , "/35, doFastSearch: " , doFastSearch);
+		//LOGLN(Logger::RDO, "numModesForFullRD: " , numModesForFullRD , "/35, doFastSearch: " , doFastSearch);
 			
 		////////////////////////////
 		////////////////////////////
@@ -2598,13 +2598,13 @@ Bool        bLumaOnly)
 				////////////////////////////
 				////////////////////////////
 
-				LOGLN(Logs::RDO, "*** piOrg ", uiHeight, "x", uiWidth, " ***");
-
-				LOG_MATRIX_1D(Logs::RDO, piOrg, uiHeight, uiWidth, uiStride);
-				LOGLN(Logs::RDO, "*** piPred ", uiHeight, "x", uiWidth, " ***");
-
-				LOG_MATRIX_1D(Logs::RDO, piPred, uiHeight, uiWidth, uiStride);
-				LOGLN(Logs::RDO, "*** uiSad ", uiSad);
+// 				LOGLN(Logger::RDO, "*** piOrg ", uiHeight, "x", uiWidth, " ***");
+// 
+// 				LOG_MATRIX_1D(Logger::RDO, piOrg, uiHeight, uiWidth, uiStride);
+// 				LOGLN(Logger::RDO, "*** piPred ", uiHeight, "x", uiWidth, " ***");
+// 
+// 				LOG_MATRIX_1D(Logger::RDO, piPred, uiHeight, uiWidth, uiStride);
+// 				LOGLN(Logger::RDO, "*** uiSad ", uiSad);
 
 				////////////////////////////
 				////////////////////////////
@@ -2614,9 +2614,9 @@ Bool        bLumaOnly)
 
 				////////////////////////////
 				////////////////////////////
-
-				LOGLN(Logs::RDO, "*** iModeBits ", iModeBits);
-				LOGLN(Logs::RDO, "*** cost ", cost);
+// 
+// 				LOGLN(Logger::RDO, "*** iModeBits ", iModeBits);
+// 				LOGLN(Logger::RDO, "*** cost ", cost);
 
 				////////////////////////////
 				////////////////////////////
@@ -2697,7 +2697,7 @@ Bool        bLumaOnly)
 				////////////////////////////
 				////////////////////////////
 
-				LOGLN(Logs::RDO, "*** Nowy najlepszy koszt: ", dPUCost, " dla trybu nr ", uiMode, " (uiOrgMode: ", uiOrgMode, ")");
+				//LOGLN(Logger::RDO, "*** Nowy najlepszy koszt: ", dPUCost, " dla trybu nr ", uiMode, " (uiOrgMode: ", uiOrgMode, ")");
 
 				////////////////////////////
 				////////////////////////////
@@ -5745,7 +5745,7 @@ UInt TEncSearch::xModeBitsIntra(TComDataCU* pcCU, UInt uiMode, UInt uiPU, UInt u
 		// Reload only contexts required for coding intra mode information
 		////////////////////////////
 		////////////////////////////
-		LOGLN(Logs::RDO, "*** Reloading only contexts required for coding intra mode information ");
+		//LOGLN(Logger::RDO, "*** Reloading only contexts required for coding intra mode information ");
 			
 		////////////////////////////
 		////////////////////////////

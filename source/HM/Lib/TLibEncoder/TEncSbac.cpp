@@ -37,13 +37,13 @@
 
 #include "TEncTop.h"
 #include "TEncSbac.h"
-#include "Logger.h"
+//#include "Logger.h"
 
 #include <map>
 #include <bitset>
 #include <algorithm>
 #include <iomanip>
-#include <boost/dynamic_bitset.hpp>
+//#include <boost/dynamic_bitset.hpp>
 
 //! \ingroup TLibEncoder
 //! \{
@@ -100,7 +100,7 @@ TEncSbac::~TEncSbac()
 
 Void TEncSbac::resetEntropy()
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	////LOG_FUNCTION_INDENT(Logger::BinOut);
 	Int  iQp = m_pcSlice->getSliceQp();
 	SliceType eSliceType = m_pcSlice->getSliceType();
 
@@ -211,8 +211,6 @@ Void TEncSbac::determineCabacInitIdx()
 */
 Void TEncSbac::updateContextTables(SliceType eSliceType, Int iQp, Bool bExecuteFinish)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, "The function does the followng: Write out terminate bit. Flush CABAC. Intialize CABAC states. Start CABAC.");
 	m_pcBinIf->encodeBinTrm(1);
 	if (bExecuteFinish) m_pcBinIf->finish();
 	m_cCUSplitFlagSCModel.initBuffer(eSliceType, iQp, (UChar*)INIT_SPLIT_FLAG);
@@ -278,21 +276,21 @@ Void TEncSbac::codeTilesWPPEntryPoint(TComSlice* pSlice)
 
 Void TEncSbac::codeTerminatingBit(UInt uilsLast)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, uilsLast);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, uilsLast);
 	m_pcBinIf->encodeBinTrm(uilsLast);
 }
 
 Void TEncSbac::codeSliceFinish()
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	m_pcBinIf->finish();
 }
 
 Void TEncSbac::xWriteUnarySymbol(UInt uiSymbol, ContextModel* pcSCModel, Int iOffset)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(uiSymbol), PRINTVAR(iOffset));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(uiSymbol), PRINTVAR(iOffset));
 	m_pcBinIf->encodeBin(uiSymbol ? 1 : 0, pcSCModel[0]);
 
 	if (0 == uiSymbol)
@@ -310,8 +308,8 @@ Void TEncSbac::xWriteUnarySymbol(UInt uiSymbol, ContextModel* pcSCModel, Int iOf
 
 Void TEncSbac::xWriteUnaryMaxSymbol(UInt uiSymbol, ContextModel* pcSCModel, Int iOffset, UInt uiMaxSymbol)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(uiSymbol), PRINTVAR(iOffset), PRINTVAR(uiMaxSymbol));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(uiSymbol), PRINTVAR(iOffset), PRINTVAR(uiMaxSymbol));
 	if (uiMaxSymbol == 0)
 	{
 		return;
@@ -340,8 +338,8 @@ Void TEncSbac::xWriteUnaryMaxSymbol(UInt uiSymbol, ContextModel* pcSCModel, Int 
 
 Void TEncSbac::xWriteEpExGolomb(UInt uiSymbol, UInt uiCount)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::Overview, "symbol: ", uiSymbol, ", count: ", uiCount);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::Overview, "symbol: ", uiSymbol, ", count: ", uiCount);
 	UInt bins = 0;
 	Int numBins = 0;
 
@@ -369,8 +367,8 @@ Void TEncSbac::xWriteEpExGolomb(UInt uiSymbol, UInt uiCount)
 */
 Void TEncSbac::xWriteCoefRemainExGolomb(UInt symbol, UInt &rParam)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(symbol), PRINTVAR(rParam));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(symbol), PRINTVAR(rParam));
 	Int codeNumber = (Int)symbol;
 
 	UInt length;
@@ -378,7 +376,7 @@ Void TEncSbac::xWriteCoefRemainExGolomb(UInt symbol, UInt &rParam)
 	{
 		length = codeNumber >> rParam;
 
-		LOGLN(Logs::BinOut, "kod: ", boost::dynamic_bitset<>(length + 1, (1 << (length + 1)) - 2), " ", boost::dynamic_bitset<>(rParam, (codeNumber % (1 << rParam))));
+		//LOGLN(Logger::BinOut, "kod: ", boost::dynamic_bitset<>(length + 1, (1 << (length + 1)) - 2), " ", boost::dynamic_bitset<>(rParam, (codeNumber % (1 << rParam))));
 
 		m_pcBinIf->encodeBinsEP((1 << (length + 1)) - 2, length + 1);
 		m_pcBinIf->encodeBinsEP((codeNumber % (1 << rParam)), rParam);
@@ -393,7 +391,7 @@ Void TEncSbac::xWriteCoefRemainExGolomb(UInt symbol, UInt &rParam)
 			codeNumber -= (1 << (length++));
 		}
 
-		LOGLN(Logs::BinOut, "kod: ", boost::dynamic_bitset<>(COEF_REMAIN_BIN_REDUCTION + length + 1 - rParam, (1 << (COEF_REMAIN_BIN_REDUCTION + length + 1 - rParam)) - 2), " ", boost::dynamic_bitset<>(length, codeNumber));
+		//LOGLN(Logger::BinOut, "kod: ", boost::dynamic_bitset<>(COEF_REMAIN_BIN_REDUCTION + length + 1 - rParam, (1 << (COEF_REMAIN_BIN_REDUCTION + length + 1 - rParam)) - 2), " ", boost::dynamic_bitset<>(length, codeNumber));
 
 		m_pcBinIf->encodeBinsEP((1 << (COEF_REMAIN_BIN_REDUCTION + length + 1 - rParam)) - 2, COEF_REMAIN_BIN_REDUCTION + length + 1 - rParam);
 		m_pcBinIf->encodeBinsEP(codeNumber, length);
@@ -432,29 +430,29 @@ Void TEncSbac::xCopyFrom(TEncSbac* pSrc)
 
 Void TEncSbac::codeMVPIdx(TComDataCU* pcCU, UInt uiAbsPartIdx, RefPicList eRefList)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	Int iSymbol = pcCU->getMVPIdx(eRefList, uiAbsPartIdx);
 	Int iNum = AMVP_MAX_NUM_CANDS;
-	LOGLN(Logs::BinOut, PRINTVAR(iSymbol), PRINTVAR(iNum));
+	//LOGLN(Logger::BinOut, PRINTVAR(iSymbol), PRINTVAR(iNum));
 
 	xWriteUnaryMaxSymbol(iSymbol, m_cMVPIdxSCModel.get(0), 1, iNum - 1);
 }
 
 Void TEncSbac::codePartSize(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	PartSize eSize = pcCU->getPartitionSize(uiAbsPartIdx);
-	LOGLN(Logs::BinOut, PRINTVAR(uiDepth), PRINTVAR(eSize));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiDepth), PRINTVAR(eSize));
 	if (pcCU->isIntra(uiAbsPartIdx))
 	{
-		LOGLN(Logs::BinOut, eSize == SIZE_2Nx2N ? "SIZE_2Nx2N" : "SIZE_NxN");
+		//LOGLN(Logger::BinOut, eSize == SIZE_2Nx2N ? "SIZE_2Nx2N" : "SIZE_NxN");
 		if (uiDepth == g_uiMaxCUDepth - g_uiAddCUDepth)
 		{
 			m_pcBinIf->encodeBin(eSize == SIZE_2Nx2N ? 1 : 0, m_cCUPartSizeSCModel.get(0, 0, 0));
 		}
 		else
 		{
-			LOGLN(Logs::BinOut, "nie koduje rozmiaru ze wzgledu na glebokosc drzewa");
+			//LOGLN(Logger::BinOut, "nie koduje rozmiaru ze wzgledu na glebokosc drzewa");
 		}
 		return;
 	}
@@ -534,18 +532,18 @@ Void TEncSbac::codePartSize(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 */
 Void TEncSbac::codePredMode(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	// get context function is here
 	Int iPredMode = pcCU->getPredictionMode(uiAbsPartIdx);
-	LOGLN(Logs::BinOut, "mode: ", iPredMode == MODE_INTER ? "inter" : "intra");
+	//LOGLN(Logger::BinOut, "mode: ", iPredMode == MODE_INTER ? "inter" : "intra");
 	m_pcBinIf->encodeBin(iPredMode == MODE_INTER ? 0 : 1, m_cCUPredModeSCModel.get(0, 0, 0));
 }
 
 Void TEncSbac::codeCUTransquantBypassFlag(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt uiSymbol = pcCU->getCUTransquantBypass(uiAbsPartIdx);
-	LOGLN(Logs::Overview, PRINTVAR(uiSymbol));
+	//LOGLN(Logger::Overview, PRINTVAR(uiSymbol));
 	m_pcBinIf->encodeBin(uiSymbol, m_CUTransquantBypassFlagSCModel.get(0, 0, 0));
 }
 
@@ -556,11 +554,11 @@ Void TEncSbac::codeCUTransquantBypassFlag(TComDataCU* pcCU, UInt uiAbsPartIdx)
 */
 Void TEncSbac::codeSkipFlag(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	// get context function is here
 	UInt uiSymbol = pcCU->isSkipped(uiAbsPartIdx) ? 1 : 0;
 	UInt uiCtxSkip = pcCU->getCtxSkipFlag(uiAbsPartIdx);
-	LOGLN(Logs::BinOut, PRINTVAR(uiSymbol), PRINTVAR(uiCtxSkip));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiSymbol), PRINTVAR(uiCtxSkip));
 	m_pcBinIf->encodeBin(uiSymbol, m_cCUSkipFlagSCModel.get(0, 0, uiCtxSkip));
 
 	DTRACE_CABAC_VL(g_nSymbolCounter++);
@@ -579,9 +577,9 @@ Void TEncSbac::codeSkipFlag(TComDataCU* pcCU, UInt uiAbsPartIdx)
 */
 Void TEncSbac::codeMergeFlag(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	const UInt uiSymbol = pcCU->getMergeFlag(uiAbsPartIdx) ? 1 : 0;
-	LOGLN(Logs::BinOut, PRINTVAR(uiSymbol));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiSymbol));
 	m_pcBinIf->encodeBin(uiSymbol, *m_cCUMergeFlagExtSCModel.get(0));
 
 	DTRACE_CABAC_VL(g_nSymbolCounter++);
@@ -601,10 +599,10 @@ Void TEncSbac::codeMergeFlag(TComDataCU* pcCU, UInt uiAbsPartIdx)
 */
 Void TEncSbac::codeMergeIndex(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt uiUnaryIdx = pcCU->getMergeIndex(uiAbsPartIdx);
 	UInt uiNumCand = pcCU->getSlice()->getMaxNumMergeCand();
-	LOGLN(Logs::BinOut, PRINTVAR(uiUnaryIdx), PRINTVAR(uiNumCand));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiUnaryIdx), PRINTVAR(uiNumCand));
 	if (uiNumCand > 1)
 	{
 		for (UInt ui = 0; ui < uiNumCand - 1; ++ui)
@@ -633,13 +631,13 @@ Void TEncSbac::codeMergeIndex(TComDataCU* pcCU, UInt uiAbsPartIdx)
 
 Void TEncSbac::codeSplitFlag(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (uiDepth == g_uiMaxCUDepth - g_uiAddCUDepth)
 		return;
 
 	UInt uiCtx = pcCU->getCtxSplitFlag(uiAbsPartIdx, uiDepth);
 	UInt uiCurrSplitFlag = (pcCU->getDepth(uiAbsPartIdx) > uiDepth) ? 1 : 0;
-	LOGLN(Logs::BinOut, PRINTVAR(uiCurrSplitFlag), PRINTVAR(uiDepth), PRINTVAR(uiCtx));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiCurrSplitFlag), PRINTVAR(uiDepth), PRINTVAR(uiCtx));
 
 	assert(uiCtx < 3);
 	m_pcBinIf->encodeBin(uiCurrSplitFlag, m_cCUSplitFlagSCModel.get(0, 0, uiCtx));
@@ -650,8 +648,8 @@ Void TEncSbac::codeSplitFlag(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth)
 
 Void TEncSbac::codeTransformSubdivFlag(UInt uiSymbol, UInt uiCtx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(uiSymbol), PRINTVAR(uiCtx));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(uiSymbol), PRINTVAR(uiCtx));
 	m_pcBinIf->encodeBin(uiSymbol, m_cCUTransSubdivFlagSCModel.get(0, 0, uiCtx));
 	DTRACE_CABAC_VL(g_nSymbolCounter++)
 		DTRACE_CABAC_T("\tparseTransformSubdivFlag()")
@@ -664,14 +662,14 @@ Void TEncSbac::codeTransformSubdivFlag(UInt uiSymbol, UInt uiCtx)
 
 Void TEncSbac::codeIntraDirLumaAng(TComDataCU* pcCU, UInt absPartIdx, Bool isMultiple)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt dir[4], j;
 	Int preds[4][3] = { { -1, -1, -1 }, { -1, -1, -1 }, { -1, -1, -1 }, { -1, -1, -1 } };
 	Int predNum[4], predIdx[4] = { -1, -1, -1, -1 };
 	PartSize mode = pcCU->getPartitionSize(absPartIdx);
 	UInt partNum = isMultiple ? (mode == SIZE_NxN ? 4 : 1) : 1;
 	UInt partOffset = (pcCU->getPic()->getNumPartInCU() >> (pcCU->getDepth(absPartIdx) << 1)) >> 2;
-	LOGLN(Logs::BinOut, PRINTVAR(isMultiple), PRINTVAR(mode), PRINTVAR(partNum), PRINTVAR(partOffset));
+	//LOGLN(Logger::BinOut, PRINTVAR(isMultiple), PRINTVAR(mode), PRINTVAR(partNum), PRINTVAR(partOffset));
 	for (j = 0; j < partNum; j++)
 	{
 		dir[j] = pcCU->getLumaIntraDir(absPartIdx + partOffset*j);
@@ -721,13 +719,13 @@ Void TEncSbac::codeIntraDirLumaAng(TComDataCU* pcCU, UInt absPartIdx, Bool isMul
 
 Void TEncSbac::codeIntraDirChroma(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt uiIntraDirChroma = pcCU->getChromaIntraDir(uiAbsPartIdx);
-	LOGLN(Logs::BinOut, PRINTVAR(uiIntraDirChroma));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiIntraDirChroma));
 
 	if (uiIntraDirChroma == DM_CHROMA_IDX)
 	{
-		LOGLN(Logs::BinOut, "derived from luma, koduje 0");
+		//LOGLN(Logger::BinOut, "derived from luma, koduje 0");
 		m_pcBinIf->encodeBin(0, m_cCUChromaPredSCModel.get(0, 0, 0));
 	}
 	else
@@ -743,7 +741,7 @@ Void TEncSbac::codeIntraDirChroma(TComDataCU* pcCU, UInt uiAbsPartIdx)
 				break;
 			}
 		}
-		LOGLN(Logs::BinOut, PRINTVAR(uiIntraDirChroma));
+		//LOGLN(Logger::BinOut, PRINTVAR(uiIntraDirChroma));
 		m_pcBinIf->encodeBin(1, m_cCUChromaPredSCModel.get(0, 0, 0));
 
 		m_pcBinIf->encodeBinsEP(uiIntraDirChroma, 2);
@@ -753,10 +751,10 @@ Void TEncSbac::codeIntraDirChroma(TComDataCU* pcCU, UInt uiAbsPartIdx)
 
 Void TEncSbac::codeInterDir(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	const UInt uiInterDir = pcCU->getInterDir(uiAbsPartIdx) - 1;
 	const UInt uiCtx = pcCU->getCtxInterDir(uiAbsPartIdx);
-	LOGLN(Logs::BinOut, PRINTVAR(uiInterDir), PRINTVAR(uiCtx));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiInterDir), PRINTVAR(uiCtx));
 	ContextModel *pCtx = m_cCUInterDirSCModel.get(0);
 	if (pcCU->getPartitionSize(uiAbsPartIdx) == SIZE_2Nx2N || pcCU->getHeight(uiAbsPartIdx) != 8)
 	{
@@ -771,11 +769,11 @@ Void TEncSbac::codeInterDir(TComDataCU* pcCU, UInt uiAbsPartIdx)
 
 Void TEncSbac::codeRefFrmIdx(TComDataCU* pcCU, UInt uiAbsPartIdx, RefPicList eRefList)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	{
 		Int iRefFrame = pcCU->getCUMvField(eRefList)->getRefIdx(uiAbsPartIdx);
 		ContextModel *pCtx = m_cCURefPicSCModel.get(0);
-		LOGLN(Logs::BinOut, PRINTVAR(iRefFrame));
+		//LOGLN(Logger::BinOut, PRINTVAR(iRefFrame));
 		m_pcBinIf->encodeBin((iRefFrame == 0 ? 0 : 1), *pCtx);
 
 		if (iRefFrame > 0)
@@ -806,7 +804,7 @@ Void TEncSbac::codeRefFrmIdx(TComDataCU* pcCU, UInt uiAbsPartIdx, RefPicList eRe
 
 Void TEncSbac::codeMvd(TComDataCU* pcCU, UInt uiAbsPartIdx, RefPicList eRefList)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (pcCU->getSlice()->getMvdL1ZeroFlag() && eRefList == REF_PIC_LIST_1 && pcCU->getInterDir(uiAbsPartIdx) == 3)
 	{
 		return;
@@ -861,7 +859,7 @@ Void TEncSbac::codeMvd(TComDataCU* pcCU, UInt uiAbsPartIdx, RefPicList eRefList)
 
 Void TEncSbac::codeDeltaQP(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	Int iDQp = pcCU->getQP(uiAbsPartIdx) - pcCU->getRefQP(uiAbsPartIdx);
 
 	Int qpBdOffsetY = pcCU->getSlice()->getSPS()->getQpBDOffsetY();
@@ -870,20 +868,20 @@ Void TEncSbac::codeDeltaQP(TComDataCU* pcCU, UInt uiAbsPartIdx)
 	UInt uiAbsDQp = (UInt)((iDQp > 0) ? iDQp : (-iDQp));
 	UInt TUValue = min((Int)uiAbsDQp, CU_DQP_TU_CMAX);
 
-	LOGLN(Logs::BinOut, PRINTVAR(iDQp), PRINTVAR(qpBdOffsetY), PRINTVAR(uiAbsDQp), PRINTVAR(TUValue));
-	LOGLN(Logs::BinOut, "pierwsze max 5 bitow");
+	//LOGLN(Logger::BinOut, PRINTVAR(iDQp), PRINTVAR(qpBdOffsetY), PRINTVAR(uiAbsDQp), PRINTVAR(TUValue));
+	//LOGLN(Logger::BinOut, "pierwsze max 5 bitow");
 	xWriteUnaryMaxSymbol(TUValue, &m_cCUDeltaQpSCModel.get(0, 0, 0), 1, CU_DQP_TU_CMAX);
 
 	if (uiAbsDQp >= CU_DQP_TU_CMAX)
 	{
-		LOGLN(Logs::BinOut, "sufiks");
+		//LOGLN(Logger::BinOut, "sufiks");
 		xWriteEpExGolomb(uiAbsDQp - CU_DQP_TU_CMAX, CU_DQP_EG_k);
 	}
 
 	if (uiAbsDQp > 0)
 	{
 		UInt uiSign = (iDQp > 0 ? 0 : 1);
-		LOGLN(Logs::BinOut, PRINTVAR(uiSign));
+		//LOGLN(Logger::BinOut, PRINTVAR(uiSign));
 		m_pcBinIf->encodeBinEP(uiSign);
 	}
 
@@ -892,10 +890,10 @@ Void TEncSbac::codeDeltaQP(TComDataCU* pcCU, UInt uiAbsPartIdx)
 
 Void TEncSbac::codeQtCbf(TComDataCU* pcCU, UInt uiAbsPartIdx, TextType eType, UInt uiTrDepth)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt uiCbf = pcCU->getCbf(uiAbsPartIdx, eType, uiTrDepth);
 	UInt uiCtx = pcCU->getCtxQtCbf(eType, uiTrDepth);
-	LOGLN(Logs::Overview, PRINTVAR(eType), PRINTVAR(uiTrDepth), PRINTVAR(uiCbf), PRINTVAR(uiCtx));
+	//LOGLN(Logger::Overview, PRINTVAR(eType), PRINTVAR(uiTrDepth), PRINTVAR(uiCbf), PRINTVAR(uiCtx));
 	m_pcBinIf->encodeBin(uiCbf, m_cCUQtCbfSCModel.get(0, eType ? TEXT_CHROMA : eType, uiCtx));
 
 	DTRACE_CABAC_VL(g_nSymbolCounter++)
@@ -913,20 +911,20 @@ Void TEncSbac::codeQtCbf(TComDataCU* pcCU, UInt uiAbsPartIdx, TextType eType, UI
 
 void TEncSbac::codeTransformSkipFlags(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt width, UInt height, TextType eTType)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (pcCU->getCUTransquantBypass(uiAbsPartIdx))
 	{
 		return;
 	}
 	if (width != 4 || height != 4)
 	{
-		LOGLN(Logs::BinOut, "size != 4x4, wychodzê");
+		//LOGLN(Logger::BinOut, "size != 4x4, wychodzê");
 
 		return;
 	}
 
 	UInt useTransformSkip = pcCU->getTransformSkip(uiAbsPartIdx, eTType);
-	LOGLN(Logs::BinOut, PRINTVAR(width), PRINTVAR(height), PRINTVAR(useTransformSkip));
+	//LOGLN(Logger::BinOut, PRINTVAR(width), PRINTVAR(height), PRINTVAR(useTransformSkip));
 
 	m_pcBinIf->encodeBin(useTransformSkip, m_cTransformSkipSCModel.get(0, eTType ? TEXT_CHROMA : TEXT_LUMA, 0));
 
@@ -950,14 +948,14 @@ void TEncSbac::codeTransformSkipFlags(TComDataCU* pcCU, UInt uiAbsPartIdx, UInt 
 */
 Void TEncSbac::codeIPCMInfo(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt uiIPCM = (pcCU->getIPCMFlag(uiAbsPartIdx) == true) ? 1 : 0;
 
 	Bool writePCMSampleFlag = pcCU->getIPCMFlag(uiAbsPartIdx);
 
 	m_pcBinIf->encodeBinTrm(uiIPCM);
 
-	LOGLN(Logs::BinOut, PRINTVAR(writePCMSampleFlag));
+	//LOGLN(Logger::BinOut, PRINTVAR(writePCMSampleFlag));
 
 	if (writePCMSampleFlag)
 	{
@@ -1025,10 +1023,10 @@ Void TEncSbac::codeIPCMInfo(TComDataCU* pcCU, UInt uiAbsPartIdx)
 
 Void TEncSbac::codeQtRootCbf(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt uiCbf = pcCU->getQtRootCbf(uiAbsPartIdx);
 	UInt uiCtx = 0;
-	LOGLN(Logs::BinOut, PRINTVAR(uiCbf), PRINTVAR(uiCtx));
+	//LOGLN(Logger::BinOut, PRINTVAR(uiCbf), PRINTVAR(uiCtx));
 	m_pcBinIf->encodeBin(uiCbf, m_cCUQtRootCbfSCModel.get(0, 0, uiCtx));
 	DTRACE_CABAC_VL(g_nSymbolCounter++)
 		DTRACE_CABAC_T("\tparseQtRootCbf()")
@@ -1043,18 +1041,18 @@ Void TEncSbac::codeQtRootCbf(TComDataCU* pcCU, UInt uiAbsPartIdx)
 
 Void TEncSbac::codeQtCbfZero(TComDataCU* pcCU, TextType eType, UInt uiTrDepth)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	// this function is only used to estimate the bits when cbf is 0
 	// and will never be called when writing the bistream. do not need to write log
 	UInt uiCbf = 0;
 	UInt uiCtx = pcCU->getCtxQtCbf(eType, uiTrDepth);
-	LOGLN(Logs::BinOut, PRINTVAR(eType), PRINTVAR(uiTrDepth), PRINTVAR(uiCbf), PRINTVAR(uiCtx));
+	//LOGLN(Logger::BinOut, PRINTVAR(eType), PRINTVAR(uiTrDepth), PRINTVAR(uiCbf), PRINTVAR(uiCtx));
 	m_pcBinIf->encodeBin(uiCbf, m_cCUQtCbfSCModel.get(0, eType ? TEXT_CHROMA : eType, uiCtx));
 }
 
 Void TEncSbac::codeQtRootCbfZero(TComDataCU* pcCU)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	// this function is only used to estimate the bits when cbf is 0
 	// and will never be called when writing the bistream. do not need to write log
 	UInt uiCbf = 0;
@@ -1073,8 +1071,8 @@ Void TEncSbac::codeQtRootCbfZero(TComDataCU* pcCU)
 */
 Void TEncSbac::codeLastSignificantXY(UInt uiPosX, UInt uiPosY, Int width, Int height, TextType eTType, UInt uiScanIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(uiPosX), PRINTVAR(uiPosY), PRINTVAR(uiScanIdx), PRINTVAR(width), PRINTVAR(height), PRINTVAR(eTType));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(uiPosX), PRINTVAR(uiPosY), PRINTVAR(uiScanIdx), PRINTVAR(width), PRINTVAR(height), PRINTVAR(eTType));
 	// swap
 	if (uiScanIdx == SCAN_VER)
 	{
@@ -1095,35 +1093,35 @@ Void TEncSbac::codeLastSignificantXY(UInt uiPosX, UInt uiPosY, Int width, Int he
 	shiftY = eTType ? g_aucConvertToBit[height] : ((g_aucConvertToBit[height] + 3) >> 2);
 
 	// posX
-	LOG(Logs::BinOut, "X: ", boost::dynamic_bitset<>(uiGroupIdxX, 0xffffffff));
+	//LOG(Logger::BinOut, "X: ", boost::dynamic_bitset<>(uiGroupIdxX, 0xffffffff));
 	for (uiCtxLast = 0; uiCtxLast < uiGroupIdxX; uiCtxLast++)
 	{
 		m_pcBinIf->encodeBin(1, *(pCtxX + blkSizeOffsetX + (uiCtxLast >> shiftX)));
 	}
 	if (uiGroupIdxX < g_uiGroupIdx[width - 1])
 	{
-		LOG(Logs::BinOut, "0");
+		//LOG(Logger::BinOut, "0");
 		m_pcBinIf->encodeBin(0, *(pCtxX + blkSizeOffsetX + (uiCtxLast >> shiftX)));
 	}
-	LOGLN(Logs::BinOut, "");
+	//LOGLN(Logger::BinOut, "");
 	// posY
-	LOG(Logs::BinOut, "Y: ", boost::dynamic_bitset<>(uiGroupIdxY, 0xffffffff));
+	//LOG(Logger::BinOut, "Y: ", boost::dynamic_bitset<>(uiGroupIdxY, 0xffffffff));
 	for (uiCtxLast = 0; uiCtxLast < uiGroupIdxY; uiCtxLast++)
 	{
 		m_pcBinIf->encodeBin(1, *(pCtxY + blkSizeOffsetY + (uiCtxLast >> shiftY)));
 	}
 	if (uiGroupIdxY < g_uiGroupIdx[height - 1])
 	{
-		LOG(Logs::BinOut, "0");
+		//LOG(Logger::BinOut, "0");
 		m_pcBinIf->encodeBin(0, *(pCtxY + blkSizeOffsetY + (uiCtxLast >> shiftY)));
 	}
-	LOGLN(Logs::BinOut, "");
+	//LOGLN(Logger::BinOut, "");
 
 	if (uiGroupIdxX > 3)
 	{
 		UInt uiCount = (uiGroupIdxX - 2) >> 1;
 		uiPosX = uiPosX - g_uiMinInGroup[uiGroupIdxX];
-		LOGLN(Logs::BinOut, "remainderX: ", boost::dynamic_bitset<>(uiCount, uiPosX));
+		//LOGLN(Logger::BinOut, "remainderX: ", boost::dynamic_bitset<>(uiCount, uiPosX));
 		for (Int i = uiCount - 1; i >= 0; i--)
 		{
 			m_pcBinIf->encodeBinEP((uiPosX >> i) & 1);
@@ -1133,7 +1131,7 @@ Void TEncSbac::codeLastSignificantXY(UInt uiPosX, UInt uiPosY, Int width, Int he
 	{
 		UInt uiCount = (uiGroupIdxY - 2) >> 1;
 		uiPosY = uiPosY - g_uiMinInGroup[uiGroupIdxY];
-		LOGLN(Logs::BinOut, "remainderY: ", boost::dynamic_bitset<>(uiCount, uiPosY));
+		//LOGLN(Logger::BinOut, "remainderY: ", boost::dynamic_bitset<>(uiCount, uiPosY));
 		for (Int i = uiCount - 1; i >= 0; i--)
 		{
 			m_pcBinIf->encodeBinEP((uiPosY >> i) & 1);
@@ -1144,7 +1142,7 @@ Void TEncSbac::codeLastSignificantXY(UInt uiPosX, UInt uiPosY, Int width, Int he
 //tutaj
 Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx, UInt uiWidth, UInt uiHeight, UInt uiDepth, TextType eTType)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	DTRACE_CABAC_VL(g_nSymbolCounter++)
 		DTRACE_CABAC_T("\tparseCoeffNxN()\teType=")
 		DTRACE_CABAC_V(eTType)
@@ -1170,16 +1168,16 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 		DTRACE_CABAC_V(pcCU->getPredictionMode(uiAbsPartIdx))
 		DTRACE_CABAC_T("\n")
 
-		LOGLN(Logs::BinOut, "texture: ", ((eTType == TEXT_LUMA) ? "LUMA" : "CHROMA"));
-	LOGLN(Logs::BinOut, "width: ", uiWidth);
-	LOGLN(Logs::BinOut, "height: ", uiHeight);
-	LOGLN(Logs::BinOut, "depth: ", uiDepth);
-	LOGLN(Logs::BinOut, "CUx: ", pcCU->getCUPelX());
-	LOGLN(Logs::BinOut, "CUy: ", pcCU->getCUPelY());
-	LOGLN(Logs::BinOut, "inCUx: ", g_auiRasterToPelX[g_auiZscanToRaster[uiAbsPartIdx]]);
-	LOGLN(Logs::BinOut, "inCUx: ", g_auiRasterToPelY[g_auiZscanToRaster[uiAbsPartIdx]]);
-	LOGLN(Logs::BinOut, "predmode: ", pcCU->getPredictionMode(uiAbsPartIdx));
-	LOG_MATRIX_1D(Logs::BinOut, pcCoef, uiWidth, uiHeight, uiWidth);
+		//LOGLN(Logger::BinOut, "texture: ", ((eTType == TEXT_LUMA) ? "LUMA" : "CHROMA"));
+	//LOGLN(Logger::BinOut, "width: ", uiWidth);
+	//LOGLN(Logger::BinOut, "height: ", uiHeight);
+	//LOGLN(Logger::BinOut, "depth: ", uiDepth);
+	//LOGLN(Logger::BinOut, "CUx: ", pcCU->getCUPelX());
+	//LOGLN(Logger::BinOut, "CUy: ", pcCU->getCUPelY());
+	//LOGLN(Logger::BinOut, "inCUx: ", g_auiRasterToPelX[g_auiZscanToRaster[uiAbsPartIdx]]);
+	//LOGLN(Logger::BinOut, "inCUx: ", g_auiRasterToPelY[g_auiZscanToRaster[uiAbsPartIdx]]);
+	//LOGLN(Logger::BinOut, "predmode: ", pcCU->getPredictionMode(uiAbsPartIdx));
+	//LOG_MATRIX_1D(Logger::BinOut, pcCoef, uiWidth, uiHeight, uiWidth);
 
 	if (uiWidth > m_pcSlice->getSPS()->getMaxTrSize())
 	{
@@ -1192,13 +1190,13 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 	// compute number of significant coefficients
 	uiNumSig = TEncEntropy::countNonZeroCoeffs(pcCoef, uiWidth * uiHeight);
 
-	LOGLN(Logs::BinOut, "ilosc wspolczynnikow niezerowych: ", uiNumSig);
+	//LOGLN(Logger::BinOut, "ilosc wspolczynnikow niezerowych: ", uiNumSig);
 
 	if (uiNumSig == 0)
 		return;
 	if (pcCU->getSlice()->getPPS()->getUseTransformSkip())
 	{
-		LOGLN(Logs::BinOut, "transformSkip!");
+		//LOGLN(Logger::BinOut, "transformSkip!");
 
 		codeTransformSkipFlags(pcCU, uiAbsPartIdx, uiWidth, uiHeight, eTType);
 	}
@@ -1241,13 +1239,13 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 
 	::memset(uiSigCoeffGroupFlag, 0, sizeof(UInt)* MLS_GRP_NUM);
 
-	LOGLN(Logs::BinOut, "+++", "skan: ");
+	//LOGLN(Logger::BinOut, "+++", "skan: ");
 
 	do
 	{
 		posLast = scan[++scanPosLast];
 
-		LOGLN(Logs::BinOut, pcCoef[posLast], " ");
+		//LOGLN(Logger::BinOut, pcCoef[posLast], " ");
 
 		// get L1 sig map - to ciekawe tylko dla > 4x4
 		UInt uiPosY = posLast >> uiLog2BlockSize;
@@ -1265,14 +1263,14 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 	Int posLastY = posLast >> uiLog2BlockSize;
 	Int posLastX = posLast - (posLastY << uiLog2BlockSize);
 
-	LOGLN(Logs::BinOut, PRINTVAR(posLastY));
-	LOGLN(Logs::BinOut, PRINTVAR(posLastX));
+	//LOGLN(Logger::BinOut, PRINTVAR(posLastY));
+	//LOGLN(Logger::BinOut, PRINTVAR(posLastX));
 
 	UInt XplusY = 0;
 	XplusY += posLastX == 3 ? 3 : posLastX + 1;
 	XplusY += posLastY == 3 ? 3 : posLastY + 1;
 
-	LOGLN(Logs::BinOut, "bity pozycji: ", XplusY);
+	//LOGLN(Logger::BinOut, "bity pozycji: ", XplusY);
 	totalBinCount += XplusY;
 
 	codeLastSignificantXY(posLastX, posLastY, uiWidth, uiHeight, eTType, uiScanIdx);
@@ -1321,7 +1319,7 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 			UInt uiSigCoeffGroup = (uiSigCoeffGroupFlag[iCGBlkPos] != 0);
 			UInt uiCtxSig = TComTrQuant::getSigCoeffGroupCtxInc(uiSigCoeffGroupFlag, iCGPosX, iCGPosY, uiWidth, uiHeight);
 
-			LOGLN(Logs::BinOut, "bity grupy: ", uiSigCoeffGroup);
+			//LOGLN(Logger::BinOut, "bity grupy: ", uiSigCoeffGroup);
 			totalBinCount += uiSigCoeffGroup;
 
 			m_pcBinIf->encodeBin(uiSigCoeffGroup, baseCoeffGroupCtx[uiCtxSig]);
@@ -1342,13 +1340,13 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 				uiPosX = uiBlkPos - (uiPosY << uiLog2BlockSize);
 				uiSig = (pcCoef[uiBlkPos] != 0);
 
-				LOGLN(Logs::BinOut, "coeff[", uiPosX, "][", uiPosY, "]: ", pcCoef[uiBlkPos], " (uiSig: ", uiSig, ")");
+				//LOGLN(Logger::BinOut, "coeff[", uiPosX, "][", uiPosY, "]: ", pcCoef[uiBlkPos], " (uiSig: ", uiSig, ")");
 
 				if (iScanPosSig > iSubPos || iSubSet == 0 || numNonZero)
 				{
 					uiCtxSig = TComTrQuant::getSigCtxInc(patternSigCtx, uiScanIdx, uiPosX, uiPosY, uiLog2BlockSize, eTType);
 
-					LOGLN(Logs::BinOut, "KODUJE: ", uiSig);
+					//LOGLN(Logger::BinOut, "KODUJE: ", uiSig);
 
 					partialBinCount++;
 
@@ -1365,18 +1363,18 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 					}
 					firstNZPosInCG = iScanPosSig;
 
-					LOGLN(Logs::BinOut, "absCoeff: ");
-					for (int i = 0; i <numNonZero; ++i)
-						LOG(Logs::BinOut, absCoeff[i], " ");
-					LOGLN(Logs::BinOut, "");
-					LOGLN(Logs::BinOut, "coeffSigns: ", boost::dynamic_bitset<>(numNonZero, coeffSigns));
-					LOGLN(Logs::BinOut, PRINTVAR(numNonZero));
-					LOGLN(Logs::BinOut, PRINTVAR(lastNZPosInCG));
-					LOGLN(Logs::BinOut, PRINTVAR(firstNZPosInCG));
+					//LOGLN(Logger::BinOut, "absCoeff: ");
+					//for (int i = 0; i <numNonZero; ++i)
+						//LOG(Logger::BinOut, absCoeff[i], " ");
+					//LOGLN(Logger::BinOut, "");
+					//LOGLN(Logger::BinOut, "coeffSigns: ", boost::dynamic_bitset<>(numNonZero, coeffSigns));
+					//LOGLN(Logger::BinOut, PRINTVAR(numNonZero));
+					//LOGLN(Logger::BinOut, PRINTVAR(lastNZPosInCG));
+					//LOGLN(Logger::BinOut, PRINTVAR(firstNZPosInCG));
 				}
 			}
 
-			LOGLN(Logs::BinOut, "bity znaczonosci: ", partialBinCount);
+			//LOGLN(Logger::BinOut, "bity znaczonosci: ", partialBinCount);
 			totalBinCount += partialBinCount;
 			partialBinCount = 0;
 		}
@@ -1387,7 +1385,7 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 
 		if (numNonZero > 0)
 		{
-			LOGLN(Logs::BinOut, "numNonZero = ", numNonZero, " > 0: ");
+			//LOGLN(Logger::BinOut, "numNonZero = ", numNonZero, " > 0: ");
 
 			Bool signHidden = (lastNZPosInCG - firstNZPosInCG >= SBH_THRESHOLD);
 			UInt uiCtxSet = (iSubSet > 0 && eTType == TEXT_LUMA) ? 2 : 0;
@@ -1402,16 +1400,16 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 			Int numC1Flag = min(numNonZero, C1FLAG_NUMBER);
 			Int firstC2FlagIdx = -1;
 
-			LOGLN(Logs::BinOut, "signHidden: ", signHidden);
-			LOGLN(Logs::BinOut, "numC1Flag (max 8): ", numC1Flag);
-			LOGLN(Logs::BinOut, "petla po numC1flag");
+			//LOGLN(Logger::BinOut, "signHidden: ", signHidden);
+			//LOGLN(Logger::BinOut, "numC1Flag (max 8): ", numC1Flag);
+			//LOGLN(Logger::BinOut, "petla po numC1flag");
 
 			for (Int idx = 0; idx < numC1Flag; idx++)
 			{
 				UInt uiSymbol = absCoeff[idx] > 1;
 
-				LOGLN(Logs::BinOut, "absCoeff[ idx = ", idx, " ]: ", absCoeff[idx]);
-				LOGLN(Logs::BinOut, "KODUJE ", uiSymbol);
+				//LOGLN(Logger::BinOut, "absCoeff[ idx = ", idx, " ]: ", absCoeff[idx]);
+				//LOGLN(Logger::BinOut, "KODUJE ", uiSymbol);
 
 				partialBinCount++;
 
@@ -1431,14 +1429,14 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 					c1++;
 				}
 
-				LOGLN(Logs::BinOut, "c1: ", c1);
-				LOGLN(Logs::BinOut, "firstC2FlagIdx: ", firstC2FlagIdx);
+				//LOGLN(Logger::BinOut, "c1: ", c1);
+				//LOGLN(Logger::BinOut, "firstC2FlagIdx: ", firstC2FlagIdx);
 			}
 
-			LOGLN(Logs::BinOut, "c1: ", c1);
-			LOGLN(Logs::BinOut, "firstC2FlagIdx: ", firstC2FlagIdx);
+			//LOGLN(Logger::BinOut, "c1: ", c1);
+			//LOGLN(Logger::BinOut, "firstC2FlagIdx: ", firstC2FlagIdx);
 
-			LOGLN(Logs::BinOut, "bity C1: ", partialBinCount);
+			//LOGLN(Logger::BinOut, "bity C1: ", partialBinCount);
 			totalBinCount += partialBinCount;
 			partialBinCount = 0;
 
@@ -1450,10 +1448,10 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 				{
 					UInt symbol = absCoeff[firstC2FlagIdx] > 2;
 
-					LOGLN(Logs::BinOut, "absCoeff[ firstC2FlagIdx = ", firstC2FlagIdx, " ] = ", absCoeff[firstC2FlagIdx]);
-					LOGLN(Logs::BinOut, "KODUJE ", symbol, " (1 jesli absCoeff[ firstC2FlagIdx ] > 2, 0 wpp)");
+					//LOGLN(Logger::BinOut, "absCoeff[ firstC2FlagIdx = ", firstC2FlagIdx, " ] = ", absCoeff[firstC2FlagIdx]);
+					//LOGLN(Logger::BinOut, "KODUJE ", symbol, " (1 jesli absCoeff[ firstC2FlagIdx ] > 2, 0 wpp)");
 
-					LOGLN(Logs::BinOut, "+++", "bit C2: ", symbol);
+					//LOGLN(Logger::BinOut, "+++", "bit C2: ", symbol);
 					totalBinCount += 1;
 
 					m_pcBinIf->encodeBin(symbol, baseCtxMod[0]);
@@ -1462,9 +1460,9 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 
 			if (beValid && signHidden)
 			{
-				LOGLN(Logs::BinOut, "ukryty jeden bit znaku");
-				boost::dynamic_bitset<> first(numNonZero - 2,(coeffSigns >> 1));
-				LOGLN(Logs::BinOut, "mapa znakow (coeffSigns >> 1): ", first);
+				//LOGLN(Logger::BinOut, "ukryty jeden bit znaku");
+				//boost::dynamic_bitset<> first(numNonZero - 2,(coeffSigns >> 1));
+				//LOGLN(Logger::BinOut, "mapa znakow (coeffSigns >> 1): ", first);
 				
 				totalBinCount += numNonZero - 1;
 
@@ -1472,9 +1470,9 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 			}
 			else
 			{
-				LOGLN(Logs::BinOut, "wszystkie bity znakow");
-				boost::dynamic_bitset<> first(numNonZero - 1, (coeffSigns));
-				LOGLN(Logs::BinOut, "mapa znakow (coeffSigns >> 1): ", first);
+				//LOGLN(Logger::BinOut, "wszystkie bity znakow");
+				//boost::dynamic_bitset<> first(numNonZero - 1, (coeffSigns));
+				//LOGLN(Logger::BinOut, "mapa znakow (coeffSigns >> 1): ", first);
 
 				totalBinCount += numNonZero;
 
@@ -1484,15 +1482,15 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 			Int iFirstCoeff2 = 1;
 			if (c1 == 0 || numNonZero > C1FLAG_NUMBER)
 			{
-				LOGLN(Logs::BinOut, "kodujemy mape wartosci");
+				//LOGLN(Logger::BinOut, "kodujemy mape wartosci");
 
 				for (Int idx = 0; idx < numNonZero; idx++)
 				{
 					UInt baseLevel = (idx < C1FLAG_NUMBER) ? (2 + iFirstCoeff2) : 1;
 
-					LOGLN(Logs::BinOut, "idx: ", idx);
-					LOGLN(Logs::BinOut, "absCoeff[ idx ]: ", absCoeff[idx]);
-					LOGLN(Logs::BinOut, "baseLevel: ", baseLevel);
+					//LOGLN(Logger::BinOut, "idx: ", idx);
+					//LOGLN(Logger::BinOut, "absCoeff[ idx ]: ", absCoeff[idx]);
+					//LOGLN(Logger::BinOut, "baseLevel: ", baseLevel);
 
 					if (absCoeff[idx] >= baseLevel)
 					{
@@ -1523,15 +1521,15 @@ Void TEncSbac::codeCoeffNxN(TComDataCU* pcCU, TCoeff* pcCoef, UInt uiAbsPartIdx,
 */
 Void TEncSbac::codeSAOSign(UInt code)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(code));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(code));
 	m_pcBinIf->encodeBinEP(code);
 }
 
 Void TEncSbac::codeSaoMaxUvlc(UInt code, UInt maxSymbol)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(code), PRINTVAR(maxSymbol));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(code), PRINTVAR(maxSymbol));
 	if (maxSymbol == 0)
 	{
 		return;
@@ -1565,8 +1563,8 @@ Void TEncSbac::codeSaoMaxUvlc(UInt code, UInt maxSymbol)
 */
 Void TEncSbac::codeSaoUflc(UInt uiLength, UInt uiCode)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, PRINTVAR(uiLength), PRINTVAR(uiCode));
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
+	//LOGLN(Logger::BinOut, PRINTVAR(uiLength), PRINTVAR(uiCode));
 	m_pcBinIf->encodeBinsEP(uiCode, uiLength);
 }
 /** Code SAO merge flags
@@ -1575,7 +1573,7 @@ Void TEncSbac::codeSaoUflc(UInt uiLength, UInt uiCode)
 */
 Void TEncSbac::codeSaoMerge(UInt uiCode)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (uiCode == 0)
 	{
 		m_pcBinIf->encodeBin(0, m_cSaoMergeSCModel.get(0, 0, 0));
@@ -1590,7 +1588,7 @@ Void TEncSbac::codeSaoMerge(UInt uiCode)
 */
 Void TEncSbac::codeSaoTypeIdx(UInt uiCode)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (uiCode == 0)
 	{
 		m_pcBinIf->encodeBin(0, m_cSaoTypeIdxSCModel.get(0, 0, 0));

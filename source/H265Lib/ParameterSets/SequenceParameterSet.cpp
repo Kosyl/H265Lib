@@ -15,6 +15,12 @@ namespace HEVC
 		initWithDefaults();
 	}
 
+	void SequenceParameterSet::configure(EncoderParameters configuration)
+	{
+		chroma_format_idc = configuration.subsampling;
+		setPicSize(configuration.pic_width, configuration.pic_height);
+	}
+
 	void SequenceParameterSet::initWithDefaults()
 	{
 		max_sub_layers = 1;

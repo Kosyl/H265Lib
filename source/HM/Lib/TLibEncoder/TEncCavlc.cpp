@@ -38,7 +38,7 @@
 #include "../TLibCommon/CommonDef.h"
 #include "TEncCavlc.h"
 #include "SEIwrite.h"
-#include "Logger.h"
+//#include "Logger.h"
 
 //! \ingroup TLibEncoder
 //! \{
@@ -90,18 +90,18 @@ Void TEncCavlc::resetEntropy()
 
 Void TEncCavlc::codeDFFlag(UInt uiCode, const Char *pSymbolName)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	WRITE_FLAG(uiCode, pSymbolName);
 }
 Void TEncCavlc::codeDFSvlc(Int iCode, const Char *pSymbolName)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	WRITE_SVLC(iCode, pSymbolName);
 }
 
 Void TEncCavlc::codeShortTermRefPicSet(TComSPS* pcSPS, TComReferencePictureSet* rps, Bool calledFromSliceHeader, Int idx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 #if PRINT_RPS_INFO
 	Int lastBits = getNumberOfWrittenBits();
 #endif
@@ -159,7 +159,7 @@ Void TEncCavlc::codeShortTermRefPicSet(TComSPS* pcSPS, TComReferencePictureSet* 
 
 Void TEncCavlc::codePPS(TComPPS* pcPPS)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 #if ENC_DEC_TRACE  
 	xTracePPSHeader(pcPPS);
 #endif
@@ -240,7 +240,7 @@ Void TEncCavlc::codePPS(TComPPS* pcPPS)
 
 Void TEncCavlc::codeVUI(TComVUI *pcVUI, TComSPS* pcSPS)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 #if ENC_DEC_TRACE
 	fprintf(g_hTrace, "----------- vui_parameters -----------\n");
 #endif
@@ -327,7 +327,7 @@ Void TEncCavlc::codeVUI(TComVUI *pcVUI, TComSPS* pcSPS)
 
 Void TEncCavlc::codeHrdParameters(TComHRD *hrd, Bool commonInfPresentFlag, UInt maxNumSubLayersMinus1)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (commonInfPresentFlag)
 	{
 		WRITE_FLAG(hrd->getNalHrdParametersPresentFlag() ? 1 : 0, "nal_hrd_parameters_present_flag");
@@ -401,7 +401,7 @@ Void TEncCavlc::codeHrdParameters(TComHRD *hrd, Bool commonInfPresentFlag, UInt 
 
 Void TEncCavlc::codeSPS(TComSPS* pcSPS)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 #if ENC_DEC_TRACE  
 	xTraceSPSHeader(pcSPS);
 #endif
@@ -517,7 +517,7 @@ Void TEncCavlc::codeSPS(TComSPS* pcSPS)
 
 Void TEncCavlc::codeVPS(TComVPS* pcVPS)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	WRITE_CODE(pcVPS->getVPSId(), 4, "vps_video_parameter_set_id");
 	WRITE_CODE(3, 2, "vps_reserved_three_2bits");
 	WRITE_CODE(0, 6, "vps_reserved_zero_6bits");
@@ -593,7 +593,7 @@ Void TEncCavlc::codeVPS(TComVPS* pcVPS)
 
 Void TEncCavlc::codeSliceHeader(TComSlice* pcSlice)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 #if ENC_DEC_TRACE  
 	xTraceSliceHeader(pcSlice);
 #endif
@@ -936,7 +936,7 @@ Void TEncCavlc::codeSliceHeader(TComSlice* pcSlice)
 
 Void TEncCavlc::codePTL(TComPTL* pcPTL, Bool profilePresentFlag, Int maxNumSubLayersMinus1)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (profilePresentFlag)
 	{
 		codeProfileTier(pcPTL->getGeneralPTL());    // general_...
@@ -975,7 +975,7 @@ Void TEncCavlc::codePTL(TComPTL* pcPTL, Bool profilePresentFlag, Int maxNumSubLa
 }
 Void TEncCavlc::codeProfileTier(ProfileTierLevel* ptl)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	WRITE_CODE(ptl->getProfileSpace(), 2, "XXX_profile_space[]");
 	WRITE_FLAG(ptl->getTierFlag(), "XXX_tier_flag[]");
 	WRITE_CODE(ptl->getProfileIdc(), 5, "XXX_profile_idc[]");
@@ -1001,7 +1001,7 @@ Void TEncCavlc::codeProfileTier(ProfileTierLevel* ptl)
  */
 Void  TEncCavlc::codeTilesWPPEntryPoint(TComSlice* pSlice)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	if (!pSlice->getPPS()->getTilesEnabledFlag() && !pSlice->getPPS()->getEntropyCodingSyncEnabledFlag())
 	{
 		return;
@@ -1189,7 +1189,7 @@ Void TEncCavlc::codeMvd(TComDataCU* pcCU, UInt uiAbsPartIdx, RefPicList eRefList
 
 Void TEncCavlc::codeDeltaQP(TComDataCU* pcCU, UInt uiAbsPartIdx)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	Int iDQp = pcCU->getQP(uiAbsPartIdx) - pcCU->getRefQP(uiAbsPartIdx);
 
 	Int qpBdOffsetY = pcCU->getSlice()->getSPS()->getQpBDOffsetY();
@@ -1221,7 +1221,7 @@ Void TEncCavlc::estBit(estBitsSbacStruct* pcEstBitsCabac, Int width, Int height,
  */
 Void TEncCavlc::xCodePredWeightTable(TComSlice* pcSlice)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	wpScalingParam  *wp;
 	Bool            bChroma = true; // color always present in HEVC ?
 	Int             iNbRef = (pcSlice->getSliceType() == B_SLICE) ? (2) : (1);
@@ -1303,7 +1303,7 @@ Void TEncCavlc::xCodePredWeightTable(TComSlice* pcSlice)
  */
 Void TEncCavlc::codeScalingList(TComScalingList* scalingList)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	UInt listId, sizeId;
 	Bool scalingListPredModeFlag;
 
@@ -1377,7 +1377,7 @@ Void TEncCavlc::xCodeScalingList(TComScalingList* scalingList, UInt sizeId, UInt
 }
 Bool TEncCavlc::findMatchingLTRP(TComSlice* pcSlice, UInt *ltrpsIndex, Int ltrpPOC, Bool usedFlag)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	// Bool state = true, state2 = false;
 	Int lsb = ltrpPOC & ((1 << pcSlice->getSPS()->getBitsForPOC()) - 1);
 	for (Int k = 0; k < pcSlice->getSPS()->getNumLongTermRefPicSPS(); k++)
@@ -1392,7 +1392,7 @@ Bool TEncCavlc::findMatchingLTRP(TComSlice* pcSlice, UInt *ltrpsIndex, Int ltrpP
 }
 Bool TComScalingList::checkPredMode(UInt sizeId, UInt listId)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logger::BinOut);
 	for (Int predListIdx = (Int)listId; predListIdx >= 0; predListIdx--)
 	{
 		if (!memcmp(getScalingListAddress(sizeId, listId), ((listId == predListIdx) ?

@@ -377,7 +377,6 @@ Void TAppEncTop::xInitLib(Bool isFieldCoding)
  */
 Void TAppEncTop::encode()
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
 
 	fstream bitstreamFile(m_pchBitstreamFile, fstream::binary | fstream::out);
 	if (!bitstreamFile)
@@ -420,7 +419,6 @@ Void TAppEncTop::encode()
 
 		// increase number of received frames
 		m_iFrameRcvd++;
-		LOGLN(Logs::Overview, "liczba ramek: ", m_iFrameRcvd);
 
 		bEos = (m_isField && (m_iFrameRcvd == (m_framesToBeEncoded >> 1))) || (!m_isField && (m_iFrameRcvd == m_framesToBeEncoded));
 		Bool flush = 0;
@@ -431,7 +429,6 @@ Void TAppEncTop::encode()
 			bEos = true;
 			m_iFrameRcvd--;
 			m_cTEncTop.setFramesToBeEncoded(m_iFrameRcvd);
-			LOGLN(Logs::Overview, "koniec pliku, pozostalo do zakodowania: ", m_cTEncTop.getFramesToBeEncoded());
 		}
 
 		// call encoding function for one frame
@@ -447,7 +444,6 @@ Void TAppEncTop::encode()
 		// write bistream to file if necessary
 		if (iNumEncoded > 0)
 		{
-			LOGLN(Logs::Overview, "iNumEncoded > 0, zapis do strumienia");
 			xWriteOutput(bitstreamFile, iNumEncoded, outputAccessUnits);
 			outputAccessUnits.clear();
 		}
@@ -521,7 +517,6 @@ Void TAppEncTop::xDeleteBuffer()
  */
 Void TAppEncTop::xWriteOutput(std::ostream& bitstreamFile, Int iNumEncoded, const std::list<AccessUnit>& accessUnits)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
 	if (m_isField)
 	{
 		//Reinterlace fields

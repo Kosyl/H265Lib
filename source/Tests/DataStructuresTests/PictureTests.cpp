@@ -29,7 +29,7 @@ namespace UnitTests
 			sps->chroma_format_idc = SubsamplingFormat::Mode_420;
 
 			Picture p;
-			p.initFromParameters(ParametersBundle(sps, pps));
+			p.initFromParameters(sps);
 
 			Assert::IsTrue(p.input_samples[Luma].height() == 60);
 			Assert::IsTrue(p.input_samples[Luma].width() == 40);
@@ -49,7 +49,7 @@ namespace UnitTests
 			sps->max_luma_coding_block_size = 64;
 
 			Picture p;
-			p.initFromParameters(ParametersBundle(sps, pps));
+			p.initFromParameters(sps);
 
 			auto ctu00 = p.getCTUBySamplePosition(0, 0);
 			Assert::IsTrue(ctu00->x == 0);

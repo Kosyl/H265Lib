@@ -20,7 +20,7 @@ namespace UnitTests
 		{
 			auto parameters = ParametersBundle::getDefaultParameters(100, 100);
 			auto pic = std::make_shared<Picture>();
-			pic->initFromParameters(parameters);
+			pic->initFromParameters(parameters.Sps);
 			
 			IntraPictureEncoder encoder;
 			encoder.Parameters = parameters;

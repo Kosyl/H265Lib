@@ -38,10 +38,10 @@
 #include <stdint.h>
 #include <vector>
 #include "TComBitStream.h"
-#include "Logger.h"
+//#include "Logger.h"
 #include <string.h>
 #include <memory.h>
-#include <boost/dynamic_bitset.hpp>
+//#include <boost/dynamic_bitset.hpp>
 
 using namespace std;
 
@@ -99,8 +99,8 @@ void TComOutputBitstream::clear()
 
 Void TComOutputBitstream::write(UInt uiBits, UInt uiNumberOfBits)
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
-	LOGLN(Logs::BinOut, boost::dynamic_bitset<>(uiNumberOfBits,uiBits));
+	//LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOGLN(Logs::BinOut, boost::dynamic_bitset<>(uiNumberOfBits,uiBits));
 	assert(uiNumberOfBits <= 32);
 	assert(uiNumberOfBits == 32 || (uiBits & (~0 << uiNumberOfBits)) == 0);
 
@@ -145,7 +145,7 @@ Void TComOutputBitstream::write(UInt uiBits, UInt uiNumberOfBits)
 
 Void TComOutputBitstream::writeAlignOne()
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logs::BinOut);
 	UInt num_bits = getNumBitsUntilByteAligned();
 	write((1 << num_bits) - 1, num_bits);
 	return;
@@ -153,7 +153,7 @@ Void TComOutputBitstream::writeAlignOne()
 
 Void TComOutputBitstream::writeAlignZero()
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logs::BinOut);
 	if (0 == m_num_held_bits)
 	{
 		return;
@@ -185,14 +185,14 @@ Void TComOutputBitstream::addSubstream(TComOutputBitstream* pcSubstream)
 
 Void TComOutputBitstream::writeByteAlignment()
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logs::BinOut);
 	write(1, 1);
 	writeAlignZero();
 }
 
 Int TComOutputBitstream::countStartCodeEmulations()
 {
-	LOG_FUNCTION_INDENT(Logs::BinOut);
+	//LOG_FUNCTION_INDENT(Logs::BinOut);
 	UInt cnt = 0;
 	vector<uint8_t>& rbsp = getFIFO();
 	for (vector<uint8_t>::iterator it = rbsp.begin(); it != rbsp.end();)

@@ -326,7 +326,7 @@ Void TEncGOP::xCreateLeadingSEIMessages(/*SEIMessages seiMessages,*/ AccessUnit 
 // ====================================================================================================================
 Void TEncGOP::compressGOP(Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rcListPic, TComList<TComPicYuv*>& rcListPicYuvRecOut, std::list<AccessUnit>& accessUnitsInGOP, bool isField, bool isTff)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 	TComPic*        pcPic;
 	TComPicYuv*     pcPicYuvRecOut;
 	TComSlice*      pcSlice;
@@ -1989,7 +1989,7 @@ Void TEncGOP::preLoopFilterPicAll(TComPic* pcPic, UInt64& ruiDist, UInt64& ruiBi
 
 Void TEncGOP::xInitGOP(Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rcListPic, TComList<TComPicYuv*>& rcListPicYuvRecOut, bool isField)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 	assert(iNumPicRcvd > 0);
 	//  Exception for the first frames
 	if ((isField && (iPOCLast == 0 || iPOCLast == 1)) || (!isField && (iPOCLast == 0)))
@@ -2001,13 +2001,13 @@ Void TEncGOP::xInitGOP(Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rcList
 		m_iGopSize = m_pcCfg->getGOPSize();
 	}
 	assert(m_iGopSize > 0);
-	LOGLN(Logs::Overview, "GOP size: ", m_iGopSize);
+	//LOGLN(Logger::Overview, "GOP size: ", m_iGopSize);
 	return;
 }
 
 Void TEncGOP::xInitGOP(Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rcListPic, TComList<TComPicYuv*>& rcListPicYuvRecOut)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 	assert(iNumPicRcvd > 0);
 	//  Exception for the first frame
 	if (iPOCLast == 0)
@@ -2019,7 +2019,7 @@ Void TEncGOP::xInitGOP(Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rcList
 
 	assert(m_iGopSize > 0);
 
-	LOGLN(Logs::Overview, "GOP size: ", m_iGopSize);
+	//LOGLN(Logger::Overview, "GOP size: ", m_iGopSize);
 	return;
 }
 

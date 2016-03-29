@@ -344,8 +344,8 @@ Void TEncTop::deletePicBuffer()
  */
 Void TEncTop::encode(Bool flush, TComPicYuv* pcPicYuvOrg, TComList<TComPicYuv*>& rcListPicYuvRecOut, std::list<AccessUnit>& accessUnitsOut, Int& iNumEncoded)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview,"access units out count:",accessUnitsOut.size());
+// 	LOG_FUNCTION_INDENT(Logger::Overview);
+// 	LOGLN(Logger::Overview,"access units out count:",accessUnitsOut.size());
 
 	if (pcPicYuvOrg) {
 		// get original YUV
@@ -599,7 +599,7 @@ Void TEncTop::xGetNewPicBuffer(TComPic*& rpcPic)
 
 Void TEncTop::xInitSPS()
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 
 	ProfileTierLevel& profileTierLevel = *m_cSPS.getPTL()->getGeneralPTL();
 	profileTierLevel.setLevelIdc(m_level);
@@ -611,7 +611,7 @@ Void TEncTop::xInitSPS()
 	profileTierLevel.setNonPackedConstraintFlag(m_nonPackedConstraintFlag);
 	profileTierLevel.setFrameOnlyConstraintFlag(m_frameOnlyConstraintFlag);
 
-	LOGLN(Logs::Overview, PRINTVAR(m_level), PRINTVAR(m_levelTier), PRINTVAR(m_profile), PRINTVAR(m_progressiveSourceFlag), PRINTVAR(m_interlacedSourceFlag), PRINTVAR(m_nonPackedConstraintFlag), PRINTVAR(m_frameOnlyConstraintFlag));
+	//LOGLN(Logger::Overview, PRINTVAR(m_level), PRINTVAR(m_levelTier), PRINTVAR(m_profile), PRINTVAR(m_progressiveSourceFlag), PRINTVAR(m_interlacedSourceFlag), PRINTVAR(m_nonPackedConstraintFlag), PRINTVAR(m_frameOnlyConstraintFlag));
 
 	if (m_profile == Profile::MAIN10 && g_bitDepthY == 8 && g_bitDepthC == 8)
 	{
@@ -634,7 +634,7 @@ Void TEncTop::xInitSPS()
 	m_cSPS.setMaxCUHeight(g_uiMaxCUHeight);
 	m_cSPS.setMaxCUDepth(g_uiMaxCUDepth);
 
-	LOGLN(Logs::Overview, PRINTVAR(m_iSourceWidth), PRINTVAR(m_iSourceHeight), PRINTVAR(g_uiMaxCUWidth), PRINTVAR(g_uiMaxCUHeight), PRINTVAR(g_uiMaxCUDepth));
+	//LOGLN(Logger::Overview, PRINTVAR(m_iSourceWidth), PRINTVAR(m_iSourceHeight), PRINTVAR(g_uiMaxCUWidth), PRINTVAR(g_uiMaxCUHeight), PRINTVAR(g_uiMaxCUDepth));
 
 	Int minCUSize = m_cSPS.getMaxCUWidth() >> (m_cSPS.getMaxCUDepth() - g_uiAddCUDepth);
 	Int log2MinCUSize = 0;
@@ -661,7 +661,7 @@ Void TEncTop::xInitSPS()
 
 	m_cSPS.setMaxTrSize(1 << m_uiQuadtreeTULog2MaxSize);
 
-	LOGLN(Logs::Overview, PRINTVAR(log2MinCUSize), PRINTVAR(m_uiPCMLog2MinSize), PRINTVAR(m_usePCM), PRINTVAR(m_pcmLog2MaxSize), PRINTVAR(m_uiQuadtreeTULog2MaxSize), PRINTVAR(m_uiQuadtreeTULog2MinSize), PRINTVAR(m_uiQuadtreeTUMaxDepthInter), PRINTVAR(m_uiQuadtreeTUMaxDepthIntra));
+	//LOGLN(Logger::Overview, PRINTVAR(log2MinCUSize), PRINTVAR(m_uiPCMLog2MinSize), PRINTVAR(m_usePCM), PRINTVAR(m_pcmLog2MaxSize), PRINTVAR(m_uiQuadtreeTULog2MaxSize), PRINTVAR(m_uiQuadtreeTULog2MinSize), PRINTVAR(m_uiQuadtreeTUMaxDepthInter), PRINTVAR(m_uiQuadtreeTUMaxDepthIntra));
 
 	Int i;
 
@@ -688,7 +688,7 @@ Void TEncTop::xInitSPS()
 
 	m_cSPS.setMaxTLayers(m_maxTempLayer);
 
-	LOGLN(Logs::Overview, PRINTVAR(g_bitDepthY), PRINTVAR(g_bitDepthC), "tQpBDOffsetY: ", 6 * (g_bitDepthY - 8), "QpBDOffsetC: ", 6 * (g_bitDepthC - 8), PRINTVAR(m_bUseSAO), PRINTVAR(m_maxTempLayer));
+	//LOGLN(Logger::Overview, PRINTVAR(g_bitDepthY), PRINTVAR(g_bitDepthC), "tQpBDOffsetY: ", 6 * (g_bitDepthY - 8), "QpBDOffsetC: ", 6 * (g_bitDepthC - 8), PRINTVAR(m_bUseSAO), PRINTVAR(m_maxTempLayer));
 
 	m_cSPS.setTemporalIdNestingFlag((m_maxTempLayer == 1) ? true : false);
 	for (i = 0; i < m_cSPS.getMaxTLayers(); i++)
@@ -704,7 +704,7 @@ Void TEncTop::xInitSPS()
 
 	m_cSPS.setUseStrongIntraSmoothing(m_useStrongIntraSmoothing);
 
-	LOGLN(Logs::Overview, PRINTVAR(m_useStrongIntraSmoothing));
+	//LOGLN(Logger::Overview, PRINTVAR(m_useStrongIntraSmoothing));
 
 	m_cSPS.setVuiParametersPresentFlag(getVuiParametersPresentFlag());
 	if (m_cSPS.getVuiParametersPresentFlag())
@@ -746,7 +746,7 @@ Void TEncTop::xInitSPS()
 
 Void TEncTop::xInitPPS()
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 
 	m_cPPS.setConstrainedIntraPred(m_bUseConstrainedIntraPred);
 	Bool bUseDQP = (getMaxCuDQPDepth() > 0) ? true : false;
@@ -797,12 +797,12 @@ Void TEncTop::xInitPPS()
 	}
 #endif
 
-	LOGLN(Logs::Overview, PRINTVAR(m_cPPS.getUseDQP()), PRINTVAR(m_cPPS.getMaxCuDQPDepth()));
+	//LOGLN(Logger::Overview, PRINTVAR(m_cPPS.getUseDQP()), PRINTVAR(m_cPPS.getMaxCuDQPDepth()));
 
 	m_cPPS.setChromaCbQpOffset(m_chromaCbQpOffset);
 	m_cPPS.setChromaCrQpOffset(m_chromaCrQpOffset);
 
-	LOGLN(Logs::Overview, PRINTVAR(m_chromaCbQpOffset), PRINTVAR(m_chromaCrQpOffset));
+	//LOGLN(Logger::Overview, PRINTVAR(m_chromaCbQpOffset), PRINTVAR(m_chromaCrQpOffset));
 
 	m_cPPS.setNumSubstreams(m_iWaveFrontSubstreams);
 	m_cPPS.setEntropyCodingSyncEnabledFlag(m_iWaveFrontSynchro > 0);
@@ -812,7 +812,7 @@ Void TEncTop::xInitPPS()
 	m_cPPS.setOutputFlagPresentFlag(false);
 	m_cPPS.setSignHideFlag(getSignHideFlag());
 
-	LOGLN(Logs::Overview, "SignHideFlag: ", getSignHideFlag(), ", setEntropyCodingSyncEnabledFlag: ", m_iWaveFrontSynchro > 0);
+	//LOGLN(Logger::Overview, "SignHideFlag: ", getSignHideFlag(), ", setEntropyCodingSyncEnabledFlag: ", m_iWaveFrontSynchro > 0);
 
 	if (getDeblockingFilterMetric())
 	{
@@ -830,7 +830,7 @@ Void TEncTop::xInitPPS()
 	m_cPPS.setCabacInitPresentFlag(CABAC_INIT_PRESENT_FLAG);
 	m_cPPS.setLoopFilterAcrossSlicesEnabledFlag(m_bLFCrossSliceBoundaryFlag);
 
-	LOGLN(Logs::Overview, "CabacInitPresentFlag: ", CABAC_INIT_PRESENT_FLAG, ", LoopFilterAcrossSlicesEnabledFlag: ", m_bLFCrossSliceBoundaryFlag);
+	//LOGLN(Logger::Overview, "CabacInitPresentFlag: ", CABAC_INIT_PRESENT_FLAG, ", LoopFilterAcrossSlicesEnabledFlag: ", m_bLFCrossSliceBoundaryFlag);
 
 	Int histogram[MAX_NUM_REF + 1];
 	for (Int i = 0; i <= MAX_NUM_REF; i++)
@@ -874,7 +874,7 @@ Void TEncTop::xInitPPS()
 		}
 	}
 
-	LOGLN(Logs::Overview, "TransquantBypassEnableFlag: ", getTransquantBypassEnableFlag(), ", UseTransformSkip: ", m_useTransformSkip, ", DependentSliceSegmentsEnabledFlag:", m_cPPS.getDependentSliceSegmentsEnabledFlag());
+	//LOGLN(Logger::Overview, "TransquantBypassEnableFlag: ", getTransquantBypassEnableFlag(), ", UseTransformSkip: ", m_useTransformSkip, ", DependentSliceSegmentsEnabledFlag:", m_cPPS.getDependentSliceSegmentsEnabledFlag());
 }
 
 //Function for initializing m_RPSList, a list of TComReferencePictureSet, based on the GOPEntry objects read from the config file.
@@ -1138,12 +1138,12 @@ Int TEncTop::getReferencePictureSetIdxForSOP(TComSlice* slice, Int POCCurr, Int 
 
 Void  TEncTop::xInitPPSforTiles()
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 
 	m_cPPS.setUniformSpacingFlag(m_iUniformSpacingIdr);
 	m_cPPS.setNumColumnsMinus1(m_iNumColumnsMinus1);
 
-	LOGLN(Logs::Overview, PRINTVAR(m_iUniformSpacingIdr), PRINTVAR(m_iNumColumnsMinus1));
+	//LOGLN(Logger::Overview, PRINTVAR(m_iUniformSpacingIdr), PRINTVAR(m_iNumColumnsMinus1));
 
 	m_cPPS.setNumRowsMinus1(m_iNumRowsMinus1);
 	if (m_iUniformSpacingIdr == 0)

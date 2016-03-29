@@ -18,19 +18,18 @@ namespace HEVC
 	{
 	}
 
-	void Picture::initFromParameters(ParametersBundle parameters)
+	void Picture::initFromParameters(std::shared_ptr<SequenceParameterSet> sps)
 	{
-		assert(parameters.Sps != nullptr);
-		assert(parameters.Pps != nullptr);
+		assert(sps != nullptr);
+		assert(sps != nullptr);
 
-		width_luma = parameters.Sps->getPicWidth(Luma);
-		width_chroma = parameters.Sps->getPicWidth(Cb);
-		height_luma = parameters.Sps->getPicHeight(Luma);
-		height_chroma = parameters.Sps->getPicHeight(Cb);
-		tiles_enabled = parameters.Pps->tiles_enabled_flag;
-		width_in_ctus = parameters.Sps->pic_width_in_ctus;
-		height_in_ctus = parameters.Sps->pic_height_in_ctus;
-		ctu_size = parameters.Sps->ctu_size;
+		width_luma = sps->getPicWidth(Luma);
+		width_chroma = sps->getPicWidth(Cb);
+		height_luma = sps->getPicHeight(Luma);
+		height_chroma = sps->getPicHeight(Cb);
+		width_in_ctus = sps->pic_width_in_ctus;
+		height_in_ctus = sps->pic_height_in_ctus;
+		ctu_size = sps->ctu_size;
 		setSize(width_luma, height_luma, width_chroma, height_chroma);
 	}
 
@@ -74,8 +73,8 @@ namespace HEVC
 			}
 		}
 
-		int ch = width_chroma;
-		int cw = height_chroma;
+		int cw = width_chroma;
+		int ch = height_chroma;
 
 		for (int i = 0; i < ch; ++i)
 		{
