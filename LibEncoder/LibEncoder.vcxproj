@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{27041458-6693-4FC0-9727-A2693E6C1005}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>LibEncoder</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)\source\HM\Lib;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)\source\HM\Lib;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\AnnexBwrite.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\NALwrite.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\SEIEncoder.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\SEIwrite.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\SyntaxElementWriter.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncAnalyze.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncBinCoder.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncBinCoderCABAC.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncBinCoderCABACCounter.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncCavlc.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncCfg.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncCu.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncEntropy.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncGOP.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncPic.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncPreanalyzer.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncRateCtrl.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncSampleAdaptiveOffset.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncSbac.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncSearch.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncSlice.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\TEncTop.h" />
+    <ClInclude Include="..\source\HM\Lib\TLibEncoder\WeightPredAnalysis.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\NALwrite.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\SEIEncoder.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\SEIwrite.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\SyntaxElementWriter.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncBinCoderCABAC.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncBinCoderCABACCounter.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncCavlc.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncCu.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncEntropy.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncGOP.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncPic.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncPreanalyzer.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncRateCtrl.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncSampleAdaptiveOffset.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncSbac.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncSearch.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncSlice.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\TEncTop.cpp" />
+    <ClCompile Include="..\source\HM\Lib\TLibEncoder\WeightPredAnalysis.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

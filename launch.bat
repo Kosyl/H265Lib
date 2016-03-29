@@ -1,1 +1,0 @@
-HMAppEncoder.exe -c cfg.cfg -c encoder_intra_main.cfg
