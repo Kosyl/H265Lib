@@ -4,12 +4,21 @@ namespace HEVC
 {
 	void VideoParameterSet::initWithDefaults()
 	{
+		base_layer_internal_flag = true;
+		base_layer_available_flag = true;
+
 		max_layers = 1;
-		max_sub_layers = 0;
-		temporal_id_nesting_flag = false;
-		sub_layer_ordering_info_present_flag = false;
+		max_sub_layers = 1;
+
+		temporal_id_nesting_flag = true;
+
+		profile_tier_level.initWithDefaults();
+
+		sub_layer_ordering_info_present_flag = true;
+		sub_layer_ordering_infos.push_back(SubLayerOrderingInfo(2, 0, -1));
+
 		max_layer_id = 0;
-		num_layer_sets = 0;
+		num_layer_sets = 1;
 		timing_info_present_flag = false;
 		num_units_in_tick = 0;
 		time_scale = 0;
@@ -27,5 +36,10 @@ namespace HEVC
 	VideoParameterSet::~VideoParameterSet()
 	{
 
+	}
+
+	void VideoParameterSet::configure(EncoderParameters configuration)
+	{
+		//defaultowe sa ok
 	}
 }

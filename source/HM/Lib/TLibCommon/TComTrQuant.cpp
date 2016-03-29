@@ -821,27 +821,6 @@ void xTrMxN(Int bitDepth, Short *block, Short *coeff, Int iWidth, Int iHeight, U
 		partialButterfly32(block, tmp, shift_1st, iHeight);
 		partialButterfly32(tmp, coeff, shift_2nd, iWidth);
 	}
-
-	//////////////////////////////////
-	//////////////////////////////////
-
-	LOG(Logs::ForwardTransform, "+++ FORWARD TRANSFORM ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"), " ***");
-	LOG(Logs::ForwardTransform, "+++ shift1: ", shift_1st, ", shift2: ", shift_2nd);
-	LOG(Logs::ForwardTransform, "+++ add1: ", (1, (shift_1st - 1)), ", add2: ", (1, (shift_2nd - 1)));
-
-	LOG(Logs::ForwardTransform, "*** block ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
-	LOG(Logs::ForwardTransform, " ***");
-	LOG_MATRIX_1D(Logs::ForwardTransform, block, iWidth, iWidth, iWidth);
-
-	LOG(Logs::ForwardTransform, "*** horizontal transofrm ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
-	LOG(Logs::ForwardTransform, " ***");
-	LOG_MATRIX_1D(Logs::ForwardTransform, tmp, iWidth, iWidth, iWidth);
-
-	LOG(Logs::ForwardTransform, "*** vertical transform ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
-	LOG(Logs::ForwardTransform, " ***");
-	LOG_MATRIX_1D(Logs::ForwardTransform, coeff, iWidth, iWidth, iWidth);
-	//////////////////////////////////
-	//////////////////////////////////
 }
 /** MxN inverse transform (2D)
 *  \param coeff input data (transform coefficients)
@@ -887,22 +866,22 @@ void xITrMxN(Int bitDepth, Short *coeff, Short *block, Int iWidth, Int iHeight, 
 	//////////////////////////////////
 	//////////////////////////////////
 
-	LOG(Logs::InverseTransform, "+++ INVERSE TRANSFORM ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
-	LOG(Logs::InverseTransform, " ***");
-	LOG(Logs::InverseTransform, "+++ ", PRINTVAR(shift_1st), PRINTVAR(shift_2nd));
-	LOG(Logs::InverseTransform, "+++ add1: ", (1, (shift_1st - 1)), ", add2: ", (1, (shift_2nd - 1)));
-
-	LOG(Logs::InverseTransform, "*** coefficients ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
-	LOG(Logs::InverseTransform, " ***");
-	LOG_MATRIX_1D(Logs::InverseTransform, coeff, iWidth, iWidth, iWidth);
-
-	LOG(Logs::InverseTransform, "*** vertical inverse transofrm ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
-	LOG(Logs::InverseTransform, " ***");
-	LOG_MATRIX_1D(Logs::InverseTransform, tmp, iWidth, iWidth, iWidth);
-
-	LOG(Logs::InverseTransform, "*** horizontal inverse transform ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
-	LOG(Logs::InverseTransform, " ***");
-	LOG_MATRIX_1D(Logs::InverseTransform, block, iWidth, iWidth, iWidth);
+// 	LOG(Logs::InverseTransform, "+++ INVERSE TRANSFORM ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
+// 	LOG(Logs::InverseTransform, " ***");
+// 	LOG(Logs::InverseTransform, "+++ ", PRINTVAR(shift_1st), PRINTVAR(shift_2nd));
+// 	LOG(Logs::InverseTransform, "+++ add1: ", (1, (shift_1st - 1)), ", add2: ", (1, (shift_2nd - 1)));
+// 
+// 	LOG(Logs::InverseTransform, "*** coefficients ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
+// 	LOG(Logs::InverseTransform, " ***");
+// 	LOG_MATRIX_1D(Logs::InverseTransform, coeff, iWidth, iWidth, iWidth);
+// 
+// 	LOG(Logs::InverseTransform, "*** vertical inverse transofrm ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
+// 	LOG(Logs::InverseTransform, " ***");
+// 	LOG_MATRIX_1D(Logs::InverseTransform, tmp, iWidth, iWidth, iWidth);
+// 
+// 	LOG(Logs::InverseTransform, "*** horizontal inverse transform ", iWidth, "x", iWidth, " ", (uiMode == REG_DCT ? "DCT" : "DST"));
+// 	LOG(Logs::InverseTransform, " ***");
+// 	LOG_MATRIX_1D(Logs::InverseTransform, block, iWidth, iWidth, iWidth);
 
 	//////////////////////////////////
 	//////////////////////////////////
@@ -1129,13 +1108,13 @@ Void TComTrQuant::xQuant(TComDataCU* pcCU,
 		////////////////////////////////
 		////////////////////////////////
 
-		LOG(Logs::Quant, "+++ zwiazane z adaptive qp selection:");
-		LOG(Logs::Quant, "+++ cQpBase.m_iPer: ", cQpBase.m_iPer);
-		LOG(Logs::Quant, "+++ iQBits: ", iQBits, " ( = QUANT_SHIFT + cQpBase.m_iPer + iTransformShift )");
-		LOG(Logs::Quant, "+++ ARL_C_PRECISION: ", ARL_C_PRECISION);
-		LOG(Logs::Quant, "+++ iQBitsC: ", iQBitsC, " ( = QUANT_SHIFT + cQpBase.m_iPer + iTransformShift - ARL_C_PRECISION )");
-		LOG(Logs::Quant, "+++ iAdd: ", iAdd, " ( = (pcCU->getSlice()->getSliceType()==I_SLICE ? 171 : 85) , (iQBits-9) )");
-		LOG(Logs::Quant, "+++ iAddC: ", iAddC, " ( = 1 , (iQBitsC-1) )");
+// 		LOG(Logs::Quant, "+++ zwiazane z adaptive qp selection:");
+// 		LOG(Logs::Quant, "+++ cQpBase.m_iPer: ", cQpBase.m_iPer);
+// 		LOG(Logs::Quant, "+++ iQBits: ", iQBits, " ( = QUANT_SHIFT + cQpBase.m_iPer + iTransformShift )");
+// 		LOG(Logs::Quant, "+++ ARL_C_PRECISION: ", ARL_C_PRECISION);
+// 		LOG(Logs::Quant, "+++ iQBitsC: ", iQBitsC, " ( = QUANT_SHIFT + cQpBase.m_iPer + iTransformShift - ARL_C_PRECISION )");
+// 		LOG(Logs::Quant, "+++ iAdd: ", iAdd, " ( = (pcCU->getSlice()->getSliceType()==I_SLICE ? 171 : 85) , (iQBits-9) )");
+// 		LOG(Logs::Quant, "+++ iAddC: ", iAddC, " ( = 1 , (iQBitsC-1) )");
 
 		////////////////////////////////
 		////////////////////////////////
@@ -1147,18 +1126,18 @@ Void TComTrQuant::xQuant(TComDataCU* pcCU,
 		////////////////////////////////
 		////////////////////////////////
 
-		LOG(Logs::Quant, "++++++++++ XQUANT " , iWidth , "x" , iWidth , " ++++++++++" );
-		LOG(Logs::Quant, "+++ uiLog2TrSize: " , uiLog2TrSize );
-		LOG(Logs::Quant, "+++ uiBitDepth: " , uiBitDepth );
-		LOG(Logs::Quant, "+++ MAX_TR_DYNAMIC_RANGE: " , MAX_TR_DYNAMIC_RANGE );
-		LOG(Logs::Quant, "+++ iTransformShift: " , iTransformShift , " ( = MAX_TR_DYNAMIC_RANGE - uiBitDepth - uiLog2TrSize )" );
-		LOG(Logs::Quant, "+++ QUANT_SHIFT: " , QUANT_SHIFT );
-		LOG(Logs::Quant, "+++ m_cQP.m_iPer: " , m_cQP.m_iPer );
-		LOG(Logs::Quant, "+++ iQBits: " , iQBits , " ( = QUANT_SHIFT + m_cQP.m_iPer + iTransformShift )" );
-		LOG(Logs::Quant, "+++ m_cQP.m_iRem: " , m_cQP.m_iRem );
-		LOG(Logs::Quant, "+++ m_cQP.m_iQP: " , m_cQP.m_iQP );
-		LOG(Logs::Quant, "+++ Slice type: " , (pcCU->getSlice()->getSliceType()==I_SLICE ? "I" : "nie I") );
-		LOG(Logs::Quant, "+++ iAdd: " , iAdd , " ( = (pcCU->getSlice()->getSliceType()==I_SLICE ? 171 : 85) , (iQBits-9) )" );
+// 		LOG(Logs::Quant, "++++++++++ XQUANT " , iWidth , "x" , iWidth , " ++++++++++" );
+// 		LOG(Logs::Quant, "+++ uiLog2TrSize: " , uiLog2TrSize );
+// 		LOG(Logs::Quant, "+++ uiBitDepth: " , uiBitDepth );
+// 		LOG(Logs::Quant, "+++ MAX_TR_DYNAMIC_RANGE: " , MAX_TR_DYNAMIC_RANGE );
+// 		LOG(Logs::Quant, "+++ iTransformShift: " , iTransformShift , " ( = MAX_TR_DYNAMIC_RANGE - uiBitDepth - uiLog2TrSize )" );
+// 		LOG(Logs::Quant, "+++ QUANT_SHIFT: " , QUANT_SHIFT );
+// 		LOG(Logs::Quant, "+++ m_cQP.m_iPer: " , m_cQP.m_iPer );
+// 		LOG(Logs::Quant, "+++ iQBits: " , iQBits , " ( = QUANT_SHIFT + m_cQP.m_iPer + iTransformShift )" );
+// 		LOG(Logs::Quant, "+++ m_cQP.m_iRem: " , m_cQP.m_iRem );
+// 		LOG(Logs::Quant, "+++ m_cQP.m_iQP: " , m_cQP.m_iQP );
+// 		LOG(Logs::Quant, "+++ Slice type: " , (pcCU->getSlice()->getSliceType()==I_SLICE ? "I" : "nie I") );
+// 		LOG(Logs::Quant, "+++ iAdd: " , iAdd , " ( = (pcCU->getSlice()->getSliceType()==I_SLICE ? 171 : 85) , (iQBits-9) )" );
 
 		////////////////////////////////
 		////////////////////////////////
@@ -1193,11 +1172,11 @@ Void TComTrQuant::xQuant(TComDataCU* pcCU,
 		////////////////////////////////
 		////////////////////////////////
 
-		LOG(Logs::Quant, "*** coefficients ", iWidth, "x", iHeight, " QP = ", m_cQP.m_iQP, " ***");
-		LOG_MATRIX_1D(Logs::Quant, piCoef, iWidth, iWidth, iWidth);
-
-		LOG(Logs::Quant, "*** quantization ", iWidth, "x", iWidth, " QP = ", m_cQP.m_iQP, " ***");
-		LOG_MATRIX_1D(Logs::Quant, piQCoef, iWidth, iWidth, iWidth);
+// 		LOG(Logs::Quant, "*** coefficients ", iWidth, "x", iHeight, " QP = ", m_cQP.m_iQP, " ***");
+// 		LOG_MATRIX_1D(Logs::Quant, piCoef, iWidth, iWidth, iWidth);
+// 
+// 		LOG(Logs::Quant, "*** quantization ", iWidth, "x", iWidth, " QP = ", m_cQP.m_iQP, " ***");
+// 		LOG_MATRIX_1D(Logs::Quant, piQCoef, iWidth, iWidth, iWidth);
 
 		////////////////////////////////
 		////////////////////////////////
@@ -1213,8 +1192,8 @@ Void TComTrQuant::xQuant(TComDataCU* pcCU,
 		////////////////////////////////
 		////////////////////////////////
 
-		LOG(Logs::Quant, "*** quantization after bit hiding", iWidth, "x", iWidth, " QP = ", m_cQP.m_iQP, " ***");
-		LOG_MATRIX_1D(Logs::Quant, piQCoef, iWidth, iWidth, iWidth);
+// 		LOG(Logs::Quant, "*** quantization after bit hiding", iWidth, "x", iWidth, " QP = ", m_cQP.m_iQP, " ***");
+// 		LOG_MATRIX_1D(Logs::Quant, piQCoef, iWidth, iWidth, iWidth);
 
 		////////////////////////////////
 		////////////////////////////////
@@ -1248,19 +1227,19 @@ Void TComTrQuant::xDeQuant(Int bitDepth, const TCoeff* pSrc, Int* pDes, Int iWid
 	////////////////////////////
 	////////////////////////////
 
-	LOG(Logs::Dequant, "*********** XDEQUANT ", iWidth, "x", iWidth, "**********");;
-	LOG(Logs::Dequant, "+++ uiLog2TrSize: ", uiLog2TrSize);;
-	LOG(Logs::Dequant, "+++ MAX_TR_DYNAMIC_RANGE: ", MAX_TR_DYNAMIC_RANGE);;
-	LOG(Logs::Dequant, "+++ QUANT_IQUANT_SHIFT: ", QUANT_IQUANT_SHIFT);;
-	LOG(Logs::Dequant, "+++ QUANT_SHIFT: ", QUANT_SHIFT);;
-	LOG(Logs::Dequant, "+++ iTransformShift: ", iTransformShift, " ( =  MAX_TR_DYNAMIC_RANGE - bitDepth - uiLog2TrSize )");;
-	LOG(Logs::Dequant, "+++ iShift: ", iShift, " ( =  QUANT_IQUANT_SHIFT - QUANT_SHIFT - iTransformShift )");;
-	LOG(Logs::Dequant, "+++ iAdd: ", (1, (iShift - 1)));;
-	LOG(Logs::Dequant, "+++ g_invQuantScales[m_cQP.m_iRem]: ", g_invQuantScales[m_cQP.m_iRem]);;
-	LOG(Logs::Dequant, "+++ scale: ", (g_invQuantScales[m_cQP.m_iRem], m_cQP.m_iPer));;
-	LOG(Logs::Dequant, "+++ m_cQP.m_iPer: ", m_cQP.m_iPer);;
-	LOG(Logs::Dequant, "+++ m_cQP.m_iRem: ", m_cQP.m_iRem);;
-	LOG(Logs::Dequant, "+++ m_cQP.m_iQP: ", m_cQP.m_iQP);;
+// 	LOG(Logs::Dequant, "*********** XDEQUANT ", iWidth, "x", iWidth, "**********");;
+// 	LOG(Logs::Dequant, "+++ uiLog2TrSize: ", uiLog2TrSize);;
+// 	LOG(Logs::Dequant, "+++ MAX_TR_DYNAMIC_RANGE: ", MAX_TR_DYNAMIC_RANGE);;
+// 	LOG(Logs::Dequant, "+++ QUANT_IQUANT_SHIFT: ", QUANT_IQUANT_SHIFT);;
+// 	LOG(Logs::Dequant, "+++ QUANT_SHIFT: ", QUANT_SHIFT);;
+// 	LOG(Logs::Dequant, "+++ iTransformShift: ", iTransformShift, " ( =  MAX_TR_DYNAMIC_RANGE - bitDepth - uiLog2TrSize )");;
+// 	LOG(Logs::Dequant, "+++ iShift: ", iShift, " ( =  QUANT_IQUANT_SHIFT - QUANT_SHIFT - iTransformShift )");;
+// 	LOG(Logs::Dequant, "+++ iAdd: ", (1, (iShift - 1)));;
+// 	LOG(Logs::Dequant, "+++ g_invQuantScales[m_cQP.m_iRem]: ", g_invQuantScales[m_cQP.m_iRem]);;
+// 	LOG(Logs::Dequant, "+++ scale: ", (g_invQuantScales[m_cQP.m_iRem], m_cQP.m_iPer));;
+// 	LOG(Logs::Dequant, "+++ m_cQP.m_iPer: ", m_cQP.m_iPer);;
+// 	LOG(Logs::Dequant, "+++ m_cQP.m_iRem: ", m_cQP.m_iRem);;
+// 	LOG(Logs::Dequant, "+++ m_cQP.m_iQP: ", m_cQP.m_iQP);;
 
 	////////////////////////////
 	////////////////////////////
@@ -1307,11 +1286,11 @@ Void TComTrQuant::xDeQuant(Int bitDepth, const TCoeff* pSrc, Int* pDes, Int iWid
 	////////////////////////////
 	////////////////////////////
 
-	LOGLN(Logs::Quant, "*** coefficients ", iWidth, "x", iHeight, " QP = ", m_cQP.m_iQP, " ***");
-	LOG_MATRIX_1D(Logs::Quant, piQCoef, iWidth, iWidth, iWidth);
-
-	LOGLN(Logs::Quant, "*** dequantization ", iWidth, "x", iWidth, " QP = ", m_cQP.m_iQP, " ***");
-	LOG_MATRIX_1D(Logs::Quant, piCoef, iWidth, iWidth, iWidth);
+// 	LOGLN(Logs::Quant, "*** coefficients ", iWidth, "x", iHeight, " QP = ", m_cQP.m_iQP, " ***");
+// 	LOG_MATRIX_1D(Logs::Quant, piQCoef, iWidth, iWidth, iWidth);
+// 
+// 	LOGLN(Logs::Quant, "*** dequantization ", iWidth, "x", iWidth, " QP = ", m_cQP.m_iQP, " ***");
+// 	LOG_MATRIX_1D(Logs::Quant, piCoef, iWidth, iWidth, iWidth);
 
 	////////////////////////////
 	////////////////////////////
@@ -1326,17 +1305,17 @@ Void TComTrQuant::init(UInt uiMaxTrSize,
 #endif
 	)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logs::Overview);
 	m_uiMaxTrSize = uiMaxTrSize;
 	m_bEnc = bEnc;
 	m_useRDOQ = bUseRDOQ;
 	m_useRDOQTS = bUseRDOQTS;
 #if ADAPTIVE_QP_SELECTION
 	m_bUseAdaptQpSelect = bUseAdaptQpSelect;
-	LOGLN(Logs::Overview, PRINTVAR(m_bUseAdaptQpSelect));
+	//LOGLN(Logs::Overview, PRINTVAR(m_bUseAdaptQpSelect));
 #endif
 	m_useTransformSkipFast = useTransformSkipFast;
-	LOGLN(Logs::Overview, PRINTVAR(m_uiMaxTrSize), PRINTVAR(m_bEnc), PRINTVAR(m_useRDOQ), PRINTVAR(m_useRDOQTS), PRINTVAR(m_useTransformSkipFast));
+	//LOGLN(Logs::Overview, PRINTVAR(m_uiMaxTrSize), PRINTVAR(m_bEnc), PRINTVAR(m_useRDOQ), PRINTVAR(m_useRDOQTS), PRINTVAR(m_useTransformSkipFast));
 }
 
 Void TComTrQuant::transformNxN(TComDataCU* pcCU,

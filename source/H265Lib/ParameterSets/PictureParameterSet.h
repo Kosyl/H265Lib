@@ -82,6 +82,7 @@ namespace HEVC
 		virtual void initWithDefaults() override;
 
 		int getQP(ImgComp comp = ImgComp::Luma) const;
+		void configure(EncoderParameters configuration);
 	};
 
 	class PictureParameterSetBank : public ParameterBank < PictureParameterSet >

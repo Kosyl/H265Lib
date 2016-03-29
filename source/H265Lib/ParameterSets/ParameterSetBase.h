@@ -7,7 +7,6 @@ namespace HEVC
 	class ParameterSetBase
 	{
 	private:
-		int _idx;
 
 	public:
 		virtual ~ParameterSetBase()
@@ -15,15 +14,12 @@ namespace HEVC
 		}
 
 		ParameterSetBase(int idx) :
-			_idx(idx)
+			Id(idx)
 		{
 
 		}
 
-		int getParameterSetIdx()
-		{
-			return _idx;
-		}
+		int Id;
 
 		virtual void initWithDefaults() = 0;
 	};

@@ -26,7 +26,11 @@
     <ClInclude Include="..\source\H265Lib\Modules\CTUEncoder.h" />
     <ClInclude Include="..\source\H265Lib\Modules\CUEncoder.h" />
     <ClInclude Include="..\source\H265Lib\Modules\PictureEncoder.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\PrimitiveBinaryEncoder.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\SequenceEncoder.h" />
     <ClInclude Include="..\source\H265Lib\Modules\SliceEncoder.h" />
+    <ClInclude Include="..\source\H265Lib\Modules\SyntaxWriter.h" />
+    <ClInclude Include="..\source\H265Lib\ParameterSets\EncoderParameters.h" />
     <ClInclude Include="..\source\H265Lib\ParameterSets\ParameterBank.h" />
     <ClInclude Include="..\source\H265Lib\Data\CTU.h" />
     <ClInclude Include="..\source\H265Lib\Data\CU.h" />
@@ -79,13 +83,18 @@
     <ClCompile Include="..\source\H265Lib\Data\PU.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\QuadTree.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\PictureEncoder.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\PrimitiveBinaryEncoder.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\Quant.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\RDCost.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\Slice.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\SequenceEncoder.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\SliceEncoder.cpp" />
+    <ClCompile Include="..\source\H265Lib\Modules\SyntaxWriter.cpp" />
     <ClCompile Include="..\source\H265Lib\Modules\Transform.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\TU.cpp" />
+    <ClCompile Include="..\source\H265Lib\ParameterSets\EncoderParameters.cpp" />
     <ClCompile Include="..\source\H265Lib\ParameterSets\PictureParameterSet.cpp" />
+    <ClCompile Include="..\source\H265Lib\ParameterSets\ProfileTierLevel.cpp" />
     <ClCompile Include="..\source\H265Lib\ParameterSets\SequenceParameterSet.cpp" />
     <ClCompile Include="..\source\H265Lib\ParameterSets\VideoParameterSet.cpp" />
   </ItemGroup>

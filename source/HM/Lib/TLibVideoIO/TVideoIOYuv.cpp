@@ -44,7 +44,7 @@
 
 #include "TLibCommon/TComRom.h"
 #include "TVideoIOYuv.h"
-#include "Logger.h"
+//#include "Logger.h"
 
 using namespace std;
 
@@ -115,7 +115,7 @@ static void scalePlane(Pel* img, UInt stride, UInt width, UInt height,
 static void scalePlane(Pel* img, UInt stride, UInt width, UInt height,
 	Int shiftbits, Pel minval, Pel maxval)
 {
-	LOGLN(Logs::Overview, "przesuniêcie pikseli o ", shiftbits, " bitow");
+	//LOGLN(Logger::Overview, "przesuniêcie pikseli o ", shiftbits, " bitow");
 	if (shiftbits == 0)
 	{
 		return;
@@ -308,8 +308,8 @@ static Bool writePlane(ostream& fd, Pel* src, Bool is16bit,
 	UInt stride,
 	UInt width, UInt height)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
-	LOGLN(Logs::Overview, "zapis pola; obszar ", width, "x", height);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
+	//LOGLN(Logger::Overview, "zapis pola; obszar ", width, "x", height);
 
 	Int write_len = width * (is16bit ? 2 : 1);
 	UChar *buf = new UChar[write_len];
@@ -466,7 +466,7 @@ Bool TVideoIOYuv::read(TComPicYuv*  pPicYuv, Int aiPad[2])
  */
 Bool TVideoIOYuv::write(TComPicYuv* pPicYuv, Int confLeft, Int confRight, Int confTop, Int confBottom)
 {
-	LOG_FUNCTION_INDENT(Logs::Overview);
+	//LOG_FUNCTION_INDENT(Logger::Overview);
 
 	// compute actual YUV frame size excluding padding size
 	Int   iStride = pPicYuv->getStride();

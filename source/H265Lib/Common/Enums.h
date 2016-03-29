@@ -70,4 +70,12 @@ namespace HEVC
 	{
 		ZScanByPixel, ZScanByBlock, RasterByBlock
 	};
+
+	enum class NalUnitType
+	{
+		VPS = 32,
+		SPS = 33,
+		PPS = 34
+
+	};
 }

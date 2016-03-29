@@ -7,19 +7,33 @@
 #include "SubLayerOrderingInfo.h"
 #include <Common/Matrix.h>
 #include "HRDParameters.h"
+#include "EncoderParameters.h"
 
 namespace HEVC
 {
 	class SubLayerOrderingInfo
 	{
-		int _maxDecPicBuffering;
-		int _maxNumReorderPic;
-		int _maxLatencyIncrease;
+	public:
+		int max_dec_pic_buffering{ 0 };
+		int max_num_reorder_pic{ 0 };
+		int max_latency_increase{ 0 };
+
+		SubLayerOrderingInfo() = default;
+		SubLayerOrderingInfo(int maxDecPicBuffering, int maxNumReorderPic, int maxLatencyIncrease) :
+			max_dec_pic_buffering(maxDecPicBuffering),
+			max_num_reorder_pic(maxNumReorderPic),
+			max_latency_increase(maxLatencyIncrease)
+		{
+
+		}
 	};
 
-	class VideoParameterSet: public ParameterSetBase
+	class VideoParameterSet : public ParameterSetBase
 	{
 	public:
+		bool base_layer_internal_flag;
+		bool base_layer_available_flag;
+
 		uint8_t max_layers;
 		uint8_t max_sub_layers;
 		bool temporal_id_nesting_flag;
@@ -48,12 +62,13 @@ namespace HEVC
 		VideoParameterSet() = delete;
 		VideoParameterSet(int idx);
 
-		virtual ~VideoParameterSet() override;;
+		virtual ~VideoParameterSet() override;
+		void configure(EncoderParameters configuration);
 
 		void initWithDefaults() override;
 	};
 
-	class VideoParameterSetBank: public ParameterBank<VideoParameterSet>
+	class VideoParameterSetBank : public ParameterBank<VideoParameterSet>
 	{
 
 	};

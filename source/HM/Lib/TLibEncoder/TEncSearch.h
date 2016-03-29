@@ -48,7 +48,7 @@
 #include "TEncEntropy.h"
 #include "TEncSbac.h"
 #include "TEncCfg.h"
-#include "Logger.h"
+//#include "Logger.h"
 
 //! \ingroup TLibEncoder
 //! \{

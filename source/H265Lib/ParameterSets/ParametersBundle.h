@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ParameterSets/PictureParameterSet.h>
+#include "EncoderParameters.h"
 
 namespace HEVC
 {
@@ -65,6 +66,23 @@ namespace HEVC
 			auto pps = PictureParameterSetBank::instance().createNext();
 
 			sps->setPicSize(picWIdth, picHeight);
+
+			return ParametersBundle(vps, sps, pps);
+		}
+
+		static ParametersBundle fromConfiguration(EncoderParameters configuration)
+		{
+			auto vps = VideoParameterSetBank::instance().createNext();
+			auto sps = SequenceParameterSetBank::instance().createNext();
+			auto pps = PictureParameterSetBank::instance().createNext();
+
+			sps->vps = vps;
+			pps->vps = vps;
+			pps->sps = sps;
+
+			vps->configure(configuration);
+			sps->configure(configuration);
+			pps->configure(configuration);
 
 			return ParametersBundle(vps, sps, pps);
 		}

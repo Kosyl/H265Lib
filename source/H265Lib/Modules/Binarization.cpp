@@ -440,6 +440,62 @@
 //	return len;
 //}
 //
+//boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYPrefix(int prefix, int transformSize)
+//{
+//	return binarizeTR(prefix, (log2Int(transformSize) << 1) - 1, 0);
+//}
+//
+//boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYSuffix(int suffix, int prefix)
+//{
+//	return binarizeFL(suffix, 1 << ((prefix >> 1) - 2));
+//}
+//
+//boost::dynamic_bitset<> Binarization::binarizeFL(int val, int maxVal)
+//{
+//	boost::dynamic_bitset<> res;
+//	int len = numBits(maxVal);
+//	for (Int i = len - 1; i >= 0; i--)
+//	{
+//		res.push_back((val >> i) & 1);
+//	}
+//	return res;
+//}
+//
+//boost::dynamic_bitset<> Binarization::binarizeTR(int val, int maxLenBeforeSuffix, int riceParam)
+//{
+//	boost::dynamic_bitset<> res;
+//
+//	int prefix = val >> riceParam;
+//	int threshold = maxLenBeforeSuffix >> riceParam;
+//
+//	if (prefix < threshold)
+//	{
+//		for (int i = 0; i < prefix; ++i)
+//		{
+//			res.push_back(1);
+//		}
+//		res.push_back(0);
+//	}
+//	else
+//	{
+//		for (int i = 0; i < threshold; ++i)
+//		{
+//			res.push_back(1);
+//		}
+//	}
+//
+//	if (maxLenBeforeSuffix > val)
+//	{
+//		int suffix = val % (1 << riceParam);
+//
+//		for (int i = 0; i < riceParam; ++i)
+//		{
+//			res.push_back((suffix >> i) & 1);
+//		}
+//	}
+//	return res;
+//}
+//
 //int Binarization::calcC1andC2( std::shared_ptr<CoeffGroup> cg, Coeff* out_remains, int numNonZero )
 //{
 //	int result = 0;
@@ -486,62 +542,6 @@
 //	{
 //		out_suffix = position - MinInGroup[ out_prefix ];
 //	}
-//}
-//
-//boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYPrefix( int prefix, int transformSize )
-//{
-//	return binarizeTR( prefix, ( log2Int( transformSize ) << 1 ) - 1, 0 );
-//}
-//
-//boost::dynamic_bitset<> Binarization::binarizeLastSignificantXYSuffix( int suffix, int prefix )
-//{
-//	return binarizeFL( suffix, 1 << ( ( prefix >> 1 ) - 2 ) );
-//}
-//
-//boost::dynamic_bitset<> Binarization::binarizeFL( int val, int maxVal )
-//{
-//	boost::dynamic_bitset<> res;
-//	int len = numBits( maxVal );
-//	for( Int i = len - 1; i >= 0; i-- )
-//	{
-//		res.push_back( ( val >> i ) & 1 );
-//	}
-//	return res;
-//}
-//
-//boost::dynamic_bitset<> Binarization::binarizeTR( int val, int maxLenBeforeSuffix, int riceParam )
-//{
-//	boost::dynamic_bitset<> res;
-//
-//	int prefix = val >> riceParam;
-//	int threshold = maxLenBeforeSuffix >> riceParam;
-//
-//	if( prefix < threshold )
-//	{
-//		for( int i = 0; i < prefix; ++i )
-//		{
-//			res.push_back( 1 );
-//		}
-//		res.push_back( 0 );
-//	}
-//	else
-//	{
-//		for( int i = 0; i < threshold; ++i )
-//		{
-//			res.push_back( 1 );
-//		}
-//	}
-//
-//	if( maxLenBeforeSuffix > val )
-//	{
-//		int suffix = val % ( 1 << riceParam );
-//
-//		for( int i = 0; i < riceParam; ++i )
-//		{
-//			res.push_back( ( suffix >> i ) & 1 );
-//		}
-//	}
-//	return res;
 //}
 //
 //bool Binarization::useSDH( )

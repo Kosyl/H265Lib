@@ -41,7 +41,7 @@
 #include "CommonDef.h"
 #include "TComYuv.h"
 #include "TComDataCU.h"
-#include "Logger.h"
+//#include "Logger.h"
 #include "ContextTables.h"
 
 //! \ingroup TLibCommon

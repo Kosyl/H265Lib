@@ -14,6 +14,11 @@ namespace HEVC
 		initWithDefaults();
 	}
 
+	void PictureParameterSet::configure(EncoderParameters configuration)
+	{
+		init_qp = configuration.qp;
+	}
+
 	void PictureParameterSet::initWithDefaults()
 	{
 		dependent_slice_segments_enabled_flag = true;
