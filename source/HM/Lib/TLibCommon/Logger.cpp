@@ -67,12 +67,12 @@ namespace HEVC
 		_logs[Logger::Console] = createLog(Logger::Console, "");
 		_logs[Logger::Dump] = createLog(Logger::Dump, "");
 
-		_logs[Logger::ForwardTransform] = createLog(Logger::ForwardTransform, "D:\\HEVC\\ft.txt");
-		_logs[Logger::InverseTransform] = createLog(Logger::InverseTransform, "D:\\HEVC\\it.txt");
-		_logs[Logger::Quant] = createLog(Logger::Quant, "D:\\HEVC\\q.txt");
-		_logs[Logger::Dequant] = createLog(Logger::Dequant, "D:\\HEVC\\iq.txt");
-		_logs[Logger::LumaPrediction] = createLog(Logger::LumaPrediction, "D:\\HEVC\\lp.txt");
-		_logs[Logger::LumaReco] = createLog(Logger::LumaReco, "D:\\HEVC\\lr.txt");
+		_logs[Logger::ForwardTransform] = nullptr;//createLog(Logger::ForwardTransform, "D:\\HEVC\\ft.txt");
+		_logs[Logger::InverseTransform] = nullptr;//createLog(Logger::InverseTransform, "D:\\HEVC\\it.txt");
+		_logs[Logger::Quant] = nullptr;// createLog(Logger::Quant, "D:\\HEVC\\q.txt");
+		_logs[Logger::Dequant] = nullptr;// createLog(Logger::Dequant, "D:\\HEVC\\iq.txt");
+		_logs[Logger::LumaPrediction] = nullptr;// createLog(Logger::LumaPrediction, "D:\\HEVC\\lp.txt");
+		_logs[Logger::LumaReco] = nullptr;// createLog(Logger::LumaReco, "D:\\HEVC\\lr.txt");
 		_logs[Logger::ChromaPred] = createLog(Logger::ChromaPred, "D:\\HEVC\\cp.txt");
 		_logs[Logger::ChromaReco] = createLog(Logger::ChromaReco, "D:\\HEVC\\cr.txt");
 		_logs[Logger::RDO] = createLog(Logger::RDO, "D:\\HEVC\\rdo.txt");
@@ -81,8 +81,8 @@ namespace HEVC
 		_logs[Logger::DeblockingFilter] = createLog(Logger::DeblockingFilter, "D:\\HEVC\\fdb.txt");
 		_logs[Logger::DeblockingFilterResult] = createLog(Logger::DeblockingFilterResult, "D:\\HEVC\\HMfdbres.txt");
 		_logs[Logger::Prediction] = createLog(Logger::Prediction, "D:\\HEVC\\predykcja.txt");
-		_logs[Logger::Overview] = createLog(Logger::Overview, "D:\\HEVC\\overview.txt");
-		_logs[Logger::IO] = createLog(Logger::IO, "D:\\HEVC\\IO.txt");
+		_logs[Logger::Overview] = nullptr;// createLog(Logger::Overview, "D:\\HEVC\\overview.txt");
+		_logs[Logger::IO] = nullptr;//createLog(Logger::IO, "D:\\HEVC\\IO.txt");
 		_logs[Logger::BinOut] = createLog(Logger::BinOut, "D:\\HEVC\\binout.txt");
 	}
 

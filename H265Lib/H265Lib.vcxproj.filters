@@ -269,5 +269,8 @@
     <ClCompile Include="..\source\H265Lib\ParameterSets\ProfileTierLevel.cpp">
       <Filter>ParameterSets</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\H265Lib\Common\Calc.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

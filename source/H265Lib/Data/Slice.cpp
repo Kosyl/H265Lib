@@ -1,32 +1,15 @@
-///**
-// * @file	Slice.cpp
-// *
-// * @brief	Implementacja klasy plastra.
-// */
-//
-//#include "Slice.h"
-//
-//Slice::Slice( Picture* picture, SliceMode type ) :
-//itsParentPicture( picture ),
-//itsSliceType( type ),
-//itsQPDelta( 0 ),
-//_CbQPOffset( 0 ),
-//_CrQPOffset( 0 ),
-//itsSAOChromaEnabled( true ),
-//itsSAOLumaEnabled( true ),
-//itsLoopFilterEnabled( true ),
-//itsDeblockingFilterEnabled( true ),
-//itsBetaOffset( 0 ),
-//itsTcOffset( 0 )
-//{
-//	assert( picture != nullptr );
-//}
-//
-//Slice::~Slice( )
-//{
-//}
-//
-//void Slice::appendCTU( std::shared_ptr<CTU> ctu )
-//{
-//	//TODO
-//}
+#include "Slice.h"
+
+namespace HEVC
+{
+	Slice::Slice(size_t beginCtuX, size_t beginCtuY, size_t lengthInCtus):
+		begin_ctu_x(beginCtuX),
+		begin_ctu_y(beginCtuY),
+		length_in_ctus(lengthInCtus)
+	{
+	}
+
+	Slice::~Slice()
+	{
+	}
+}

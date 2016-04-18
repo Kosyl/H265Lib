@@ -5,6 +5,16 @@
 
 namespace HEVC
 {
+	SequenceEncoder::SequenceEncoder()
+	{
+
+	}
+
+	SequenceEncoder::~SequenceEncoder()
+	{
+		cleanup();
+	}
+
 	void SequenceEncoder::encodeSequence(EncoderParameters configuration)
 	{
 		LOGLN(Logger::Console, "Rozpoczecie kodowania");
@@ -17,7 +27,12 @@ namespace HEVC
 
 		loadFrames(configuration.input_file_path, configuration.num_frames_to_encode, encoding_parameters.Sps);
 
-		//encode
+		pic_encoder = std::make_unique<HardcodedPictureEncoder>(encoding_parameters);
+
+		for(auto& frame: input_frames)
+		{
+			pic_encoder->encodePicture(*frame);
+		}
 
 		writeBitstream();
 	}
@@ -29,14 +44,19 @@ namespace HEVC
 		std::ifstream file(filePath, std::ios::binary);
 		for (int i = 0; i < numPics; ++i)
 		{
-			auto pic = std::make_shared<Picture>();
-			pic->initFromParameters(sps);
+			auto pic = std::make_unique<Picture>();
+			pic->initFromParameters(*sps);
 
 			pic->loadFrameFromYuv(file);
 
-			input_frames.push_back(pic);
+			input_frames.push_back(std::move(pic));
 		}
 		file.close();
+	}
+
+	void SequenceEncoder::cleanup()
+	{
+		
 	}
 
 	void SequenceEncoder::writeBitstream()

@@ -19,13 +19,12 @@ namespace UnitTests
 		TEST_METHOD(encodeSamplePicture_PrintResult)
 		{
 			auto parameters = ParametersBundle::getDefaultParameters(100, 100);
-			auto pic = std::make_shared<Picture>();
-			pic->initFromParameters(parameters.Sps);
+			auto pic = std::make_unique<Picture>();
+			pic->initFromParameters(*parameters.Sps);
 			
-			IntraPictureEncoder encoder;
-			encoder.Parameters = parameters;
+			IntraPictureEncoder encoder(parameters);
 
-			encoder.encodePicture(pic);
+			encoder.encodePicture(*pic);
 
 			printPictureDescription(*pic);
 
@@ -37,27 +36,27 @@ namespace UnitTests
 			auto widthInCTUs = pic.width_in_ctus;
 			auto heightInCTUs = pic.height_in_ctus;
 
-			for (auto y = 0; y < heightInCTUs; ++y)
+			for (auto y = 0u; y < heightInCTUs; ++y)
 			{
-				for (auto x = 0; x < widthInCTUs; ++x)
+				for (auto x = 0u; x < widthInCTUs; ++x)
 				{
 					auto ctu = pic.getCTU(x, y);
-					Log::println("CTU: x=", ctu->x, ", y=", ctu->y, ", size=", ctu->size);
-					printCUTreeDescription(ctu->CUQuadTree);
+					Log::println("CTU: x=", ctu->pos.x, ", y=", ctu->pos.y, ", size=", ctu->size());
+					//printCUTreeDescription(ctu->CUQuadTree);
 				}
 			}
 		}
 		void printCUTreeDescription(std::shared_ptr<CUQuadTree> subTree)
 		{
 			Log::tab();
-			if (subTree->mode == QTMode::Leaf)
+			if (subTree->isLeaf())
 			{
-				auto leaf = subTree->leaf;
-				Log::println("CU: x=", leaf->x, ", y=", leaf->y, ", size=", leaf->size);
+				auto leaf = subTree->getCU();
+				Log::println("CU: x=", leaf->pos.x, ", y=", leaf->pos.y, ", size=", leaf->size());
 			}
 			else
 			{
-				Log::println("CUTree: x=", subTree->x, ", y=", subTree->y, ", size=", subTree->size);
+				Log::println("CUTree: x=", subTree->pos.x, ", y=", subTree->pos.y, ", size=", subTree->size());
 				/*	for (auto& i : subTree->subtrees)
 					{
 						if (i != nullptr)

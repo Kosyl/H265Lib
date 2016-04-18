@@ -78,6 +78,8 @@ public:
 
   Int getEntropyBits(Short val) { return m_entropyBits[m_ucState ^ val]; }
 
+	Int idx;
+
 #if FAST_BIT_EST
   Void update( Int binVal )
   {

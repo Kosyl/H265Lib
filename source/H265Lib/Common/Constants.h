@@ -5,6 +5,7 @@ namespace HEVC
 {
 	namespace Constants
 	{
+		static const int MAX_CU_SIZE = 64;
 		static const int CG_SIZE = 4;
 
 		static const int NUM_COEFFS_IN_CG = CG_SIZE * CG_SIZE;

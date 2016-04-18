@@ -75,6 +75,7 @@ namespace HEVC
 		virtual void reconstructionLoop() = 0;*/
 
 		virtual void print(LogId logId, bool recursive = true) override;
+		bool is_processed;
 	};
 
 	class Cintra : public CU

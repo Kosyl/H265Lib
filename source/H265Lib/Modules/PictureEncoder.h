@@ -8,70 +8,68 @@
 
 namespace HEVC
 {
+	struct CuContext
+	{
+		std::vector<std::shared_ptr<CU>> neighbours;
+		size_t pic_width, pic_height;
+		size_t max_tb_size;
+
+		void initFromparameters(ParametersBundle params)
+		{
+			pic_width = params.Sps->pic_width_in_luma_samples;
+			pic_height = params.Sps->pic_height_in_luma_samples;
+			max_tb_size = params.Sps->max_luma_transform_block_size;
+		}
+	};
+
+	struct CtuContext
+	{
+		std::shared_ptr<CTU> upper, upper_right, left, lower_left, upper_left, lower;
+		size_t pic_width, pic_height;
+		size_t max_tb_size;
+
+		void initFromparameters(ParametersBundle params)
+		{
+			pic_width = params.Sps->pic_width_in_luma_samples;
+			pic_height = params.Sps->pic_height_in_luma_samples; 
+			max_tb_size = params.Sps->max_luma_transform_block_size;
+		}
+	};
+
 	interface IPictureEncoder
 	{
-		IPictureEncoder() = default;
 		virtual ~IPictureEncoder() = default;
 
-		virtual void encodePicture(std::shared_ptr<Picture> picture) = 0;
+		virtual void encodePicture(Picture &pic_to_encode) = 0;
 	};
 
 	class IntraPictureEncoder: public IPictureEncoder
 	{
-	protected:
-		std::shared_ptr<Picture> _picture;
-
 	public:
-		ParametersBundle Parameters;
+		IntraPictureEncoder(ParametersBundle parameter_sets);
+		virtual ~IntraPictureEncoder();
 
-		IntraPictureEncoder();
-		~IntraPictureEncoder();
-
-		virtual void encodePicture(std::shared_ptr<Picture> picture) override
-		{
-			_picture = picture;
-
-			processPicture();
-		}
+		virtual void encodePicture(Picture &pic) override;
 
 	protected:
+		ParametersBundle parameters;
 
-		void processPicture()
-		{
-			auto widthInCTUs = Parameters.Sps->pic_width_in_ctus, heightInCTUs = Parameters.Sps->pic_height_in_ctus;
+		void processCTU(std::shared_ptr<CTU> ctu);
+		void divideCUTreeIntoSmallestCUs(std::shared_ptr<CUQuadTree> subTree);
+	};
 
-			for (auto y = 0; y < heightInCTUs; ++y)
-			{
-				for (auto x = 0; x < widthInCTUs; ++x)
-				{
-					processCTU(_picture->getCTU(x, y));
-				}
-			}
-		}
+	class HardcodedPictureEncoder: public IPictureEncoder
+	{
+	public:
 
-		void processCTU(std::shared_ptr<CTU> ctu)
-		{
-			divideCUTreeIntoSmallestCUs(ctu->CUQuadTree);
-		}
+		HardcodedPictureEncoder(ParametersBundle parameter_sets);
+		virtual ~HardcodedPictureEncoder() = default;
 
-		void divideCUTreeIntoSmallestCUs(std::shared_ptr<CUQuadTree> subTree)
-		{
-			auto treeSize = subTree->size;
-			auto isMinAllowedSize = treeSize <= Parameters.Sps->min_luma_coding_block_size;
-			auto isSmallerThanWholePicture = treeSize <= Parameters.Sps->getPicWidth() && treeSize <= Parameters.Sps->getPicHeight();
-			if (isMinAllowedSize&&isSmallerThanWholePicture)
-			{
-				subTree->rebuild(QTMode::Leaf, Parameters.Sps->getPicWidth(), Parameters.Sps->getPicHeight());
-			}
-			else
-			{
-				subTree->rebuild(QTMode::Split, Parameters.Sps->getPicWidth(), Parameters.Sps->getPicHeight());
-				for (auto newSubTree : subTree->subtrees)
-				{
-					//if (newSubTree != nullptr)
-						//divideCUTreeIntoSmallestCUs(newSubTree);
-				}
-			}
-		}
+		virtual void encodePicture(Picture &pic) override;
+
+	protected:
+		ParametersBundle parameters;
+
+		void processQuadtree(CUQuadTree &tree, CtuContext context);
 	};
 }

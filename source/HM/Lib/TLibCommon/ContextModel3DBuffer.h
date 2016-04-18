@@ -59,6 +59,7 @@ protected:
   const UInt    m_sizeX;        ///< X size of 3D buffer
   const UInt    m_sizeXY;       ///< X times Y size of 3D buffer
   const UInt    m_sizeXYZ;      ///< total size of 3D buffer
+	const UInt    m_base_idx;
 
 public:
   ContextModel3DBuffer  ( UInt uiSizeZ, UInt uiSizeY, UInt uiSizeX, ContextModel *basePtr, Int &count );

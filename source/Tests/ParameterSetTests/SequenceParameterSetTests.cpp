@@ -64,5 +64,25 @@ namespace ParameterSetTests
 			Assert::IsTrue(sps->getPicHeight(ImgComp::Cb) == 100);
 			Assert::IsTrue(sps->getPicWidth(ImgComp::Cb) == 100);
 		}
+		
+		TEST_METHOD(ZscanArray_InitializationTest)
+		{
+			auto sps = SequenceParameterSetBank::instance().createNext();
+			
+			Log::printMatrix(*sps->_zScanArray);
+
+			int arr[4][4] = 
+			{
+				{1,2,5,6},
+				{3,4,7,8},
+				{9,10,13,14},
+				{11,12,15,16}
+			};
+
+			Log::println(arr[0][1]);
+			Log::println(arr[1][0]);
+			Log::println(arr[1][1]);
+			Log::println(arr[2][3]);
+		}
 	};
 }

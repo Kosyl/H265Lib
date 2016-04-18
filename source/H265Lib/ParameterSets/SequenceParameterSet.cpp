@@ -163,7 +163,7 @@ namespace HEVC
 
 #pragma region PicSize
 
-	int SequenceParameterSet::getPicWidth(ImgComp plane) const
+	size_t SequenceParameterSet::getPicWidth(ImgComp plane) const
 	{
 		if (chroma_format_idc == SubsamplingFormat::Mode_444)
 		{
@@ -178,7 +178,7 @@ namespace HEVC
 		}
 	}
 
-	int SequenceParameterSet::getPicHeight(ImgComp plane) const
+	size_t SequenceParameterSet::getPicHeight(ImgComp plane) const
 	{
 		if (chroma_format_idc == SubsamplingFormat::Mode_444 || chroma_format_idc == SubsamplingFormat::Mode_422)
 		{

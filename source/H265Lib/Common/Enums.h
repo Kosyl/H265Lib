@@ -13,7 +13,8 @@ namespace HEVC
 		Luma = 0,
 		Chroma = 1,
 		Cb = 1,
-		Cr = 2
+		Cr = 2,
+		NUM_IMG_PLANES=3
 	};
 
 	enum EdgeType
@@ -36,7 +37,7 @@ namespace HEVC
 		Diagonal = 0, Horizontal = 1, Vertical = 2
 	};
 
-	enum class SliceMode
+	enum class SliceType
 	{
 		I = 0, P = 1, B = 2
 	};

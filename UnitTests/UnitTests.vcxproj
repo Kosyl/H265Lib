@@ -95,6 +95,7 @@
     <ClCompile Include="..\source\Tests\DataStructuresTests\MatrixTests.cpp" />
     <ClCompile Include="..\source\Tests\DataStructuresTests\PictureTests.cpp" />
     <ClCompile Include="..\source\Tests\DataStructuresTests\PositionTests.cpp" />
+    <ClCompile Include="..\source\Tests\DataStructuresTests\QuadTreeTests.cpp" />
     <ClCompile Include="..\source\Tests\MiscTests\InterfaceTests.cpp" />
     <ClCompile Include="..\source\Tests\MiscTests\PropertyTests.cpp" />
     <ClCompile Include="..\source\Tests\MiscTests\ReferenceTests.cpp" />

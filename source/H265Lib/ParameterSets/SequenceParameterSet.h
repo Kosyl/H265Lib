@@ -44,7 +44,7 @@ namespace HEVC
 
 		int log2_ctu_size, log2_max_coding_block_size, log2_min_coding_block_size;
 		int ctu_size;
-		int max_luma_coding_block_size, min_luma_coding_block_size; //def. 64 i 8
+		size_t max_luma_coding_block_size, min_luma_coding_block_size; //def. 64 i 8
 		int max_luma_transform_block_size, min_luma_transform_block_size; // def. 32 i 4
 		int pic_width_in_ctus, pic_height_in_ctus;
 
@@ -99,8 +99,8 @@ namespace HEVC
 
 		void initWithDefaults() override;
 
-		int getPicWidth(ImgComp plane = ImgComp::Luma) const;
-		int getPicHeight(ImgComp plane = ImgComp::Luma) const;
+		size_t getPicWidth(ImgComp plane = ImgComp::Luma) const;
+		size_t getPicHeight(ImgComp plane = ImgComp::Luma) const;
 		void setPicSize(int width, int height);
 		void refreshPicSizeInCTUs();
 

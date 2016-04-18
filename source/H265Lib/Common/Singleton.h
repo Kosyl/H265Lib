@@ -16,7 +16,7 @@ protected:
 public:
 	static T& instance()
 	{
-		static T _instance;
-		return _instance;
+		static T m_instance;
+		return m_instance;
 	}
 };

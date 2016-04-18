@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include "TypeDef.h"
+#include <Common/Constants.h>
 
 namespace HEVC
 {
@@ -29,5 +30,7 @@ namespace HEVC
 		{
 			return log2(value) + 1;
 		}
+
+		size_t zscan_idx(size_t x, size_t y, size_t range = Constants::MAX_CU_SIZE);
 	}
 }

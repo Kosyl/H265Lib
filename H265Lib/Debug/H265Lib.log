@@ -1,2 +1,10 @@
-﻿  VideoParameterSet.cpp
+﻿  CTU.cpp
+  Generating Code...
+d:\repos\hevc\source\h265lib\data\ctu.cpp(24): warning C4715: 'HEVC::CTU::hasUnprocessedCus': not all control paths return a value
+  Compiling...
+  SequenceEncoder.cpp
+  PictureEncoder.cpp
+  QuadTree.cpp
+  Picture.cpp
+  Generating Code...
   H265Lib.vcxproj -> D:\Repos\HEVC\Debug\H265Lib.lib

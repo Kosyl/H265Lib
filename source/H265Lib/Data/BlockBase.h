@@ -12,20 +12,22 @@ namespace HEVC
 		int idx;
 
 		Position();
-		Position(int x, int y);
-
-		void resolveIdx(const SequenceParameterSet& sps, Indexing idxType);
+		Position(int new_x, int new_y);
 	};
 
-	class BlockBase: public Position
+	class BlockBase
 	{
+	private:
+		size_t m_size;
+
 	public:
 
 		BlockBase();
-		BlockBase(int x, int y, int size);
+		BlockBase(int x, int y, size_t size);
 		virtual ~BlockBase() = default;
 
-		int size;
+		Position pos;
+		size_t size() { return m_size; }
 
 		virtual void print(LogId logId, bool recursive);
 	};

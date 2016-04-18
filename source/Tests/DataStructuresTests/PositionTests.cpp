@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <Common/Bitset.h>
 #include <Data/BlockBase.h>
+#include <Common/Calc.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace HEVC;
@@ -34,7 +35,7 @@ namespace UnitTests
 
 			for (auto p : pos)
 			{
-				p.resolveIdx(*sps, Indexing::ZScanByPixel);
+				p.idx = Calc::zscan_idx(p.x, p.y);
 				Log::println("(", p.x, ",", p.y, ") -> ", p.idx);
 			}
 		}

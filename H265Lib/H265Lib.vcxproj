@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265Lib\Common\Bitset.cpp" />
+    <ClCompile Include="..\source\H265Lib\Common\Calc.cpp" />
     <ClCompile Include="..\source\H265Lib\Common\FileIO.cpp" />
     <ClCompile Include="..\source\H265Lib\Common\Logger.cpp" />
     <ClCompile Include="..\source\H265Lib\Data\BlockBase.cpp" />

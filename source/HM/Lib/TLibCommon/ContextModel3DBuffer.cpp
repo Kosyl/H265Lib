@@ -51,6 +51,7 @@ ContextModel3DBuffer::ContextModel3DBuffer( UInt uiSizeZ, UInt uiSizeY, UInt uiS
 : m_sizeX  ( uiSizeX )
 , m_sizeXY ( uiSizeX * uiSizeY )
 , m_sizeXYZ( uiSizeX * uiSizeY * uiSizeZ )
+, m_base_idx( count )
 {
   // allocate 3D buffer
   m_contextModel = basePtr;
@@ -70,14 +71,16 @@ ContextModel3DBuffer::ContextModel3DBuffer( UInt uiSizeZ, UInt uiSizeY, UInt uiS
  */
 Void ContextModel3DBuffer::initBuffer( SliceType sliceType, Int qp, UChar* ctxModel )
 {
-	LOG_FUNCTION_INDENT(Logger::Overview);
-	LOGLN(Logger::Overview, "sliceType: ", sliceType, ", qp: ", qp);
+	LOG_FUNCTION_INDENT(Logger::BinOut);
+	LOGLN(Logger::BinOut, "sliceType: ", sliceType, ", qp: ", qp);
   ctxModel += sliceType * m_sizeXYZ;
 
   for ( Int n = 0; n < m_sizeXYZ; n++ )
   {
     m_contextModel[ n ].init( qp, ctxModel[ n ] );
     m_contextModel[ n ].setBinsCoded( 0 );
+		m_contextModel[n].idx = m_base_idx + n; 
+		LOGLN(Logger::BinOut, "init kontekstu idx=", m_contextModel[n].idx, ", State=", (UInt)m_contextModel[n].getState(), ", MPS:", (UInt)m_contextModel[n].getMps(), ", binsCoded: ", m_contextModel[n].getBinsCoded());
   }
 }
 

@@ -18,84 +18,126 @@ namespace HEVC
 	{
 	}
 
-	void Picture::initFromParameters(std::shared_ptr<SequenceParameterSet> sps)
+	Picture::Picture(SequenceParameterSet& parameters)
 	{
-		assert(sps != nullptr);
-		assert(sps != nullptr);
-
-		width_luma = sps->getPicWidth(Luma);
-		width_chroma = sps->getPicWidth(Cb);
-		height_luma = sps->getPicHeight(Luma);
-		height_chroma = sps->getPicHeight(Cb);
-		width_in_ctus = sps->pic_width_in_ctus;
-		height_in_ctus = sps->pic_height_in_ctus;
-		ctu_size = sps->ctu_size;
-		setSize(width_luma, height_luma, width_chroma, height_chroma);
+		initFromParameters(parameters);
 	}
 
-	void Picture::setSize(int lumaWidth, int lumaHeight, int chromaWidth, int chromaHeight)
+	void Picture::initFromParameters(SequenceParameterSet &sps)
 	{
-		if (lumaWidth == 0 || lumaHeight == 0) return;
+		width[Luma] = sps.getPicWidth(Luma);
+		width[Cb] = sps.getPicWidth(Cb);
+		width[Cr] = sps.getPicWidth(Cr);
+		height[Luma] = sps.getPicHeight(Luma);
+		height[Cb] = sps.getPicHeight(Cb);
+		height[Cr] = sps.getPicHeight(Cr);
+		width_in_ctus = sps.pic_width_in_ctus;
+		height_in_ctus = sps.pic_height_in_ctus;
+		ctu_size = sps.ctu_size;
 
-		input_samples[Luma] = Matrix<Sample>(lumaWidth, lumaHeight);
-	  reconstructed_samples[Luma] = Matrix<Sample>(lumaWidth, lumaHeight);
-
-		input_samples[Cb] = Matrix<Sample>(chromaWidth, chromaHeight);
-		input_samples[Cr] = Matrix<Sample>(chromaWidth, chromaHeight);
-		reconstructed_samples[Cb] = Matrix<Sample>(chromaWidth, chromaHeight);
-		reconstructed_samples[Cr] = Matrix<Sample>(chromaWidth, chromaHeight);
-
+		resetBuffers();
+		initCTUs();
 		slices.clear();
 
 		if (tiles_enabled)
 		{
-			tiles_map = Matrix<int>(width_in_ctus, height_in_ctus);
+			setTileIds(sps);
 		}
+	}
 
-		initCTUs();
+	void Picture::resetBuffers()
+	{
+		if (width[Luma] == 0 || height[Luma] == 0) return;
+
+		input_samples[Luma] = Matrix<Sample>(width[Luma], height[Luma]);
+		reconstructed_samples[Luma] = Matrix<Sample>(width[Luma], height[Luma]);
+
+		input_samples[Cb] = Matrix<Sample>(width[Cb], height[Cb]);
+		input_samples[Cr] = Matrix<Sample>(width[Cr], height[Cr]);
+		reconstructed_samples[Cb] = Matrix<Sample>(width[Cb], height[Cb]);
+		reconstructed_samples[Cr] = Matrix<Sample>(width[Cr], height[Cr]);
+	}
+
+	void Picture::initCTUs()
+	{
+		CTUs = Matrix<std::shared_ptr<CTU>>(width_in_ctus, height_in_ctus);
+
+		for (auto i = 0u; i < height_in_ctus; ++i)
+		{
+			for (auto j = 0u; j < width_in_ctus; ++j)
+			{
+				CTUs(j, i) = std::make_shared<CTU>(j*ctu_size, i*ctu_size, ctu_size);
+			}
+		}
+	}
+
+	void Picture::setTileIds(SequenceParameterSet &sps)
+	{
+		//todo: przypisac tileId do CTU'ow na podstawie SPS
 	}
 
 	void Picture::loadFrameFromYuv(std::ifstream& yuvFile)
 	{
 		unsigned char tmp;
-		int width = width_luma, height = height_luma;
 
 		auto luma = input_samples[Luma];
 		auto cb = input_samples[Cb];
 		auto cr = input_samples[Cr];
 
-		for (int i = 0; i < height; ++i)
+		for (size_t i = 0; i < height[Luma]; ++i)
 		{
-			for (int j = 0; j < width; ++j)
+			for (size_t j = 0; j < width[Luma]; ++j)
 			{
 				yuvFile.read(reinterpret_cast<char*>(&tmp), 1);
 				luma(j, i) = tmp;
 			}
 		}
 
-		int cw = width_chroma;
-		int ch = height_chroma;
-
-		for (int i = 0; i < ch; ++i)
+		for (size_t i = 0; i < height[Cb]; ++i)
 		{
-			for (int j = 0; j < cw; ++j)
+			for (size_t j = 0; j < width[Cb]; ++j)
 			{
 				yuvFile.read(reinterpret_cast<char*>(&tmp), 1);
 				cb(j, i) = tmp;
 			}
 		}
-		for (int i = 0; i < ch; ++i)
+		for (size_t i = 0; i < height[Cr]; ++i)
 		{
-			for (int j = 0; j < cw; ++j)
+			for (size_t j = 0; j < width[Cr]; ++j)
 			{
 				yuvFile.read(reinterpret_cast<char*>(&tmp), 1);
 				cr(j, i) = tmp;
 			}
 		}
 	}
-	
-	std::shared_ptr<CTU> Picture::getCTU(int ctuX, int ctuY)
+
+	std::shared_ptr<Slice> Picture::createSlice(size_t beginCtuX, size_t beginCtuY, size_t lengthInCtus)
 	{
+		auto slice = std::make_shared<Slice>(beginCtuX, beginCtuY, lengthInCtus);
+		slice->slice_idx = slices.size();
+
+		size_t x = beginCtuX, y = beginCtuY;
+
+		while(lengthInCtus > 0)
+		{
+			auto ctu = this->CTUs(x, y);
+			ctu->slice = slice;
+			slice->assignCtu(ctu);
+
+			x = (++x)%width_in_ctus;
+			if (x == 0)
+				++y;
+			--lengthInCtus;
+		}
+
+		slices.push_back(slice);
+		return slice;
+	}
+
+	std::shared_ptr<CTU> Picture::getCTU(size_t ctuX, size_t ctuY)
+	{
+		if (ctuX < 0 || ctuX >= CTUs.width() || ctuY < 0 || ctuY >= CTUs.height())
+			return nullptr;
 		return CTUs(ctuX, ctuY);
 	}
 
@@ -107,22 +149,9 @@ namespace HEVC
 		return getCTU(ctuX, ctuY);
 	}
 
-	void Picture::initCTUs()
-	{
-		CTUs = Matrix<std::shared_ptr<CTU>>(width_in_ctus, height_in_ctus);
-
-		for (int i = 0; i < height_in_ctus; ++i)
-		{
-			for (int j = 0; j < width_in_ctus; ++j)
-			{
-				CTUs(j, i) = std::make_shared<CTU>(j*ctu_size, i*ctu_size, ctu_size);
-			}
-		}
-	}
-
 	void Picture::printDescription(LogId logId, bool recursive, bool printSamples)
 	{
-		LOGLN(logId, "Obraz ", width_luma, " x ", height_luma);
+		LOGLN(logId, "Obraz ", width[Luma], " x ", height[Luma]);
 		if (printSamples)
 		{
 			LOG_MATRIX(logId, input_samples[Luma]);
@@ -169,19 +198,5 @@ namespace HEVC
 		}
 		} while (cu == nullptr);*/
 		return cu;
-	}
-
-	int Picture::getWidth(const ImgComp comp) const
-	{
-		if (comp == Luma)
-			return width_luma;
-		return width_chroma;
-	}
-
-	int Picture::getHeight(const ImgComp comp) const
-	{
-		if (comp == Luma)
-			return height_luma;
-		return height_chroma;
 	}
 }

@@ -158,3 +158,6 @@ $RECYCLE.BIN/
 
 #VCopendb
 *.VC.opendb
+/AppEncoder/rec.yuv
+/AppEncoder/str.bin
+/H265Lib.VC.db

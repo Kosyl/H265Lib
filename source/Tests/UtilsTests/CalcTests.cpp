@@ -58,5 +58,21 @@ namespace UnitTests
 			Assert::AreEqual(Calc::numBits(5), 3);
 			Assert::AreEqual(Calc::numBits(8), 4);
 		}
+
+		TEST_METHOD(zscan_idx_valuesTest)
+		{
+			Assert::AreEqual(Calc::zscan_idx(0, 0), 0u);
+			Assert::AreEqual(Calc::zscan_idx(1, 0), 1u);
+			Assert::AreEqual(Calc::zscan_idx(0, 1), 2u);
+			Assert::AreEqual(Calc::zscan_idx(1, 1), 3u);
+			Assert::AreEqual(Calc::zscan_idx(2, 0), 4u);
+			Assert::AreEqual(Calc::zscan_idx(3, 0), 5u);
+			Assert::AreEqual(Calc::zscan_idx(2, 1), 6u);
+			Assert::AreEqual(Calc::zscan_idx(3, 1), 7u);
+			Assert::AreEqual(Calc::zscan_idx(62,62), 4092u);
+			Assert::AreEqual(Calc::zscan_idx(63, 62), 4093u);
+			Assert::AreEqual(Calc::zscan_idx(62, 63), 4094u);
+			Assert::AreEqual(Calc::zscan_idx(63,63), 4095u);
+		}
 	};
 }
