@@ -10,6 +10,9 @@
 namespace HEVC
 {
 	template<typename T>
+	using MatrixRef;
+
+	template<typename T>
 	class Matrix
 	{
 	private:
@@ -91,9 +94,9 @@ namespace HEVC
 			return *this;
 		}
 
-		Matrix submatrix(size_t offsetX, size_t offsetY, size_t width, size_t height)
+		MatrixRef<T> submatrix(size_t offsetX, size_t offsetY, size_t width, size_t height)
 		{
-			Matrix result(*this);
+			MatrixRef<T> result(*this);
 			result.matrix_info.rows = height;
 			result.matrix_info.columns = width;
 			result.matrix_info.offsetX = offsetX;
@@ -103,9 +106,9 @@ namespace HEVC
 			return result;
 		}
 
-		Matrix deepCopy()
+		MatrixRef<T> deepCopy()
 		{
-			Matrix result;
+			MatrixRef<T> result;
 			result.m_data = std::make_shared<std::vector<T>>(height()*width());
 			result.matrix_info.rows = height();
 			result.matrix_info.columns = width();
@@ -269,4 +272,16 @@ namespace HEVC
 
 #pragma endregion
 	};
-};
+
+	template<typename T>
+	using MatrixRef = Matrix<T>;
+
+	template<typename T>
+	struct Matrix3D
+	{
+		std::shared_ptr<Matrix<T>> values[3]{nullptr,nullptr,nullptr};
+	};
+
+	template<typename T>
+	using Matrix3DRef = Matrix3D<T>;
+}

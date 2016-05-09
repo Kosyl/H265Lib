@@ -3,6 +3,7 @@
 #include <cassert>
 #include "CU.h"
 #include <vector>
+#include <Common/Enums.h>
 
 namespace HEVC
 {
@@ -13,59 +14,19 @@ namespace HEVC
 	{
 	private:
 
-		/*Cintra* itsParentCU;
-
-		int itsLumaModeIdx, itsChromaModeIdx;
-
-		std::shared_ptr<TUQuadTree> itsTransformArea;*/
-
 	public:
 
 		PU(int X, int Y, int size);
-
 		~PU();
+		
+		short intra_luma_prediction_mode;
+		short intra_chroma_prediction_mode;
+		short intra_chroma_mode_derivation_type;
 
-		/*void setLumaModeIdx(const int modeIdx)
-		{
-			assert(modeIdx >= 0 && modeIdx <= 34);
-			itsLumaModeIdx = modeIdx;
-			refreshChromaModeIdx();
-		}
+		void setIntraPredictionMode(const short lumaMode, const short chroma_derivation_type);
 
-		void refreshChromaModeIdx()
-		{
-			itsChromaModeIdx = Pintra::getModeForChroma(itsLumaModeIdx, itsParentCU->getIntraChromaPredictionDerivationType());
-		}
-
-		virtual Cintra* getCu() const
-		{
-			return itsParentCU;
-		}
-
-		int getModeIdx(ImgComp comp) const
-		{
-			if (comp == LUMA)
-				return itsLumaModeIdx;
-			else
-				return itsChromaModeIdx;
-		}
-
-		std::shared_ptr<TUQuadTree> getTransformArea() const
-		{
-			return itsTransformArea;
-		}
-
-		void setTransformArea(std::shared_ptr<TUQuadTree> val)
-		{
-			itsTransformArea = val;
-		}
-
-		void reconstructionLoop();
-
-		static int getModeForChroma(int modeForLuma, int chromaPredictionDerivationMode);*/
+		short getIntraModeIdx(ImgComp comp) const;
 
 		virtual void print(LogId logId, bool recursive = true) override;
-
-		//std::vector<int> bestSAD8x8modes;
 	};
 }

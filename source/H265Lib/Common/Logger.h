@@ -259,6 +259,7 @@ namespace HEVC
 #define LOG_ARRAY(...) GET_MACRO(__VA_ARGS__, LOG_ARRAY_RECT, LOG_ARRAY_SQUARE)(__VA_ARGS__)
 #define LOG_MATRIX(log,matrix) LoggingControl::instance().printMatrix(log, matrix)
 
+#define LOG_INDENT(logId) Indent COMBINE(logIndent,__LINE__)(logId)
 #define LOG_SCOPE_INDENT(logId,title) Indent COMBINE(logIndent,__LINE__)(title,logId)
 #define LOG_FUNCTION_INDENT(logId) Indent COMBINE(logIndent,__LINE__)(__FUNCTION__,logId)
 #define LOG_SCOPE_MUTE(logId) Mute COMBINE(logMute,__LINE__)(logId)
@@ -277,6 +278,7 @@ namespace HEVC
 #define LOG_ARRAY(...)
 #define LOG_MATRIX(log,matrix)
 
+#define LOG_INDENT(logId) 
 #define LOG_SCOPE_INDENT(logId,title)
 #define LOG_FUNCTION_INDENT(logId)
 #define LOG_SCOPE_MUTE(logId)

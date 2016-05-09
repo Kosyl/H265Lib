@@ -25,6 +25,7 @@ int main( int argc, char* argv[] )
 	HEVC::SequenceEncoder encoder;
 	encoder.encodeSequence(params);
 
+	std::cout << "Nacisnij klawisz, aby zakonczyc...";
 	getchar();
 }
 

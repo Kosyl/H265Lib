@@ -64,7 +64,7 @@ namespace HEVC
 
 	enum class SubsamplingFormat
 	{
-		Mode_Monochrome, Mode_420, Mode_422, Mode_444
+		Mode_Monochrome, Mode_420, Mode_422, Mode_444, Mode_444_SeparatelyCoded
 	};
 
 	enum class Indexing

@@ -4,8 +4,7 @@ namespace HEVC
 {
 	TB::TB(int x, int y, int size, ImgComp comp) :
 		BlockBase(x, y, size),
-		plane(comp),
-		reference_samples(size)
+		plane(comp)
 	{
 	}
 

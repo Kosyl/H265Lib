@@ -2,38 +2,25 @@
 
 #include <Common/Bitset.h>
 #include <Data/BlockBase.h>
+#include <Data/TB.h>
 
 namespace HEVC
 {
-	class TU : public BlockBase
+	struct TU : public BlockBase
 	{
-	private:
+		Matrix3DRef<Sample> input_samples;
+		Matrix3DRef<Sample> reconstructed_samples;
+		std::vector<std::shared_ptr<TB> > transform_blocks;
 
-	/*	std::shared_ptr<SequenceParameterSet> _sps;
+		short tu_qp_delta;
+		short transform_depth;
 
-		Int itsQPDeltaFromCU;
-
-		int _initQP;
-
-		int transformDepth;
-
-		bool itsCBFs[3];
-
-		std::vector<std::shared_ptr<TB> > itsTBs;
-
-		CU* itsParentCU;*/
-
-	public:
+		bool cbf[3];
 
 		TU(int x, int y, int size);
-
 		virtual ~TU() = default;
 
+		void createTransformBlocks(size_t min_tu_size, SubsamplingFormat subsampling);
 		virtual void print(LogId logId, bool recursive = true) override;
-
-		/*std::shared_ptr<TB> getTB(ImgComp comp) const
-		{
-			return itsTBs[comp];
-		}*/
 	};
 }

@@ -22,111 +22,57 @@ namespace HEVC
 		
 	}
 
+	void CU::setPartitionMode(Partition type)
+	{
+		prediction_units.clear();
+		switch (type)
+		{
+		case Partition::Mode_NxN:
+			prediction_units.push_back(std::make_shared<PU>(pos.x,							pos.y,							m_size / 2));
+			prediction_units.push_back(std::make_shared<PU>(pos.x + m_size / 2, pos.y,							m_size / 2));
+			prediction_units.push_back(std::make_shared<PU>(pos.x,							pos.y + m_size / 2, m_size / 2));
+			prediction_units.push_back(std::make_shared<PU>(pos.x + m_size / 2, pos.y + m_size / 2, m_size / 2));
+			break;
+		case Partition::Mode_2Nx2N:
+			prediction_units.push_back(std::make_shared<PU>(pos.x, pos.y, m_size));
+			break;
+		case Partition::Mode_2NxN: 
+			assert(false);
+			break;
+		case Partition::Mode_Nx2N:
+			assert(false); 
+			break;
+		case Partition::Mode_2NxnU:
+			assert(false); 
+			break;
+		case Partition::Mode_2NxnD:
+			assert(false);
+			break;
+		case Partition::Mode_nLx2N:
+			assert(false); 
+			break;
+		case Partition::Mode_nRx2N:
+			assert(false); 
+			break;
+		case Partition::Mode_NotSet:
+			assert(false); 
+			break;
+		default: break;
+		}
+		partitioning_mode = type;
+	}
+
+	double CU::getTotalCost()
+	{
+		double res = 0.0;
+		/*res += RDCost::getInstance()->calcCost(itsTransformTree->getTotalBins(LUMA), itsTransformTree->getTotalDistortion(LUMA), PicParams()->getQP(LUMA));
+		res += RDCost::getInstance()->calcCost(itsTransformTree->getTotalBins(CB), itsTransformTree->getTotalDistortion(CB), PicParams()->getQP(CB));
+		res += RDCost::getInstance()->calcCost(itsTransformTree->getTotalBins(CR), itsTransformTree->getTotalDistortion(CR), PicParams()->getQP(CR));*/
+		return res;
+	}
+
 	void CU::print(LogId logId, bool recursive)
 	{
 		////LOG( "PART" ) << "CU[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << std::endl;
 	}
-
-	Cintra::Cintra(int x, int y, int size):
-		CU(x,y,size)
-	{
-	}
-
-	/*Short CU::getAbsoluteQP()
-	{
-		return PicParams()->getQP(LUMA) + itsParentCTU->getParentSlice()->getQPDelta(LUMA) + itsQPDeltaForCU;
-	}
-
-	Cintra::Cintra(CTU* ctu, int x, int y, int size) :
-		CU(ctu, x, y, size),
-		itsChromaPredictionDerivationType(0)
-	{
-		for (int i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
-		{
-			itsPUs[i] = nullptr;
-		}
-		itsIntraMPMs[0] = itsIntraMPMs[1] = itsIntraMPMs[2] = 0;
-		itsPredictionType = PREDICTION_INTRA;
-	}*/
-
-	Cintra::~Cintra()
-	{
-	}
-
-	void Cintra::print(LogId logId, bool recursive)
-	{
-		////LOG( "PART" ) << "Cintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", chromaModeDerivation: " << itsChromaPredictionDerivationType << "; partMode: " << ( itsPartitionMode == PART_NxN ? "NxN" : "2Nx2N" ) << std::endl;
-		//printMatrix( itsParentPicture->getSamples( Luma ), itsSize, itsSize, //LOG( "PART" ), itsX, itsY, "" );
-
-		/*//LOG( "PART" )  << "PUs:" << std::endl;
-
-		//LOG_TAB );*/
-
-		//for (QTComponent position = QTCOMPONENT_FIRST; position <= QTCOMPONENT_LAST; ++position)
-		//{
-		//	if (itsPUs[position] != nullptr) itsPUs[position]->printDescription();
-		//}
-
-		////LOG_UNTAB );
-	}
-
-	//void Cintra::setIntraChromaPredictionDerivationType(int val)
-	//{
-	//	itsChromaPredictionDerivationType = val;
-	//	for (Int i = 0; i < 4; ++i)
-	//	{
-	//		if (itsPUs[i] != nullptr)
-	//			itsPUs[i]->refreshChromaModeIdx();
-	//	}
-	//}
-
-	//void Cintra::reconstructionLoop()
-	//{
-	//	/*//LOG( "RECO" ) << "Cintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", chromaModeDerivation: " << itsChromaPredictionDerivationType << "; partMode: " << ( itsPartitionMode == PART_NxN ? "NxN" : "2Nx2N" ) << std::endl;
-	//	//LOG_TAB "RECO" );*/
-
-	//	if (itsPartitionMode == PART_2Nx2N)
-	//	{
-	//		itsPUs[0]->reconstructionLoop();
-	//	}
-	//	else
-	//	{
-	//		for (QTComponent position = QTCOMPONENT_FIRST; position <= QTCOMPONENT_LAST; ++position)
-	//		{
-	//			itsPUs[position]->reconstructionLoop();
-	//		}
-	//	}
-
-	//	////LOG_UNTAB"RECO" );
-	//}
-
-	//void Cintra::createPUs(int lumaModeIdx)
-	//{
-	//	if (itsPartitionMode == PART_NxN)
-	//	{
-	//		for (QTComponent i = QTCOMPONENT_FIRST; i <= QTCOMPONENT_LAST; ++i)
-	//		{
-	//			int x = itsX + (itsSize / 2) * (i % 2);
-	//			int y = itsY + (itsSize / 2) * (i / 2);
-	//			std::shared_ptr<Pintra> pu = std::make_shared<Pintra>(this, x, y, itsSize / 2);
-	//			pu->setLumaModeIdx(lumaModeIdx);
-	//			addPU(pu, i);
-	//		}
-	//	}
-	//	else // PART_2Nx2N
-	//	{
-	//		std::shared_ptr<Pintra> pu = std::make_shared<Pintra>(this, itsX, itsY, itsSize);
-	//		pu->setLumaModeIdx(lumaModeIdx);
-	//		addPU(pu);
-	//	}
-	//}
-
-	//Double Cintra::getTotalCost()
-	//{
-	//	Double res = 0.0;
-	//	res += RDCost::getInstance()->calcCost(itsTransformTree->getTotalBins(LUMA), itsTransformTree->getTotalDistortion(LUMA), PicParams()->getQP(LUMA));
-	//	res += RDCost::getInstance()->calcCost(itsTransformTree->getTotalBins(CB), itsTransformTree->getTotalDistortion(CB), PicParams()->getQP(CB));
-	//	res += RDCost::getInstance()->calcCost(itsTransformTree->getTotalBins(CR), itsTransformTree->getTotalDistortion(CR), PicParams()->getQP(CR));
-	//	return res;
-	//}
 }

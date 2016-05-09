@@ -17,10 +17,10 @@ namespace HEVC
 
 	void SequenceEncoder::encodeSequence(EncoderParameters configuration)
 	{
-		LOGLN(Logger::Console, "Rozpoczecie kodowania");
-		LOGLN(Logger::Console, "plik wejsciowy: ", configuration.input_file_path);
-		LOGLN(Logger::Console, "plik wyjsciowy: ", configuration.output_file_path);
-		LOGLN(Logger::Console, "klatki: ", configuration.num_frames_to_encode, ", QP: ", configuration.qp);
+		LOGLN(Logger::Dump, "Rozpoczecie kodowania");
+		LOGLN(Logger::Dump, "plik wejsciowy: ", configuration.input_file_path);
+		LOGLN(Logger::Dump, "plik wyjsciowy: ", configuration.output_file_path);
+		LOGLN(Logger::Dump, "klatki: ", configuration.num_frames_to_encode, ", QP: ", configuration.qp);
 		
 		config = configuration;
 		encoding_parameters = ParametersBundle::fromConfiguration(configuration);

@@ -17,6 +17,5 @@ namespace HEVC
 		virtual ~CTU() = default;
 		
 		virtual void print(LogId logId, bool recursive = true) override;
-		bool hasUnprocessedCus();
 	};
 }

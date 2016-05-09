@@ -1,55 +1,8 @@
 #include "PictureEncoder.h"
+#include <Common/Logger.h>
 
 namespace HEVC
 {
-	IntraPictureEncoder::IntraPictureEncoder(ParametersBundle parameter_sets) :
-		parameters(parameter_sets)
-	{
-
-	}
-
-	IntraPictureEncoder::~IntraPictureEncoder()
-	{
-
-	}
-
-	void IntraPictureEncoder::encodePicture(Picture &pic)
-	{
-		auto widthInCTUs = parameters.Sps->pic_width_in_ctus, heightInCTUs = parameters.Sps->pic_height_in_ctus;
-
-		for (auto y = 0; y < heightInCTUs; ++y)
-		{
-			for (auto x = 0; x < widthInCTUs; ++x)
-			{
-				processCTU(pic.getCTU(x, y));
-			}
-		}
-	}
-
-	void IntraPictureEncoder::processCTU(std::shared_ptr<CTU> ctu)
-	{
-		//divideCUTreeIntoSmallestCUs(ctu->CUQuadTree);
-	}
-
-	void IntraPictureEncoder::divideCUTreeIntoSmallestCUs(std::shared_ptr<CUQuadTree> subTree)
-	{
-		auto treeSize = subTree->size();
-		auto isMinAllowedSize = treeSize <= parameters.Sps->min_luma_coding_block_size;
-		auto isSmallerThanWholePicture = treeSize <= parameters.Sps->getPicWidth() && treeSize <= parameters.Sps->getPicHeight();
-		if (isMinAllowedSize&&isSmallerThanWholePicture)
-		{
-			subTree->buildLeaf();
-		}
-		else
-		{
-			subTree->buildSubtrees(parameters.Sps->getPicWidth(), parameters.Sps->getPicHeight());
-			for (auto& newSubTree : subTree->subtrees)
-			{
-				//if (newSubTree != nullptr)
-				//divideCUTreeIntoSmallestCUs(newSubTree);
-			}
-		}
-	}
 
 	HardcodedPictureEncoder::HardcodedPictureEncoder(ParametersBundle parameter_sets) :
 		parameters(parameter_sets)
@@ -58,40 +11,71 @@ namespace HEVC
 
 	void HardcodedPictureEncoder::encodePicture(Picture &pic)
 	{
+		LOG_FUNCTION_INDENT(Logger::Dump);
+		LOGLN(Logger::Dump, "width: ",pic.width[Luma], ", height: ", pic.height[Luma]);
+
 		for (auto y = 0u; y < pic.height_in_ctus; ++y)
 		{
 			for (auto x = 0u; x < pic.width_in_ctus; ++x)
 			{
-				CtuContext context;
-				context.initFromparameters(parameters);
-
-				context.left = pic.getCTU(x - 1, y);
-				context.upper = pic.getCTU(x, y - 1);
-				context.upper_left = pic.getCTU(x - 1, y - 1);
-				context.upper_right = pic.getCTU(x + 1, y - 1);
-				context.lower_left = pic.getCTU(x - 1, y + 1);
-				context.lower = pic.getCTU(x, y + 1);
+				CuContext context;
+				context.initFromParameters(parameters);
+				context.picture = &pic;
 
 				processQuadtree(*(pic.getCTU(x, y)->cu_tree), context);
 			}
 		}
 	}
 
-	void HardcodedPictureEncoder::processQuadtree(CUQuadTree &tree, CtuContext context)
+	void HardcodedPictureEncoder::processQuadtree(CUQuadTree &tree, CuContext context)
 	{
-		bool hasToSplit = tree.size() > context.max_tb_size;
+		bool bigger_than_max_transform = tree.size() > context.max_tb_size;
+		bool overlaps_picture_boundaries = 
+			tree.pos.x + tree.size() > context.pic_width
+			|| tree.pos.y + tree.size() > context.pic_height;
+
+		bool hasToSplit = bigger_than_max_transform || overlaps_picture_boundaries;
 		if (hasToSplit)
 		{
 			tree.buildSubtrees(context.pic_width, context.pic_height);
-			for(auto &subtree: tree.subtrees) //kolejnosc z
+			for (auto &subtree : tree.subtrees) //kolejnosc z
 			{
-				processQuadtree(*subtree, context);
+				if (subtree != nullptr)
+					processQuadtree(*subtree, context);
 			}
 		}
 		else //lisc
 		{
 			tree.buildLeaf();
-			
+
+			processCu(*(tree.getCU()), context);
 		}
+	}
+
+	void HardcodedPictureEncoder::processCu(CU& cu, CuContext context)
+	{
+		LOG_INDENT(Logger::Dump);
+		LOGLN(Logger::Dump, "CU(", cu.pos.x, ",", cu.pos.y, ") ", cu.size(), "x", cu.size());
+
+		cu.prediction_type = PredictionType::Intra;
+		cu.chroma_prediction_derivation_type = 4;
+		cu.cu_qp_delta = 0;
+		cu.transquant_bypass_on = false;
+		cu.setPartitionMode(Partition::Mode_2Nx2N);
+
+		prepareTransformTree(cu);
+
+		auto tu_iterator = cu.transform_tree->begin();
+		do
+		{
+
+		} 
+		while (!tu_iterator.atEnd());
+	}
+
+	void HardcodedPictureEncoder::prepareTransformTree(CU& cu)
+	{
+		cu.transform_tree = std::make_shared<TUQuadTree>(cu.pos.x, cu.pos.y, cu.size());
+		cu.transform_tree->buildLeaf();
 	}
 }

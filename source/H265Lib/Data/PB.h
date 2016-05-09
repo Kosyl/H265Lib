@@ -5,64 +5,34 @@
 
 namespace HEVC
 {
-	class PBIntra : public BlockBase
+	struct PB : public BlockBase
 	{
-	private:
+		ImgComp img_comp;
 
-		/*TB *itsParentTB;
+		MatrixRef<Sample> intra_source_samples;
+		Matrix<Sample> prediction;
 
-		ImgComp itsComp;
+		int intra_mode;
 
-		Sample const* const *itsPicRecon;
-
-		Sample** itsPredictionTarget;
-
-		Sample** itsSideReferences;
-
-		Sample itsCornerReference;
-
-		bool itsReferencesReady;
-
-		int itsModeIdx;
-
-		bool calcPuAvail(const Int x, const Int y) const;
-
+		bool calcPuAvail(const int x, const int y) const;
 		int getReferenceValue(const IntraDirection dir, const int offset = 0) const;
 
 		void fillMissingReferences(bool** sideAvailable, bool cornerAvailable);
 
-		bool itsPredictionDone;*/
+		PB(ImgComp comp, int x, int y, int size, ParametersBundle parameters);
+		virtual ~PB();
 
-	public:
-
-		PBIntra(ImgComp comp, int x, int y, int size, ParametersBundle parameters);
-
-		~PBIntra();
-
-		/*void calcAndWritePredictionToCU(std::shared_ptr<Pintra> mainPU);
+		void calcAndWritePredictionToCU(std::shared_ptr<Pintra> mainPU);
 
 		void calcReferences();
 
-		ImgComp getImgComp() const;
-
-		int getModeIdx() const;
-
 		int getPUIdx() const;
-
-		void setModeIdx(int mode);
 
 		Sample getCornerReference();
 
 		Sample* getSideRefs(const IntraDirection);
-
 		Sample **getPred();
-
 		Sample **getPredForceRef(Sample* leftRefs, Sample* topRefs, Sample corner);
-
-		bool predictionDone()
-		{
-			return itsPredictionDone;
-		}*/
 
 		virtual void print(LogId logId, bool recursive = true) override;
 	};

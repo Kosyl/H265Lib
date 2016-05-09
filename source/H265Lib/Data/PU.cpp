@@ -1,51 +1,58 @@
 #include "PU.h"
+#include <cassert>
+#include <Common/Logger.h>
 
 namespace HEVC
 {
 	PU::PU(int X, int Y, int size) :
 		BlockBase(X, Y, size)
 	{
+		LOG_INDENT(Logger::Dump);
+		LOGLN(Logger::Dump, "PU(", pos.x, ",", pos.y, ") ", size, "x", size);
 	}
 
 	PU::~PU()
 	{
 	}
 
-	void PU::print(LogId logId, bool recursive)
+	void PU::setIntraPredictionMode(const short lumaMode, const short chroma_derivation_type)
 	{
-		////LOG( "PART" ) << "Pintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
+		assert(lumaMode >= 0 && lumaMode <= 34);
+		intra_luma_prediction_mode = lumaMode;
+		intra_chroma_mode_derivation_type = chroma_derivation_type;
 
-		////LOG( "PART" ) << "zawarte TU:" << std::endl;
-		//LOG_TAB "PART" );
-		//itsTransformArea->printDescription();
-		//LOG_UNTAB "PART" );
+		switch (intra_chroma_mode_derivation_type)
+		{
+		case 0:
+			intra_chroma_prediction_mode = intra_luma_prediction_mode == 0 ? 34 : 0;
+			break;
+		case 1:
+			intra_chroma_prediction_mode = intra_luma_prediction_mode == 26 ? 34 : 26;
+			break;
+		case 2:
+			intra_chroma_prediction_mode = intra_luma_prediction_mode == 10 ? 34 : 10;
+			break;
+		case 3:
+			intra_chroma_prediction_mode = intra_luma_prediction_mode == 1 ? 34 : 1;
+			break;
+		case 4:
+			intra_chroma_prediction_mode = intra_luma_prediction_mode;
+			break;
+		default:
+			assert(false);
+		}
 	}
 
-	//int Pintra::getModeForChroma(int modeForLuma, int chromaPredictionDerivationMode)
-	//{
-	//	switch (chromaPredictionDerivationMode)
-	//	{
-	//	case 0:
-	//		return modeForLuma == 0 ? 34 : 0;
-	//	case 1:
-	//		return modeForLuma == 26 ? 34 : 26;
-	//	case 2:
-	//		return modeForLuma == 10 ? 34 : 10;
-	//	case 3:
-	//		return modeForLuma == 1 ? 34 : 1;
-	//	case 4:
-	//		return modeForLuma;
-	//	default:
-	//		assert(false);
-	//		return 0;
-	//	}
-	//}
+	short PU::getIntraModeIdx(ImgComp comp) const
+	{
+		if (comp == Luma)
+			return intra_luma_prediction_mode;
+		else
+			return intra_chroma_prediction_mode;
+	}
 
-	//void Pintra::reconstructionLoop()
-	//{
-	//	////LOG( "RECO" ) << "Pintra[" << getX( ) << "][" << getY( ) << "], size: " << getSize( ) << ", lumaPredMode: " << itsLumaModeIdx << std::endl;
-	//	//LOG_TAB "RECO" );
-	//	itsTransformArea->reconstructionLoop(shared_from_this());
-	//	//LOG_UNTAB "RECO" );
-	//}
+	void PU::print(LogId logId, bool recursive)
+	{
+
+	}
 }

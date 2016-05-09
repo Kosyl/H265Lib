@@ -17,7 +17,7 @@ namespace HEVC
 
 	class BlockBase
 	{
-	private:
+	protected:
 		size_t m_size;
 
 	public:

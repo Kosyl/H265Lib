@@ -12,14 +12,4 @@ namespace HEVC
 	void CTU::print(LogId logId, bool recursive)
 	{
 	}
-
-	bool CTU::hasUnprocessedCus()
-	{
-		if (cu_tree->isLeaf())
-			return cu_tree->getCU()->is_processed;
-		else
-		{
-			
-		}
-	}
 }

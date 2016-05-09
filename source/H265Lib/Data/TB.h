@@ -6,20 +6,15 @@
 
 namespace HEVC
 {
-	class TB : public BlockBase
+	struct TB : public BlockBase
 	{
-	private:
-
-	public:
 		ImgComp plane;
 
-		ReferenceSamples reference_samples;
-
-		Matrix<Sample> input_samples;
+		MatrixRef<Sample> input_samples;
 		Matrix<Sample> prediction;
 		Matrix<Sample> residuals;
 		Matrix<Coeff> transform_coefficients;
-		Matrix<Sample> reconstructed_samples;
+		MatrixRef<Sample> reconstructed_samples;
 
 		int last_sig_coeff_x, last_sig_coeff_y;
 		Bitset coded_sub_block_flags;
