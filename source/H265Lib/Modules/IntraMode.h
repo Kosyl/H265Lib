@@ -1,24 +1,20 @@
-/**
-* @file	IntraMode.h
-*
-* @brief	Deklaracje klasy strategii intra
-*/
 #ifndef INTRA_MODE_H
 #define INTRA_MODE_H
 
 #include <cassert>
 #include <Common/TypeDef.h>
 #include <Common/Enums.h>
+#include <Common/Matrix.h>
 #include <Data/ReferenceSamples.h>
 
 namespace HEVC
 {
 	class PBIntra;
 
-	struct IntraMode
+	interface IntraMode
 	{
-		IntraMode();
-		virtual ~IntraMode();
+		IntraMode( ) = default;
+		virtual ~IntraMode() = default;
 
 		virtual Matrix<Sample> calcPred(ReferenceSamples samples, ImgComp img_comp, int mode_idx) = 0;
 	};
@@ -27,8 +23,8 @@ namespace HEVC
 	{
 	public:
 
-		PlanarMode();
-		virtual ~PlanarMode();
+		PlanarMode() = default;
+		virtual ~PlanarMode() = default;
 
 		virtual Matrix<Sample> calcPred(ReferenceSamples samples, ImgComp img_comp, int mode_idx) override;
 	};
@@ -37,17 +33,16 @@ namespace HEVC
 	{
 	private:
 
-		Sample itsDCVal;
 		bool itsFiltreEdges;
 
-		void calcDcVal();
+		Sample calcDcVal( ReferenceSamples &samples );
 		Sample getFiltCorner() const;
 		Sample getFiltEdge(const IntraDirection dir, const int offset) const;
 
 	public:
 
-		DcMode();
-		virtual ~DcMode();
+		DcMode() = default;
+		virtual ~DcMode() = default;
 
 		virtual Matrix<Sample> calcPred(ReferenceSamples samples, ImgComp img_comp, int mode_idx) override;
 	};
@@ -59,8 +54,8 @@ namespace HEVC
 		Sample getFiltEdge(const IntraDirection dir, const int offset);
 	public:
 
-		LinearMode();
-		virtual ~LinearMode();
+		LinearMode() = default;
+		virtual ~LinearMode() = default;
 
 		virtual Matrix<Sample> calcPred(ReferenceSamples samples, ImgComp img_comp, int mode_idx) override;
 	};
@@ -69,21 +64,21 @@ namespace HEVC
 	{
 	private:
 
-		const static Int angles[];
+		const static int angles[];
 
-		const static Int invAngles[];
+		const static int invAngles[];
 
 		Sample* refsArray;
 
-		Int getAngle() const;
+		int getAngle() const;
 
-		Int getInvAngle() const;
+		int getInvAngle() const;
 
 		void getRefsArray();
 	public:
 
-		AngMode();
-		virtual ~AngMode();
+		AngMode() = default;
+		virtual ~AngMode() = default;
 
 		virtual Matrix<Sample> calcPred(ReferenceSamples samples, ImgComp img_comp, int mode_idx) override;
 	};

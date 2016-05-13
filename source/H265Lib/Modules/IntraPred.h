@@ -12,6 +12,7 @@
 #include <Common/TypeDef.h>
 #include <Common/Enums.h>
 #include <Data/PU.h>
+#include "IntraMode.h"
 
 namespace HEVC
 {

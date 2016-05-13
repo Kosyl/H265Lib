@@ -10,7 +10,10 @@
 namespace HEVC
 {
 	template<typename T>
-	using MatrixRef;
+	class Matrix;
+
+	template<typename T>
+	using MatrixRef = Matrix<T>;
 
 	template<typename T>
 	class Matrix
@@ -50,6 +53,11 @@ namespace HEVC
 			m_data(nullptr)
 		{
 			resize(0, 0, false);
+		}
+
+		Matrix( size_t size):
+			Matrix(size,size )
+		{
 		}
 
 		Matrix(size_t columns, size_t rows) :
@@ -272,9 +280,6 @@ namespace HEVC
 
 #pragma endregion
 	};
-
-	template<typename T>
-	using MatrixRef = Matrix<T>;
 
 	template<typename T>
 	struct Matrix3D
