@@ -5,20 +5,37 @@
 
 namespace HEVC
 {
-	struct ReferenceSamples
+	template<typename T>
+	struct IntraReferenceData
 	{
 		size_t block_size;
-		Sample Corner;
-		std::vector<Sample> Upper;
-		std::vector<Sample> Left;
+		T Corner;
+		std::vector<T> Top;
+		std::vector<T> Left;
 
-		ReferenceSamples(size_t blockSize) :
+		IntraReferenceData(size_t blockSize) :
 			block_size(blockSize),
 			Corner(0),
-			Upper(blockSize * 2),
+			Top(blockSize * 2),
 			Left(blockSize * 2)
 		{
 
 		}
+
+		std::vector<T>& operator[](IntraDirection dir)
+		{
+			assert(dir != IntraDirection::Corner);
+
+			return (dir == IntraDirection::Left) ? Left : Top;
+		}
+		std::vector<T>& side_to(IntraDirection dir)
+		{
+			assert(dir != IntraDirection::Corner);
+
+			return (dir == IntraDirection::Left) ? Top : Left;
+		}
 	};
+
+	using IntraReferenceSamples = IntraReferenceData<Sample>;
+	using IntraReferenceAvailability = IntraReferenceData<bool>;
 }

@@ -284,7 +284,9 @@ namespace HEVC
 	template<typename T>
 	struct Matrix3D
 	{
-		std::shared_ptr<Matrix<T>> values[3]{nullptr,nullptr,nullptr};
+		Matrix<T> values[3]{nullptr,nullptr,nullptr};
+
+		Matrix<T>& operator[](int i) { return values[i]; }
 	};
 
 	template<typename T>

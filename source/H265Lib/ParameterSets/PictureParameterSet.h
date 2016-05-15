@@ -13,8 +13,11 @@ namespace HEVC
 	private:
 
 		void refreshChromaQP();
-
+		void resetZScanArray();
+		
 	public:
+		Matrix<size_t> z_scan_array;
+
 		std::shared_ptr<SequenceParameterSet> sps;
 		std::shared_ptr<VideoParameterSet> vps;
 

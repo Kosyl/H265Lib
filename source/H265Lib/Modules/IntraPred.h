@@ -1,8 +1,3 @@
-/**
-* @file	IntraPred.h
-*
-* @brief	Deklaracje klasy predyktora intra
-*/
 #ifndef INTRA_PRED_H
 #define INTRA_PRED_H
 
@@ -13,53 +8,38 @@
 #include <Common/Enums.h>
 #include <Data/PU.h>
 #include "IntraMode.h"
+#include <Data/TB.h>
 
 namespace HEVC
 {
 	class IntraPred
 	{
 	private:
+		DcMode mode_dc;
+		PlanarMode mode_planar;
+		LinearMode mode_linear;
+		AngMode mode_angular;
+		std::shared_ptr<SequenceParameterSet> sps;
 
-		static IntraPred *itsInstance;
+		int getFilteringThreshold(size_t block_size) const;
+		bool isFilteringRequired(ImgComp img_comp, int mode_idx, size_t block_size) const;
+		Sample filtreSample(Sample main, Sample left, Sample right);
+		void filtreReferenceSamples(IntraReferenceSamples &samples);
 
-		IntraMode **itsModes;
+		bool isSmoothingRequired(ImgComp img_comp, IntraReferenceSamples &samples) const;
+		void smoothReferenceSamples(IntraReferenceSamples &samples);
 
-		PB* itsCurrentPB;
+		IntraMode& getPredictionStrategy(int mode_idx);
 
-		Sample itsCornerValue;
-
-		Sample** itsReferenceValues;
-
-		int getFilteringThreshold() const;
-
-		bool isFilteringRequired() const;
-
-		Sample filtRef(const Sample mainRef, const Sample leftRef, const Sample rightRef) const;
-
-		void filterSideRefs(const IntraDirection referenceDirection);
-
-		void doReferenceFiltering();
-
-		bool checkSmoothConditions(const IntraDirection direction) const;
-
-		bool isSmoothingRequired() const;
-
-		Sample getSmoothedReferenceAtPosition(const IntraDirection dir, const int offset) const;
-
-		void smoothSideRefs(const IntraDirection dir);
-
-		void doReferenceSmoothing();
-
-		IntraMode* getPredictionStrategy();
+		bool calcPuAvail(const size_t targetPuX, const size_t targetPuY, Picture &pic) const;
 
 	public:
 
-		IntraPred();
-		~IntraPred();
+		IntraPred(std::shared_ptr<SequenceParameterSet> parameters);
+		~IntraPred() = default;
 
-		Sample** calcPred(PBIntra* targetPB);
-
-		Sample** calcPredForceRefs(PBIntra* tergetPB, Sample* leftRefs, Sample* topRefs, const Sample corner);
+		IntraReferenceSamples calcReference(MatrixRef<Sample> source, std::shared_ptr<TB> tb, Picture &pic);
+		Matrix<Sample> calcPred(IntraReferenceSamples samples, ImgComp img_comp, int mode_idx );
 	};
 }
 #endif

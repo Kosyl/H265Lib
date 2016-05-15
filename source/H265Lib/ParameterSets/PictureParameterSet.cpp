@@ -60,13 +60,14 @@ namespace HEVC
 
 		slice_segment_header_extension_present_flag = false;
 		extension_flag = false;
-	
+
 		refresh();
 	}
-	
+
 	void PictureParameterSet::refresh()
 	{
 		refreshChromaQP();
+		resetZScanArray();
 		log2_parallel_merge_level = Calc::log2(parallel_merge_level);
 	}
 
@@ -84,5 +85,37 @@ namespace HEVC
 	{
 		cb_init_qp = init_qp + cb_qp_offset;
 		cr_init_qp = init_qp + cr_qp_offset;
+	}
+
+	void PictureParameterSet::resetZScanArray()
+	{
+		int y, x, m, p, i, tbX, tbY, ctbAddrRs;
+		int minTUSize = sps->min_luma_transform_block_size, CTUSize = sps->log2_ctu_size;
+		int PicWidthInCTUs = sps->pic_width_in_ctus, PicHeightInCTUs = sps->pic_height_in_ctus;
+
+		if (minTUSize < 2 || CTUSize < 4 || PicHeightInCTUs <= 0 || PicHeightInCTUs <= 0)
+			return;
+
+		int yLimit = PicHeightInCTUs << (CTUSize - minTUSize);
+		int xLimit = PicWidthInCTUs << (CTUSize - minTUSize);
+
+		z_scan_array = Matrix<size_t>(xLimit, yLimit);
+
+		for (y = 0; y < yLimit; ++y)
+		{
+			for (x = 0; x < xLimit; ++x)
+			{
+				tbX = (x << minTUSize) >> CTUSize;
+				tbY = (y << minTUSize) >> CTUSize;
+				ctbAddrRs = PicWidthInCTUs * tbY + tbX;
+				z_scan_array(x, y) = ctbAddrRs << ((CTUSize - minTUSize) * 2);
+				for (i = 0, p = 0; i < (CTUSize - minTUSize); i++)
+				{
+					m = 1 << i;
+					p += (m & x ? m * m : 0) + (m & y ? 2 * m * m : 0);
+				}
+				z_scan_array(x, y) += p;
+			}
+		}
 	}
 }

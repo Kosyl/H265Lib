@@ -1,246 +1,204 @@
-/**
- * @file	IntraPred.cpp
- *
- * @brief	Implementacja klay predyktora intra
- */
-
 #include "IntraPred.h"
 
-IntraPred* IntraPred::itsInstance = nullptr;
-
-IntraPred::IntraPred( ) :
-itsCurrentPB( nullptr ),
-itsReferenceValues( nullptr ),
-itsCornerValue( 0 )
+namespace HEVC
 {
-	itsModes = new IntraMode *[ 4 ];
-	itsModes[ INTRAMODE_PLANAR ] = new PlanarMode( );
-	itsModes[ INTRAMODE_DC ] = new DcMode( );
-	itsModes[ INTRAMODE_LINEAR ] = new LinearMode( );
-	itsModes[ INTRAMODE_ANGULAR ] = new AngMode( );
-}
-
-IntraPred::~IntraPred( )
-{
-	for( int i = 0; i < 4; i++ )
-		delete itsModes[ i ];
-	delete[] itsModes;
-}
-
-IntraPred* IntraPred::getInstance( )
-{
-	if( itsInstance == nullptr )
-		itsInstance = new IntraPred( );
-	return itsInstance;
-}
-
-int IntraPred::getFilteringThreshold( ) const
-{
-	int thresh = 10;
-	switch( itsCurrentPB->getSize( ) )
+	IntraPred::IntraPred(std::shared_ptr<SequenceParameterSet> parameters):
+		sps(parameters)
 	{
-	case 8:
-		thresh = 7;
-		break;
-	case 16:
-		thresh = 1;
-		break;
-	case 32:
-		thresh = 0;
-		break;
-	};
-	return thresh;
-}
-
-bool IntraPred::isFilteringRequired( ) const
-{
-	if( itsCurrentPB->getImgComp( ) != LUMA )
-		return false;
-
-	if( itsCurrentPB->getModeIdx( ) == INTRAMODE_DC || itsCurrentPB->getSize( ) == 4 )
-		return false;
-
-	int dist = std::min( std::abs( ( (Int)itsCurrentPB->getModeIdx( ) ) - 10 ), std::abs( ( (Int)itsCurrentPB->getModeIdx( ) ) - 26 ) );
-	if( dist <= getFilteringThreshold( ) )
-		return false;
-
-	return true;
-}
-
-Sample IntraPred::filtRef( const Sample mainRef, const Sample leftRef, const Sample rightRef ) const
-{
-	return ( leftRef + 2 * mainRef + rightRef + 2 ) >> 2;
-}
-
-void IntraPred::filterSideRefs( const IntraDirection dir )
-{
-	Sample* refs = itsReferenceValues[ dir ];
-	Sample* newRefs = new Short[ 2 * itsCurrentPB->getSize( ) ];
-
-	Sample prevRef = itsCornerValue, currRef;
-	int limit = 2 * itsCurrentPB->getSize( ) - 1;
-	for( int x = 0; x < limit; ++x, prevRef = currRef )
-	{
-		currRef = refs[ x ];
-		newRefs[ x ] = filtRef( refs[ x ], prevRef, refs[ x + 1 ] );
-	}
-	newRefs[ 2 * itsCurrentPB->getSize( ) - 1 ] = refs[ 2 * itsCurrentPB->getSize( ) - 1 ];
-	delete[] itsReferenceValues[ dir ];
-	itsReferenceValues[ dir ] = newRefs;
-}
-
-void IntraPred::doReferenceFiltering( )
-{
-	assert( itsReferenceValues != nullptr && itsReferenceValues[ INTRA_DIR_LEFT ] != nullptr && itsReferenceValues[ INTRA_DIR_TOP ] != nullptr );
-
-	int firstLeft = itsReferenceValues[ INTRA_DIR_LEFT ][ 0 ];
-	int firstTop = itsReferenceValues[ INTRA_DIR_TOP ][ 0 ];
-
-	filterSideRefs( INTRA_DIR_LEFT );
-	filterSideRefs( INTRA_DIR_TOP );
-
-	itsCornerValue = filtRef( itsCornerValue, firstLeft, firstTop );
-}
-
-bool IntraPred::checkSmoothConditions( const IntraDirection dir ) const
-{
-	assert( dir != INTRA_DIR_CORNER );
-	Sample* currRefs = itsReferenceValues[ dir ];
-	int cond = std::abs( itsCornerValue + currRefs[ 2 * itsCurrentPB->getSize( ) - 1 ] - 2 * currRefs[ itsCurrentPB->getSize( ) - 1 ] );
-	int limit = 1 << ( SeqParams( )->getBitDepthLuma( ) - 5 );
-	return cond < limit;
-}
-
-bool IntraPred::isSmoothingRequired( ) const
-{
-	bool doSmoothing = ( itsCurrentPB->getSize( ) == 32 ) && SeqParams( )->getStrongIntraSmoothingEnabled( );
-	bool smoothCond = checkSmoothConditions( INTRA_DIR_LEFT ) && checkSmoothConditions( INTRA_DIR_TOP );
-	return doSmoothing && smoothCond;
-}
-
-Sample IntraPred::getSmoothedReferenceAtPosition( const IntraDirection dir, const int offset ) const
-{
-	Sample lastRef = itsReferenceValues[ dir ][ 2 * itsCurrentPB->getSize( ) - 1 ];
-	return ( ( 63 - offset ) * itsCornerValue + ( offset + 1 ) * lastRef + 32 ) >> 6;
-}
-
-void IntraPred::smoothSideRefs( const IntraDirection dir )
-{
-	assert( itsCurrentPB->getSize( ) == 32 );
-
-	Sample* refs = itsReferenceValues[ dir ];
-	Sample* newRefs = new Short[ 2 * itsCurrentPB->getSize( ) ];
-
-	int limit = 2 * itsCurrentPB->getSize( ) - 1;
-	for( int x = 0; x < limit; ++x )
-		newRefs[ x ] = getSmoothedReferenceAtPosition( dir, x );
-
-	newRefs[ limit ] = refs[ limit ];
-	delete itsReferenceValues[ dir ];
-	itsReferenceValues[ dir ] = newRefs;
-}
-
-void IntraPred::doReferenceSmoothing( )
-{
-	smoothSideRefs( INTRA_DIR_LEFT );
-	smoothSideRefs( INTRA_DIR_TOP );
-}
-
-IntraMode *IntraPred::getPredictionStrategy( )
-{
-	switch( itsCurrentPB->getModeIdx( ) )
-	{
-	case 0:
-		return itsModes[ INTRAMODE_PLANAR ];
-	case 1:
-		return itsModes[ INTRAMODE_DC ];
-	case 10:
-	case 26:
-		return itsModes[ INTRAMODE_LINEAR ];
-	default:
-		return itsModes[ INTRAMODE_ANGULAR ];
-	}
-}
-
-Sample** IntraPred::calcPred( PBIntra* newPb )
-{
-	assert( newPb != nullptr );
-
-	itsCurrentPB = newPb;
-
-	itsCurrentPB->calcReferences( );
-
-	itsCornerValue = itsCurrentPB->getCornerReference( );
-	itsReferenceValues = new Short*[2];
-	itsReferenceValues[INTRA_DIR_LEFT] = new Sample[2 * newPb->getSize()];
-	itsReferenceValues[INTRA_DIR_TOP] = new Sample[2 * newPb->getSize()];
-	Sample* ptr1 = itsCurrentPB->getSideRefs( INTRA_DIR_LEFT );
-	Sample* ptr2 = itsCurrentPB->getSideRefs(INTRA_DIR_TOP);
-	for (int i = 0; i < 2 * newPb->getSize(); ++i)
-	{
-		itsReferenceValues[INTRA_DIR_LEFT][i] = ptr1[i];
-		itsReferenceValues[INTRA_DIR_TOP][i] = ptr2[i];
 	}
 
-	if( isFilteringRequired( ) )
+	int IntraPred::getFilteringThreshold(size_t block_size) const
 	{
-		if( isSmoothingRequired( ) )
-			doReferenceSmoothing( );
+		int thresh = 10;
+		switch (block_size)
+		{
+		case 8:
+			thresh = 7;
+			break;
+		case 16:
+			thresh = 1;
+			break;
+		case 32:
+			thresh = 0;
+			break;
+		};
+
+		assert(thresh != 10); //dla block_size==4, ale dla 4 nigdy nie powinno wejsc do tej metody
+
+		return thresh;
+	}
+
+	bool IntraPred::isFilteringRequired( ImgComp img_comp, int mode_idx, size_t block_size) const
+	{
+		if (img_comp != Luma)
+			return false;
+
+		if (mode_idx == IntraMode_DC || block_size == 4)
+			return false;
+
+		int dist = std::min(std::abs(mode_idx - 10), std::abs(mode_idx - 26));
+		if (dist <= getFilteringThreshold(block_size))
+			return false;
+
+		return true;
+	}
+
+	Sample IntraPred::filtreSample(Sample main, Sample left, Sample right)
+	{
+		return (left + 2 * main + right + 2) >> 2;
+	}
+
+	void IntraPred::filtreReferenceSamples(IntraReferenceSamples &samples)
+	{
+		auto corner = samples.Corner;
+		samples.Corner = filtreSample(corner, samples.Left[0], samples.Top[0]);
+
+		Sample prevLeft = corner, prevTop = corner, currLeft,currTop;
+		int limit = 2 * samples.block_size - 1;
+		for (int x = 0; x < limit; ++x)
+		{
+			currLeft = samples.Left[x];
+			currTop = samples.Top[x];
+			samples.Left[x] = filtreSample(prevLeft, samples.Left[x], samples.Left[x + 1]);
+			samples.Top[x] = filtreSample(prevTop, samples.Top[x], samples.Top[x + 1]);
+			prevLeft = currLeft;
+			prevTop = currTop;
+		}
+	}
+
+	bool IntraPred::isSmoothingRequired(ImgComp img_comp, IntraReferenceSamples &samples) const
+	{
+		bool smoothPossible = (samples.block_size == 32) && sps->strong_intra_smoothing_enabled_flag && img_comp == Luma;
+		if (!smoothPossible)
+			return false;
+
+		Sample limit = 1 << (sps->bit_depth_luma - 5);
+		auto condLeft = std::abs(samples.Corner + samples.Left[2 * samples.block_size - 1] - 2 * samples.Left[samples.block_size - 1]);
+		auto condTop = std::abs(samples.Corner + samples.Top[2 * samples.block_size - 1] - 2 * samples.Top[samples.block_size - 1]);
+
+		bool smoothRequired = condLeft < limit && condTop < limit;
+		return smoothRequired;
+	}
+
+	void IntraPred::smoothReferenceSamples(IntraReferenceSamples &samples)
+	{
+		assert(samples.block_size == 32);
+
+		int limit = 2 * samples.block_size - 1;
+		for (int x = 0; x < limit; ++x)
+		{
+			samples.Left[x] = ((63 - x) * samples.Corner + (x + 1) * samples.Left[limit] + 32) >> 6;
+			samples.Top[x] = ((63 - x) * samples.Corner + (x + 1) * samples.Top[limit] + 32) >> 6;
+		}
+	}
+
+	IntraMode& IntraPred::getPredictionStrategy( int mode_idx)
+	{
+		switch (mode_idx)
+		{
+		case IntraMode_Planar:
+			return mode_planar;
+		case IntraMode_DC:
+			return mode_dc;
+		case IntraMode_Horizontal:
+		case IntraMode_Vertical:
+			return mode_linear;
+		default:
+			return mode_angular;
+		}
+	}
+
+	bool IntraPred::calcPuAvail(Position curr_luma_position, Position target_luma_position)
+	{
+		auto picWidth = sps->getPicWidth(comp);
+		auto picHeight = sps->getPicHeight(comp);
+
+		bool puOutsidePic = (target.x < 0) || (target.y < 0) || (target.x >= picWidth) || (target.y >= picHeight);
+
+		bool puAlreadyCalc = sps->calcIdx() getZScanIdxIn4x4(neigh_x, neigh_y) < itsIdx;
+
+		if (puOutsidePic || !puAlreadyCalc)
+			return false;
+
+		return true;
+	}
+
+	IntraReferenceSamples IntraPred::calcReference(MatrixRef<Sample> source,  std::shared_ptr<TB> tb, Picture &pic)
+	{
+		IntraReferenceAvailability avail(tb->size());
+
+		bool atLeasOneAvailable = false;
+
+		//corner
+		avail.Corner = calcPuAvail(block_pos, block_pos.move(-1,-1));
+		if (cornerAvailable)
+		{
+			itsCornerReference = itsPicRecon[X - 1][Y - 1];
+			atLeasOneAvailable = true;
+		}
+
+		int offsetLimit = 2 * itsSize;
+
+		for (int offset = 0; offset < offsetLimit; ++offset)
+		{
+			//left
+			sideAvailable[INTRA_DIR_LEFT][offset] = calcPuAvail(X - 1, Y + offset);
+			if (sideAvailable[INTRA_DIR_LEFT][offset])
+			{
+				itsSideReferences[INTRA_DIR_LEFT][offset] = getReferenceValue(INTRA_DIR_LEFT, offset);
+				atLeasOneAvailable = true;
+			}
+
+			//up
+			sideAvailable[INTRA_DIR_TOP][offset] = calcPuAvail(X + offset, Y - 1);
+			if (sideAvailable[INTRA_DIR_TOP][offset])
+			{
+				itsSideReferences[INTRA_DIR_TOP][offset] = getReferenceValue(INTRA_DIR_TOP, offset);
+				atLeasOneAvailable = true;
+			}
+		}
+
+		if (!atLeasOneAvailable)
+		{
+			Sample def = SeqParams()->getDefaultSampleValue(itsComp);
+			itsCornerReference = def;
+			for (int offset = 0; offset < offsetLimit; ++offset)
+			{
+				itsSideReferences[INTRA_DIR_LEFT][offset] = def;
+				itsSideReferences[INTRA_DIR_TOP][offset] = def;
+			}
+		}
 		else
-			doReferenceFiltering( );
+		{
+			fillMissingReferences(sideAvailable, cornerAvailable);
+		}
+
+
+		delete[] sideAvailable[INTRA_DIR_LEFT];
+		delete[] sideAvailable[INTRA_DIR_TOP];
+		delete[] sideAvailable;
+
+		////LOG( "OPT" ) << "Probki referencyjne:" << std::endl << itsCornerReference << " ";
+		//printTable( itsSideReferences[ INTRA_DIR_TOP ], 2 * itsSize, ////LOG( "OPT" ) );
+
+		//printMatrix( itsSideReferences, 1, 2 * itsSize, ////LOG( "OPT" ), 0, 0 );
+		itsReferencesReady = true;
 	}
 
-	IntraMode *strategy = getPredictionStrategy( );
-	strategy->setPb( itsCurrentPB );
-	strategy->setCorner( itsCornerValue );
-	strategy->setSideRefs( INTRA_DIR_LEFT, itsReferenceValues[ INTRA_DIR_LEFT ] );
-	strategy->setSideRefs( INTRA_DIR_TOP, itsReferenceValues[ INTRA_DIR_TOP ] );
-
-	Sample** pred = strategy->calcPred( );
-
-	delete[] itsReferenceValues;
-	itsCurrentPB = nullptr;
-
-	return pred;
-}
-
-Sample **IntraPred::calcPredForceRefs( PBIntra *newPb, Sample *leftRefs, Sample *topRefs, const Sample corner )
-{
-	assert( newPb != nullptr );
-
-	itsCurrentPB = newPb;
-
-	itsCornerValue = corner;
-	itsReferenceValues = new Short*[ 2 ];
-	itsReferenceValues[ INTRA_DIR_LEFT ] = new Short[ 2 * itsCurrentPB->getSize( ) ]; 
-	itsReferenceValues[ INTRA_DIR_TOP ] = new Short[ 2 * itsCurrentPB->getSize( ) ];
-	for( int i = 0; i < 2 * itsCurrentPB->getSize( ); ++i )
+	Matrix<Sample> IntraPred::calcPred(IntraReferenceSamples samples, ImgComp img_comp, int mode_idx)
 	{
-		itsReferenceValues[ INTRA_DIR_LEFT ][ i ] = leftRefs[ i ];
-		itsReferenceValues[ INTRA_DIR_TOP ][ i ] = topRefs[ i ];
+		auto size = samples.block_size;
+
+		if (isFilteringRequired(img_comp,mode_idx, size))
+		{
+			if (isSmoothingRequired(img_comp,samples))
+				smoothReferenceSamples(samples);
+			else
+				filtreReferenceSamples(samples);
+		}
+
+		IntraMode &strategy = getPredictionStrategy(mode_idx);
+
+		return strategy.calcPred(samples, img_comp, mode_idx);
 	}
-	
-	if( isFilteringRequired( ) )
-	{
-		if( isSmoothingRequired( ) )
-			doReferenceSmoothing( );
-		else
-			doReferenceFiltering( );
-	}
-	IntraMode *strategy = getPredictionStrategy( );
-	strategy->setPb( itsCurrentPB );
-	strategy->setCorner( itsCornerValue );
-	strategy->setSideRefs( INTRA_DIR_LEFT, itsReferenceValues[ INTRA_DIR_LEFT ] );
-	strategy->setSideRefs( INTRA_DIR_TOP, itsReferenceValues[ INTRA_DIR_TOP ] );
-
-	Sample** pred = strategy->calcPred( );
-
-	strategy->setPb( nullptr );
-	strategy->setCorner( -1 );
-
-	deleteMatrix( itsReferenceValues, 2 );
-	itsCornerValue = -1;
-	itsCurrentPB = nullptr;
-
-	return pred;
 }

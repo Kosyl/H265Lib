@@ -15,10 +15,6 @@ namespace HEVC
 {
 	class SequenceParameterSet : public ParameterSetBase
 	{
-	private:
-
-		void resetZScanArray();
-
 	public:
 
 		std::shared_ptr<VideoParameterSet> vps;
@@ -81,22 +77,13 @@ namespace HEVC
 		bool sps_extension_flag;
 		bool sps_extension_data_flag;
 
-		std::shared_ptr<Matrix<size_t> > _zScanArray;
-
 		void refresh();
 
 		SequenceParameterSet() = delete;
 		SequenceParameterSet(int idx);
 
 		virtual ~SequenceParameterSet() override;
-
-		size_t calcIdx(const size_t x, const size_t y, const Indexing idxType) const;
-		size_t calcZScanIdxOf4x4BlockIn64x64BlockByPixel(const int pixelX, const int pixelY);
-		size_t getSmallestBlockZScanIdxByPixel(const size_t pixelX, const size_t pixelY) const;
-		size_t getSmallestBlockZScanIdxByBlockPosition(size_t blockX, size_t blockY) const;
-		std::shared_ptr<Matrix<size_t>> getZScanArrayPtr();
-		int getSmallestBlockRasterIdx(int x, int y) const;
-
+		
 		void initWithDefaults() override;
 
 		size_t getPicWidth(ImgComp plane = ImgComp::Luma) const;

@@ -67,85 +67,6 @@ namespace HEVC
 		refresh();
 	}
 
-#pragma region Indexes
-
-	void SequenceParameterSet::resetZScanArray()
-	{
-		int y, x, m, p, i, tbX, tbY, ctbAddrRs;
-		int minTUSize = min_luma_transform_block_size, CTUSize = log2_ctu_size;
-		int PicWidthInCTUs = pic_width_in_ctus, PicHeightInCTUs = pic_height_in_ctus;
-
-		if (minTUSize < 2 || CTUSize < 4 || PicHeightInCTUs <= 0 || PicHeightInCTUs <= 0)
-			return;
-
-		int yLimit = PicHeightInCTUs << (CTUSize - minTUSize);
-		int xLimit = PicWidthInCTUs << (CTUSize - minTUSize);
-
-		_zScanArray = std::make_shared<Matrix<size_t>>(xLimit, yLimit);
-
-		for (y = 0; y < yLimit; ++y)
-		{
-			for (x = 0; x < xLimit; ++x)
-			{
-				tbX = (x << minTUSize) >> CTUSize;
-				tbY = (y << minTUSize) >> CTUSize;
-				ctbAddrRs = PicWidthInCTUs * tbY + tbX;
-				_zScanArray->at(x, y) = ctbAddrRs << ((CTUSize - minTUSize) * 2);
-				for (i = 0, p = 0; i < (CTUSize - minTUSize); i++)
-				{
-					m = 1 << i;
-					p += (m & x ? m * m : 0) + (m & y ? 2 * m * m : 0);
-				}
-				_zScanArray->at(x, y) = _zScanArray->at(x, y) + p;
-			}
-		}
-	}
-
-	int SequenceParameterSet::getSmallestBlockRasterIdx(int x, int y) const
-	{
-		return  ((y / min_luma_transform_block_size) * getPicWidth() / min_luma_transform_block_size) + (x / min_luma_transform_block_size);
-	}
-
-	std::shared_ptr<Matrix<size_t>> SequenceParameterSet::getZScanArrayPtr()
-	{
-		return _zScanArray;
-	}
-
-	size_t SequenceParameterSet::getSmallestBlockZScanIdxByBlockPosition(size_t puX, size_t puY) const
-	{
-		return _zScanArray->at(puX, puY);
-	}
-
-	size_t SequenceParameterSet::getSmallestBlockZScanIdxByPixel(const size_t pixelX, const size_t pixelY) const
-	{
-		return getSmallestBlockZScanIdxByBlockPosition(pixelX >> log2_min_transform_block_size, pixelY >> log2_min_transform_block_size);
-	}
-
-	size_t SequenceParameterSet::calcZScanIdxOf4x4BlockIn64x64BlockByPixel(const int puX, const int puY)
-	{
-		int puXDivBy4 = puX >> log2_min_transform_block_size;
-		int puYDivBy4 = puY >> log2_min_transform_block_size;
-		int calcPuIdx = ((puXDivBy4 & 8) << 3) | ((puXDivBy4 & 4) << 2) | ((puXDivBy4 & 2) << 1) | (puXDivBy4 & 1);
-		calcPuIdx |= ((puYDivBy4 & 8) << 4) | ((puYDivBy4 & 4) << 3) | ((puYDivBy4 & 2) << 2) | ((puYDivBy4 & 1) << 1);
-		return calcPuIdx;
-	}
-
-	size_t SequenceParameterSet::calcIdx(const size_t x, const size_t y, const Indexing idxType) const
-	{
-		switch (idxType)
-		{
-		case Indexing::RasterByBlock:
-			return getSmallestBlockRasterIdx(x, y);
-		case Indexing::ZScanByBlock:
-			return getSmallestBlockZScanIdxByBlockPosition(x, y);
-		case Indexing::ZScanByPixel:
-		default:
-			return getSmallestBlockZScanIdxByPixel(x, y);
-		}
-	}
-
-#pragma endregion
-
 	void SequenceParameterSet::refresh()
 	{
 		log2_max_transform_block_size = Calc::log2(max_luma_transform_block_size);
@@ -158,7 +79,6 @@ namespace HEVC
 		log2_max_pic_order_cnt = Calc::log2(max_pic_order_cnt);
 	
 		refreshPicSizeInCTUs();
-		resetZScanArray();
 	}
 
 #pragma region PicSize

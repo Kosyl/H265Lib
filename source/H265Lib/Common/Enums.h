@@ -32,6 +32,11 @@ namespace HEVC
 		Planar = 0, DC = 1, Linear = 2, Angular = 3
 	};
 
+	enum IntraModeIdx
+	{
+		IntraMode_Planar = 0, IntraMode_DC = 1, IntraMode_Horizontal = 10, IntraMode_18 = 18, IntraMode_Vertical = 26
+	};
+
 	enum class ScanOrder // 2 dla predMode 6-14, 1 dla 22-30, 0 wpp
 	{
 		Diagonal = 0, Horizontal = 1, Vertical = 2

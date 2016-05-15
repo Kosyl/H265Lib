@@ -13,6 +13,7 @@ namespace HEVC
 
 		Position();
 		Position(int new_x, int new_y);
+		Position move(int dx, int dy) { return Position(x + dx, y + dy); };
 	};
 
 	class BlockBase

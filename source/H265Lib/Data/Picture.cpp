@@ -18,13 +18,16 @@ namespace HEVC
 	{
 	}
 
-	Picture::Picture(SequenceParameterSet& parameters)
+	Picture::Picture(ParametersBundle& parameters)
 	{
 		initFromParameters(parameters);
 	}
 
-	void Picture::initFromParameters(SequenceParameterSet &sps)
+	void Picture::initFromParameters(ParametersBundle &parameters)
 	{
+		pps = parameters.Pps;
+
+		auto& sps = *parameters.Sps;
 		width[Luma] = sps.getPicWidth(Luma);
 		width[Cb] = sps.getPicWidth(Cb);
 		width[Cr] = sps.getPicWidth(Cr);
@@ -34,6 +37,7 @@ namespace HEVC
 		width_in_ctus = sps.pic_width_in_ctus;
 		height_in_ctus = sps.pic_height_in_ctus;
 		ctu_size = sps.ctu_size;
+		log2_min_tb_size = sps.log2_min_transform_block_size;
 
 		resetBuffers();
 		initCTUs();
@@ -198,5 +202,17 @@ namespace HEVC
 		}
 		} while (cu == nullptr);*/
 		return cu;
+	}
+
+	size_t Picture::getZScanIdx(const size_t x, const size_t y, bool shiftToMinTb) const
+	{
+		int shift = shiftToMinTb ? log2_min_tb_size : 0;
+		return pps->z_scan_array->at(x >> shift, y >> shift);
+	}
+
+	size_t Picture::getRasterIdx(const size_t x, const size_t y, bool shiftToMinTb) const
+	{
+		int shift = shiftToMinTb ? log2_min_tb_size : 0;
+		return  ((y >> shift) * (width[Luma] >> shift)) + (x >> shift);
 	}
 }
