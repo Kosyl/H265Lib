@@ -36,6 +36,8 @@
 */
 
 #include "TDecSlice.h"
+#include "TLibCommon/Logger.h"
+using namespace HEVC;
 
 //! \ingroup TLibDecoder
 //! \{
@@ -121,17 +123,20 @@ Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcP
 
   // for every CTU in the slice segment...
 
+  LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "ctus" );
   Bool isLastCtuOfSliceSegment = false;
   for( UInt ctuTsAddr = startCtuTsAddr; !isLastCtuOfSliceSegment && ctuTsAddr < numCtusInFrame; ctuTsAddr++)
   {
-    const UInt ctuRsAddr = pcPic->getPicSym()->getCtuTsToRsAddrMap(ctuTsAddr);
+	  LOG_JSON_SCOPE( Logger::Decoder );
+
+    const UInt ctuRsAddr = pcPic->getPicSym( )->getCtuTsToRsAddrMap( ctuTsAddr ); LOGLN_JSON( Logger::Decoder, "ctuRsAddr", ctuRsAddr ); LOGLN_JSON( Logger::Decoder, "ctuTsAddr", ctuTsAddr );
     const TComTile &currentTile = *(pcPic->getPicSym()->getTComTile(pcPic->getPicSym()->getTileIdxMap(ctuRsAddr)));
-    const UInt firstCtuRsAddrOfTile = currentTile.getFirstCtuRsAddr();
-    const UInt tileXPosInCtus = firstCtuRsAddrOfTile % frameWidthInCtus;
-    const UInt tileYPosInCtus = firstCtuRsAddrOfTile / frameWidthInCtus;
-    const UInt ctuXPosInCtus  = ctuRsAddr % frameWidthInCtus;
-    const UInt ctuYPosInCtus  = ctuRsAddr / frameWidthInCtus;
-    const UInt uiSubStrm=pcPic->getSubstreamForCtuAddr(ctuRsAddr, true, pcSlice)-subStreamOffset;
+    const UInt firstCtuRsAddrOfTile = currentTile.getFirstCtuRsAddr(); LOGLN_JSON( Logger::Decoder, "firstCtuRsAddrOfTile", firstCtuRsAddrOfTile );
+    const UInt tileXPosInCtus = firstCtuRsAddrOfTile % frameWidthInCtus; LOGLN_JSON( Logger::Decoder, "tileXPosInCtus", tileXPosInCtus );
+    const UInt tileYPosInCtus = firstCtuRsAddrOfTile / frameWidthInCtus; LOGLN_JSON( Logger::Decoder, "tileYPosInCtus", tileYPosInCtus );
+    const UInt ctuXPosInCtus  = ctuRsAddr % frameWidthInCtus; LOGLN_JSON( Logger::Decoder, "ctuXPosInCtus", ctuXPosInCtus );
+    const UInt ctuYPosInCtus  = ctuRsAddr / frameWidthInCtus; LOGLN_JSON( Logger::Decoder, "ctuYPosInCtus", ctuYPosInCtus );
+    const UInt uiSubStrm=pcPic->getSubstreamForCtuAddr(ctuRsAddr, true, pcSlice)-subStreamOffset; LOGLN_JSON( Logger::Decoder, "substream", uiSubStrm );
     TComDataCU* pCtu = pcPic->getCtu( ctuRsAddr );
     pCtu->initCtu( pcPic, ctuRsAddr );
 

@@ -38,6 +38,9 @@
 #include "TDecSbac.h"
 #include "TLibCommon/TComTU.h"
 #include "TLibCommon/TComTrQuant.h"
+#include "TLibCommon/Logger.h"
+
+using namespace HEVC;
 
 #if RExt__DECODER_DEBUG_BIT_STATISTICS
 #include "TLibCommon/TComCodingStatistics.h"
@@ -408,6 +411,8 @@ Void TDecSbac::parseCUTransquantBypassFlag( TComDataCU* pcCU, UInt uiAbsPartIdx,
   UInt uiSymbol;
   m_pcTDecBinIf->decodeBin( uiSymbol, m_CUTransquantBypassFlagSCModel.get( 0, 0, 0 ) RExt__DECODER_DEBUG_BIT_STATISTICS_PASS_OPT_ARG(STATS__CABAC_BITS__TQ_BYPASS_FLAG) );
   pcCU->setCUTransquantBypassSubParts(uiSymbol ? true : false, uiAbsPartIdx, uiDepth);
+
+  LOGLN_JSON( Logger::Decoder, "cu_transquant_bypass", uiSymbol ? true : false );
 }
 
 /** parse skip flag
@@ -433,6 +438,8 @@ Void TDecSbac::parseSkipFlag( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth 
   DTRACE_CABAC_T( "\tuiSymbol: ");
   DTRACE_CABAC_V( uiSymbol );
   DTRACE_CABAC_T( "\n");
+
+  LOGLN_JSON( Logger::Decoder, "skip_flag", uiSymbol ? true : false );
 
   if( uiSymbol )
   {
@@ -524,6 +531,7 @@ Void TDecSbac::parseSplitFlag     ( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt ui
   DTRACE_CABAC_T( "\tSplitFlag\n" )
   pcCU->setDepthSubParts( uiDepth + uiSymbol, uiAbsPartIdx );
 
+  LOGLN_JSON( Logger::Decoder, "split_flag", uiSymbol );
   return;
 }
 
@@ -554,6 +562,9 @@ Void TDecSbac::parsePartSize( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth 
       m_pcTDecBinIf->decodeBin( uiSymbol, m_cCUPartSizeSCModel.get( 0, 0, 0) RExt__DECODER_DEBUG_BIT_STATISTICS_PASS_OPT_ARG(ctype) );
     }
     eMode = uiSymbol ? SIZE_2Nx2N : SIZE_NxN;
+
+    LOGLN_JSON( Logger::Decoder, "part_size", uiSymbol ? "SIZE_2Nx2N" : "SIZE_NxN");
+
     UInt uiTrLevel = 0;
     UInt uiWidthInBit  = g_aucConvertToBit[pcCU->getWidth(uiAbsPartIdx)]+2;
     UInt uiTrSizeInBit = g_aucConvertToBit[pcCU->getSlice()->getSPS()->getMaxTrSize()]+2;
@@ -632,6 +643,8 @@ Void TDecSbac::parsePredMode( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth 
   m_pcTDecBinIf->decodeBin( uiSymbol, m_cCUPredModeSCModel.get( 0, 0, 0 ) RExt__DECODER_DEBUG_BIT_STATISTICS_PASS_OPT_ARG(STATS__CABAC_BITS__PRED_MODE) );
   iPredMode += uiSymbol;
   pcCU->setPredModeSubParts( (PredMode)iPredMode, uiAbsPartIdx, uiDepth );
+
+  LOGLN_JSON( Logger::Decoder, "pred_mode", iPredMode );
 }
 
 
@@ -649,11 +662,13 @@ Void TDecSbac::parseIntraDirLumaAng  ( TComDataCU* pcCU, UInt absPartIdx, UInt d
 #if RExt__DECODER_DEBUG_BIT_STATISTICS
   const TComCodingStatisticsClassType ctype(STATS__CABAC_BITS__INTRA_DIR_ANG, g_aucConvertToBit[pcCU->getSlice()->getSPS()->getMaxCUWidth()>>depth]+2, CHANNEL_TYPE_LUMA);
 #endif
+
   for (j=0;j<partNum;j++)
   {
     m_pcTDecBinIf->decodeBin( symbol, m_cCUIntraPredSCModel.get( 0, 0, 0) RExt__DECODER_DEBUG_BIT_STATISTICS_PASS_OPT_ARG(ctype) );
     mpmPred[j] = symbol;
   }
+  LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "intra_modes_luma" );
   for (j=0;j<partNum;j++)
   {
     Int preds[NUM_MOST_PROBABLE_MODES] = {-1, -1, -1};
@@ -691,6 +706,8 @@ Void TDecSbac::parseIntraDirLumaAng  ( TComDataCU* pcCU, UInt absPartIdx, UInt d
         intraPredMode += ( intraPredMode >= preds[i] );
       }
     }
+
+    LOGLN( Logger::Decoder, intraPredMode, ", " );
     pcCU->setIntraDirSubParts(CHANNEL_TYPE_LUMA, (UChar)intraPredMode, absPartIdx+partOffset*j, depth );
   }
 }
@@ -717,6 +734,7 @@ Void TDecSbac::parseIntraDirChroma( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt ui
     uiSymbol = uiAllowedChromaDir[ uiIPredMode ];
   }
 
+  LOGLN_JSON( Logger::Decoder, "pred_mode_chroma", uiSymbol );
   pcCU->setIntraDirSubParts( CHANNEL_TYPE_CHROMA, uiSymbol, uiAbsPartIdx, uiDepth );
 }
 

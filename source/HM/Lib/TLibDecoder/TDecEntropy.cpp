@@ -38,7 +38,9 @@
 #include "TDecEntropy.h"
 #include "TLibCommon/TComTU.h"
 #include "TLibCommon/TComPrediction.h"
+#include "TLibCommon/Logger.h"
 
+using namespace HEVC;
 #if ENVIRONMENT_VARIABLE_DEBUG_AND_TEST
 #include "../TLibCommon/Debug.h"
 static const Bool bDebugRQT = DebugOptionList::DebugRQT.getInt()!=0;
@@ -370,6 +372,7 @@ Void TDecEntropy::decodeMVPIdxPU( TComDataCU* pcSubCU, UInt uiPartAddr, UInt uiD
 
 Void TDecEntropy::xDecodeTransform        ( Bool& bCodeDQP, Bool& isChromaQpAdjCoded, TComTU &rTu, const Int quadtreeTULog2MinSizeInCU )
 {
+  LOG_JSON_SCOPE( Logger::Decoder );
   TComDataCU *pcCU=rTu.getCU();
   const UInt uiAbsPartIdx=rTu.GetAbsPartIdxTU();
   const UInt uiDepth=rTu.GetTransformDepthTotal();
@@ -415,6 +418,8 @@ Void TDecEntropy::xDecodeTransform        ( Bool& bCodeDQP, Bool& isChromaQpAdjC
     m_pcEntropyDecoderIf->parseTransformSubdivFlag( uiSubdiv, 5 - uiLog2TrafoSize );
   }
 
+  LOGLN_JSON( Logger::Decoder, "subdiv", uiSubdiv );
+
   for(Int chan=COMPONENT_Cb; chan<numValidComponent; chan++)
   {
     const ComponentID compID=ComponentID(chan);
@@ -442,15 +447,19 @@ Void TDecEntropy::xDecodeTransform        ( Bool& bCodeDQP, Bool& isChromaQpAdjC
 
     TComTURecurse tuRecurseChild(rTu, true);
 
-    do
     {
-      xDecodeTransform( bCodeDQP, isChromaQpAdjCoded, tuRecurseChild, quadtreeTULog2MinSizeInCU );
-      UInt childTUAbsPartIdx=tuRecurseChild.GetAbsPartIdxTU();
-      for(UInt ch=0; ch<numValidComponent; ch++)
+      LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "transforms" );
+      do
       {
-        uiYUVCbf[ch] |= pcCU->getCbf(childTUAbsPartIdx , ComponentID(ch),  uiTrDepth+1 );
+        xDecodeTransform( bCodeDQP, isChromaQpAdjCoded, tuRecurseChild, quadtreeTULog2MinSizeInCU );
+        UInt childTUAbsPartIdx = tuRecurseChild.GetAbsPartIdxTU( );
+        for( UInt ch = 0; ch < numValidComponent; ch++ )
+        {
+          uiYUVCbf[ ch ] |= pcCU->getCbf( childTUAbsPartIdx, ComponentID( ch ), uiTrDepth + 1 );
+        }
       }
-    } while (tuRecurseChild.nextSection(rTu) );
+      while( tuRecurseChild.nextSection( rTu ) );
+    }
 
     for(UInt ch=0; ch<numValidComponent; ch++)
     {
@@ -641,7 +650,7 @@ Void TDecEntropy::decodeCoeff( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth
 #endif
 
   Int quadtreeTULog2MinSizeInCU = pcCU->getQuadtreeTULog2MinSizeInCU(uiAbsPartIdx);
-  
+  LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "transforms" );
   xDecodeTransform( bCodeDQP, isChromaQpAdjCoded, tuRecurse, quadtreeTULog2MinSizeInCU );
 }
 

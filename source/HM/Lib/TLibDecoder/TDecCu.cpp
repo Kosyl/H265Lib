@@ -38,6 +38,9 @@
 #include "TDecCu.h"
 #include "TLibCommon/TComTU.h"
 #include "TLibCommon/TComPrediction.h"
+#include "TLibCommon/Logger.h"
+
+using namespace HEVC;
 
 //! \ingroup TLibDecoder
 //! \{
@@ -144,6 +147,7 @@ Void TDecCu::decodeCtu( TComDataCU* pCtu, Bool& isLastCtuOfSliceSegment )
     setIsChromaQpAdjCoded(true);
   }
 
+  LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "cus" );
   // start from the top level CU
   xDecodeCU( pCtu, 0, 0, isLastCtuOfSliceSegment);
 }
@@ -181,6 +185,8 @@ Bool TDecCu::xDecodeSliceEnd( TComDataCU* pcCU, UInt uiAbsPartIdx )
 //! decode CU block recursively
 Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UInt uiDepth, Bool &isLastCtuOfSliceSegment)
 {
+  LOG_JSON_SCOPE( Logger::Decoder );
+
   TComPic* pcPic        = pcCU->getPic();
   const TComSPS &sps    = pcPic->getPicSym()->getSPS();
   const TComPPS &pps    = pcPic->getPicSym()->getPPS();
@@ -191,10 +197,15 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
 
 
   Bool bBoundary = false;
-  UInt uiLPelX   = pcCU->getCUPelX() + g_auiRasterToPelX[ g_auiZscanToRaster[uiAbsPartIdx] ];
+  UInt uiLPelX = pcCU->getCUPelX( ) + g_auiRasterToPelX[ g_auiZscanToRaster[ uiAbsPartIdx ] ]; 
   UInt uiRPelX   = uiLPelX + (maxCuWidth>>uiDepth)  - 1;
   UInt uiTPelY   = pcCU->getCUPelY() + g_auiRasterToPelY[ g_auiZscanToRaster[uiAbsPartIdx] ];
   UInt uiBPelY   = uiTPelY + (maxCuHeight>>uiDepth) - 1;
+
+  LOGLN_JSON( Logger::Decoder, "x", uiLPelX );
+  LOGLN_JSON( Logger::Decoder, "y", uiTPelY );
+  LOGLN_JSON( Logger::Decoder, "x2", uiRPelX );
+  LOGLN_JSON( Logger::Decoder, "y2", uiBPelY );
 
   if( ( uiRPelX < sps.getPicWidthInLumaSamples() ) && ( uiBPelY < sps.getPicHeightInLumaSamples() ) )
   {
@@ -218,6 +229,7 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
       setIsChromaQpAdjCoded(true);
     }
 
+    LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "cus" );
     for ( UInt uiPartUnitIdx = 0; uiPartUnitIdx < 4; uiPartUnitIdx++ )
     {
       uiLPelX   = pcCU->getCUPelX() + g_auiRasterToPelX[ g_auiZscanToRaster[uiIdx] ];
