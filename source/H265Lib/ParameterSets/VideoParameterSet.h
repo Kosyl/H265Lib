@@ -68,8 +68,16 @@ namespace HEVC
 		void initWithDefaults() override;
 	};
 
-	class VideoParameterSetBank : public ParameterBank<VideoParameterSet>
+	class VideoParameterSetBank : public ParameterBank<VideoParameterSet, VideoParameterSetBank>
 	{
+	public:
 
+		std::shared_ptr<VideoParameterSet> createNext( )
+		{
+			int idx = getNextIdx( );
+			auto set = std::make_shared<VideoParameterSet>( idx );
+			parameter_sets[ idx ] = set;
+			return set;
+		}
 	};
 }

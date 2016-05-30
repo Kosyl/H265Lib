@@ -16,7 +16,7 @@ namespace HEVC
 		std::vector<std::unique_ptr<Picture>> input_frames;
 		std::unique_ptr<IPictureEncoder> pic_encoder;
 
-		void loadFrames(std::string filePath, int numPics, std::shared_ptr<SequenceParameterSet> sps);
+		void loadFrames(std::string filePath, int numPics, ParametersBundle parameters );
 		void cleanup();
 
 	public:

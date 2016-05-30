@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include <ParameterSets/SequenceParameterSet.h>
+#include <ParameterSets/PictureParameterSet.h>
+#include <ParameterSets/ParametersBundle.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace HEVC;
@@ -67,9 +69,9 @@ namespace ParameterSetTests
 		
 		TEST_METHOD(ZscanArray_InitializationTest)
 		{
-			auto sps = SequenceParameterSetBank::instance().createNext();
+			ParametersBundle parameters = ParametersBundle::getDefaultParameters( 200, 200 );
 			
-			Log::printMatrix(*sps->_zScanArray);
+			Log::printMatrix(parameters.Pps->z_scan_array );
 
 			int arr[4][4] = 
 			{

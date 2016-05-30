@@ -13,7 +13,7 @@
 
 namespace HEVC
 {
-	class SequenceParameterSet : public ParameterSetBase
+	class SequenceParameterSet: public ParameterSetBase
 	{
 	public:
 
@@ -77,30 +77,41 @@ namespace HEVC
 		bool sps_extension_flag;
 		bool sps_extension_data_flag;
 
-		void refresh();
+		void refresh( );
 
-		SequenceParameterSet() = delete;
-		SequenceParameterSet(int idx);
+		SequenceParameterSet( ) = delete;
+		SequenceParameterSet( int idx );
 
-		virtual ~SequenceParameterSet() override;
-		
-		void initWithDefaults() override;
+		virtual ~SequenceParameterSet( ) override;
 
-		size_t getPicWidth(ImgComp plane = ImgComp::Luma) const;
-		size_t getPicHeight(ImgComp plane = ImgComp::Luma) const;
-		void setPicSize(int width, int height);
-		void refreshPicSizeInCTUs();
+		void initWithDefaults( ) override;
 
-		void setConformanceWindow(int top, int bottom, int left, int right);
+		size_t getPicWidth( ImgComp plane = ImgComp::Luma ) const;
+		size_t getPicHeight( ImgComp plane = ImgComp::Luma ) const;
+		void setPicSize( size_t width, size_t height );
+		void refreshPicSizeInCTUs( );
 
-		int getBitDepth(ImgComp comp) const;
-		Sample clip(ImgComp comp, Sample value);
-		Sample getDefaultSampleValue(ImgComp comp);
-		void configure(EncoderParameters configuration);
+		void setConformanceWindow( int top, int bottom, int left, int right );
+
+		int getBitDepth( ImgComp comp ) const;
+		Sample clip( ImgComp comp, Sample value );
+		Sample getDefaultSampleValue( ImgComp comp );
+		void configure( EncoderParameters configuration );
+		int chromaScaleFactorX( ) const;
+
+		int chromaScaleFactorY( ) const;
 	};
 
-	class SequenceParameterSetBank : public ParameterBank < SequenceParameterSet >
+	class SequenceParameterSetBank: public ParameterBank < SequenceParameterSet, SequenceParameterSetBank >
 	{
+	public:
 
+		std::shared_ptr<SequenceParameterSet> createNext( )
+		{
+			int idx = getNextIdx( );
+			auto set = std::make_shared<SequenceParameterSet>( idx );
+			parameter_sets[ idx ] = set;
+			return set;
+		}
 	};
 }

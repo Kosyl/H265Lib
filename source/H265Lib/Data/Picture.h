@@ -5,6 +5,7 @@
 #include <Common/Matrix.h>
 #include <ParameterSets/PictureParameterSet.h>
 #include <ParameterSets/ParametersBundle.h>
+#include "BlockBase.h"
 
 namespace HEVC
 {
@@ -49,5 +50,6 @@ namespace HEVC
 		size_t getRasterIdx(const size_t x, const size_t y, bool shiftToMinTb = true) const;
 
 		void printDescription(LogId logId, bool recursive = true, bool printSamples = false);
+		Position scalePositionToLuma(const Position& pos, ImgComp plane) const;
 	};
 }

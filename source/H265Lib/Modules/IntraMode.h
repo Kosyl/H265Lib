@@ -45,7 +45,7 @@ namespace HEVC
 	{
 	private:
 		std::shared_ptr<SequenceParameterSet> sps;
-		Sample getFiltEdge(const IntraReferenceSamples &samples, const IntraDirection dir, const ImgComp img_comp, const int offset);
+		Sample getFiltEdge(IntraReferenceSamples &samples, const IntraDirection dir, const ImgComp img_comp, const int offset);
 
 	public:
 		LinearMode() = default;

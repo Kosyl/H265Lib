@@ -7,22 +7,17 @@ using namespace HEVC;
 
 namespace UnitTests
 {
-	class ExposedIntraEncoder: public IntraPictureEncoder
-	{
-		
-	};
-
 	TEST_CLASS(IntraPictureEncoderTests)
 	{
 	public:
 
 		TEST_METHOD(encodeSamplePicture_PrintResult)
 		{
-			auto parameters = ParametersBundle::getDefaultParameters(100, 100);
+			auto parameters = ParametersBundle::getDefaultParameters(120, 120);
 			auto pic = std::make_unique<Picture>();
-			pic->initFromParameters(*parameters.Sps);
+			pic->initFromParameters(parameters);
 			
-			IntraPictureEncoder encoder(parameters);
+			HardcodedPictureEncoder encoder(parameters);
 
 			encoder.encodePicture(*pic);
 

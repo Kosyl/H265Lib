@@ -25,7 +25,7 @@ namespace HEVC
 		config = configuration;
 		encoding_parameters = ParametersBundle::fromConfiguration(configuration);
 
-		loadFrames(configuration.input_file_path, configuration.num_frames_to_encode, encoding_parameters.Sps);
+		loadFrames(configuration.input_file_path, configuration.num_frames_to_encode, encoding_parameters);
 
 		pic_encoder = std::make_unique<HardcodedPictureEncoder>(encoding_parameters);
 
@@ -37,7 +37,7 @@ namespace HEVC
 		writeBitstream();
 	}
 
-	void SequenceEncoder::loadFrames(std::string filePath, int numPics, std::shared_ptr<SequenceParameterSet> sps)
+	void SequenceEncoder::loadFrames(std::string filePath, int numPics, ParametersBundle parameters)
 	{
 		input_frames.clear();
 
@@ -45,7 +45,7 @@ namespace HEVC
 		for (int i = 0; i < numPics; ++i)
 		{
 			auto pic = std::make_unique<Picture>();
-			pic->initFromParameters(*sps);
+			pic->initFromParameters(parameters);
 
 			pic->loadFrameFromYuv(file);
 

@@ -37,6 +37,9 @@
 
 #include "NALread.h"
 #include "TDecTop.h"
+#include "TLibCommon/Logger.h"
+
+using namespace HEVC;
 
 //! \ingroup TLibDecoder
 //! \{
@@ -437,6 +440,7 @@ Void TDecTop::xParsePrefixSEImessages()
 
 Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay )
 {
+  LOG_JSON_NAMED_SCOPE( Logger::Decoder, "slice" );
   m_apcSlicePilot->initSlice(); // the slice pilot is an object to prepare for a new slice
                                 // it is not associated with picture, sps or pps structures.
 
@@ -450,6 +454,8 @@ Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisp
   }
   m_apcSlicePilot->setSliceIdx(m_uiSliceIdx);
 
+  LOGLN_JSON( Logger::Decoder, "slice_id", m_uiSliceIdx );
+
   m_apcSlicePilot->setNalUnitType(nalu.m_nalUnitType);
   Bool nonReferenceFlag = (m_apcSlicePilot->getNalUnitType() == NAL_UNIT_CODED_SLICE_TRAIL_N ||
                            m_apcSlicePilot->getNalUnitType() == NAL_UNIT_CODED_SLICE_TSA_N   ||
@@ -459,6 +465,8 @@ Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisp
   m_apcSlicePilot->setTemporalLayerNonReferenceFlag(nonReferenceFlag);
   m_apcSlicePilot->setReferenced(true); // Putting this as true ensures that picture is referenced the first time it is in an RPS
   m_apcSlicePilot->setTLayerInfo(nalu.m_temporalId);
+
+  LOGLN_JSON( Logger::Decoder, "temporal_id", nalu.m_temporalId );
 
 #if ENC_DEC_TRACE
   const UInt64 originalSymbolCount = g_nSymbolCounter;
@@ -607,6 +615,10 @@ Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisp
     pcSlice->setSliceCurEndCtuTsAddr(m_pcPic->getPicSym()->getCtuRsToTsAddrMap(pcSlice->getSliceCurEndCtuTsAddr()));
   }
 
+
+	LOGLN_JSON( Logger::Decoder, "start_ctu_addr", pcSlice->getSliceCurStartCtuTsAddr( ) );
+	LOGLN_JSON( Logger::Decoder, "end_ctu_addr", pcSlice->getSliceCurEndCtuTsAddr( ) );
+
   m_pcPic->setTLayer(nalu.m_temporalId);
 
   if (!pcSlice->getDependentSliceSegmentFlag())
@@ -699,6 +711,8 @@ Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisp
 
 Void TDecTop::xDecodeVPS(const std::vector<UChar> &naluData)
 {
+  LOG_JSON_NAMED_SCOPE( HEVC::Logger::Decoder, "vps" );
+
   TComVPS* vps = new TComVPS();
 
   m_cEntropyDecoder.decodeVPS( vps );
@@ -707,6 +721,8 @@ Void TDecTop::xDecodeVPS(const std::vector<UChar> &naluData)
 
 Void TDecTop::xDecodeSPS(const std::vector<UChar> &naluData)
 {
+  LOG_JSON_NAMED_SCOPE( HEVC::Logger::Decoder, "sps" );
+
   TComSPS* sps = new TComSPS();
 #if O0043_BEST_EFFORT_DECODING
   sps->setForceDecodeBitDepth(m_forceDecodeBitDepth);
@@ -717,6 +733,8 @@ Void TDecTop::xDecodeSPS(const std::vector<UChar> &naluData)
 
 Void TDecTop::xDecodePPS(const std::vector<UChar> &naluData)
 {
+  LOG_JSON_NAMED_SCOPE( HEVC::Logger::Decoder, "pps" );
+
   TComPPS* pps = new TComPPS();
   m_cEntropyDecoder.decodePPS( pps );
   m_parameterSetManager.storePPS( pps, naluData);

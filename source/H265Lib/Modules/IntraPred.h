@@ -21,24 +21,25 @@ namespace HEVC
 		AngMode mode_angular;
 		std::shared_ptr<SequenceParameterSet> sps;
 
-		int getFilteringThreshold(size_t block_size) const;
+		static int getFilteringThreshold(size_t block_size);
 		bool isFilteringRequired(ImgComp img_comp, int mode_idx, size_t block_size) const;
-		Sample filtreSample(Sample main, Sample left, Sample right);
-		void filtreReferenceSamples(IntraReferenceSamples &samples);
+		static Sample filtreSample(Sample main, Sample left, Sample right);
+		static void filtreReferenceSamples(IntraReferenceSamples &samples);
 
 		bool isSmoothingRequired(ImgComp img_comp, IntraReferenceSamples &samples) const;
 		void smoothReferenceSamples(IntraReferenceSamples &samples);
 
 		IntraMode& getPredictionStrategy(int mode_idx);
 
-		bool calcPuAvail(const size_t targetPuX, const size_t targetPuY, Picture &pic) const;
+		static bool checkSampleAvailability( Position curr_luma_position, Position target_luma_position, Picture &pic );
 
 	public:
 
 		IntraPred(std::shared_ptr<SequenceParameterSet> parameters);
 		~IntraPred() = default;
 
-		IntraReferenceSamples calcReference(MatrixRef<Sample> source, std::shared_ptr<TB> tb, Picture &pic);
+		static IntraReferenceSamples calcReference( MatrixRef<Sample> source, TB &tb, Picture &pic );
+		static void fillMissingReferences( IntraReferenceSamples &samples, IntraReferenceAvailability &availability );
 		Matrix<Sample> calcPred(IntraReferenceSamples samples, ImgComp img_comp, int mode_idx );
 	};
 }

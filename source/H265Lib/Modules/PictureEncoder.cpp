@@ -68,7 +68,7 @@ namespace HEVC
 		auto tu_iterator = cu.transform_tree->begin();
 		do
 		{
-
+			++tu_iterator;
 		} 
 		while (!tu_iterator.atEnd());
 	}

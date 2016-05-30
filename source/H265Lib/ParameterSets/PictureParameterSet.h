@@ -8,7 +8,12 @@
 
 namespace HEVC
 {
-	class PictureParameterSet : public ParameterSetBase
+	interface IZscanIndexer
+	{
+		virtual size_t get( size_t min_block_x, size_t min_block_y ) = 0;
+	};
+
+	class PictureParameterSet : public ParameterSetBase, public IZscanIndexer
 	{
 	private:
 
@@ -17,6 +22,10 @@ namespace HEVC
 		
 	public:
 		Matrix<size_t> z_scan_array;
+		virtual size_t get( size_t min_block_x, size_t min_block_y ) override
+		{
+			return z_scan_array( min_block_x, min_block_y );
+		}
 
 		std::shared_ptr<SequenceParameterSet> sps;
 		std::shared_ptr<VideoParameterSet> vps;
@@ -79,7 +88,7 @@ namespace HEVC
 		void refresh();
 
 		PictureParameterSet() = delete;
-		PictureParameterSet(int idx);
+		PictureParameterSet(int idx, std::shared_ptr<SequenceParameterSet> sps);
 
 		virtual ~PictureParameterSet() override;
 		virtual void initWithDefaults() override;
@@ -88,8 +97,16 @@ namespace HEVC
 		void configure(EncoderParameters configuration);
 	};
 
-	class PictureParameterSetBank : public ParameterBank < PictureParameterSet >
+	class PictureParameterSetBank : public ParameterBank < PictureParameterSet, PictureParameterSetBank >
 	{
+	public:
 
+		std::shared_ptr<PictureParameterSet> createNext( std::shared_ptr<SequenceParameterSet> sps )
+		{
+			int idx = getNextIdx( );
+			auto set = std::make_shared<PictureParameterSet>( idx, sps );
+			parameter_sets[ idx ] = set;
+			return set;
+		}
 	};
 }

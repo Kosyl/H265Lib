@@ -6,33 +6,28 @@
 
 namespace HEVC
 {
-	template < typename TParameterClass >
-	class ParameterBank : public Singleton < ParameterBank<TParameterClass> >
+	template < typename TParameterClass, typename TSelf >
+	class ParameterBank : public Singleton < TSelf >
 	{
-	private:
-		std::unordered_map<int, std::shared_ptr<TParameterClass>> _parameterSets;
-		int _lastSetIdx = 0;
-		int _nextSetIdx = 0;
+	protected:
+		std::unordered_map<int, std::shared_ptr<TParameterClass>> parameter_sets;
+		int last_set_idx = 0;
+
+		int getNextIdx( )
+		{
+			return ++last_set_idx;
+		}
 
 	public:
-		std::shared_ptr<TParameterClass> createNext()
-		{
-			auto idx = _nextSetIdx;
-			_lastSetIdx = idx;
-			++_nextSetIdx;
-
-			this->_parameterSets[idx] = std::make_unique<TParameterClass>(idx);
-			return _parameterSets[idx];
-		}
 
 		std::shared_ptr<TParameterClass> getSetByIdx(int idx)
 		{
-			return _parameterSets[idx];
+			return parameter_sets[idx];
 		}
 
 		std::shared_ptr<TParameterClass> getCurrent()
 		{
-			return _parameterSets[_lastSetIdx];
+			return parameter_sets[last_set_idx];
 		}
 	};
 }

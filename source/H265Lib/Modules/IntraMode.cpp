@@ -10,9 +10,9 @@ namespace HEVC
 		int log2PuSize = Calc::log2(size);
 
 		Matrix<Sample> pred(size);
-		for (int x = 0; x < size; x++)
+		for (size_t x = 0; x < size; x++)
 		{
-			for (int y = 0; y < size; y++)
+			for ( size_t y = 0; y < size; y++)
 			{
 				int offset = (samples.Left[y] + samples.Top[x] + 1) << log2PuSize;
 				int sumLeft = (x + 1) * (samples.Top[size] - samples.Left[y]);
@@ -31,9 +31,9 @@ namespace HEVC
 	Sample DcMode::calcDcValue(IntraReferenceSamples &samples)
 	{
 		auto size = samples.block_size;
-		auto dc = size;
+		Sample dc = static_cast<Sample>(size);
 
-		for (int x = 0; x < size; ++x)
+		for ( size_t x = 0; x < size; ++x)
 			dc += samples.Left[x] + samples.Top[x];
 		dc >>= log2Int(size) + 1;
 
@@ -42,7 +42,7 @@ namespace HEVC
 
 	Matrix<Sample> DcMode::calcPred(IntraReferenceSamples samples, ImgComp img_comp, int mode_idx)
 	{
-		auto blockSize = samples.block_size;
+		size_t blockSize = samples.block_size;
 		Matrix<Sample> prediction(blockSize);
 
 		auto dc = calcDcValue(samples);
@@ -59,15 +59,15 @@ namespace HEVC
 		{
 			prediction(0, 0) = (samples.Left[0] + 2 * dc + samples.Top[0] + 2) >> 2;
 
-			for (int x = 1; x < blockSize; x++)
+			for ( size_t x = 1; x < blockSize; x++)
 			{
 				prediction(0, x) = (samples.Left[x] + 3 * dc + 2) >> 2;
 				prediction(x, 0) = (samples.Top[x] + 3 * dc + 2) >> 2;
 			}
 
-			for (int x = 1; x < blockSize; x++)
+			for ( size_t x = 1; x < blockSize; x++)
 			{
-				for (int y = 1; y < blockSize; y++)
+				for ( size_t y = 1; y < blockSize; y++)
 				{
 					prediction(x, y) = dc;
 				}
@@ -77,7 +77,7 @@ namespace HEVC
 		return prediction;
 	}
 
-	Sample LinearMode::getFiltEdge(const IntraReferenceSamples &samples, const IntraDirection dir, const ImgComp img_comp, const int offset)
+	Sample LinearMode::getFiltEdge(IntraReferenceSamples &samples, const IntraDirection dir, const ImgComp img_comp, const int offset)
 	{
 		auto& mainRefs = samples[dir];
 		auto& sideRefs = samples.side_to(dir);
@@ -100,12 +100,12 @@ namespace HEVC
 		{
 			prediction(0, 0) = samples[dir][0];
 
-			for (int x = 1; x < blockSize; x++)
+			for ( size_t x = 1; x < blockSize; x++)
 			{
 				prediction(x, 0) = dir == IntraDirection::Top ? samples[IntraDirection::Top][x] : samples[IntraDirection::Left][0];
 			}
 
-			for (int y = 1; y < blockSize; y++)
+			for ( size_t y = 1; y < blockSize; y++)
 			{
 				prediction(0, y) = dir == IntraDirection::Left ? samples[IntraDirection::Left][y] : samples[IntraDirection::Top][0];
 			}
@@ -114,17 +114,20 @@ namespace HEVC
 		{
 			prediction(0, 0) = getFiltEdge(samples, dir, img_comp, 0);
 
-			for (int x = 1; x < blockSize; x++)
+			for ( size_t x = 1; x < blockSize; x++)
 				prediction(x, 0) = dir == IntraDirection::Top ? samples[IntraDirection::Top][x] : getFiltEdge(samples, IntraDirection::Left, img_comp, x);
 
-			for (int y = 1; y < blockSize; y++)
+			for ( size_t y = 1; y < blockSize; y++)
 				prediction(0, y) = dir == IntraDirection::Left ? samples[IntraDirection::Left][y] : getFiltEdge(samples, IntraDirection::Top, img_comp, y);
 		}
 
-		for (int x = 1; x < blockSize; x++)
-			for (int y = 1; y < blockSize; y++)
-				prediction(x, y) = dir == IntraDirection::Left ? samples[IntraDirection::Left][y] : samples[IntraDirection::Top][x];
-
+		for( size_t x = 1; x < blockSize; x++ )
+		{
+			for( size_t y = 1; y < blockSize; y++ )
+			{
+				prediction( x, y ) = dir == IntraDirection::Left ? samples[ IntraDirection::Left ][ y ] : samples[ IntraDirection::Top ][ x ];
+			}
+		}
 		return prediction;
 	}
 
@@ -168,7 +171,7 @@ namespace HEVC
 
 		int start = size;
 		refsArray[start++] = samples.Corner;
-		for (int x = start; x <= 2 * size; x++)
+		for ( size_t x = start; x <= 2 * size; x++)
 		{
 			refsArray[x] = modeHor ? samples.Left[x - start] : samples.Top[x - start];
 
@@ -186,13 +189,13 @@ namespace HEVC
 					int refIdx = ((x*invAngle + 128) >> 8) - 1;
 					refsArray[size + x] = modeHor ? samples.Top[refIdx] : samples.Left[refIdx];
 
-					////LOG( "PRED" ) << "refsArray[ " << size + x << " ] <- itsReferenceValues[ " << refIdx << " ] = " << refsArray[ size + x ] << std::endl;
+					////LOG( "PRED" ) << "refsArray[ " << size + x << " ] <- itsReferenceValues[ " << refIdx << " ] = " << refsArray[ size + x ] << std::ndl;
 				}
 			}
 		}
 		else
 		{
-			for (int x = 2 * size + 1; x <= 3 * size; ++x)
+			for ( size_t x = 2 * size + 1; x <= 3 * size; ++x)
 			{
 				refsArray[x] = modeHor ? samples.Left[x - 1 - size] : samples.Top[x - 1 - size];
 				////LOG( "PRED" ) << "refsArray[ " << x << " ] <- itsReferenceValues[ " << x - 1 - size << " ] = " << refsArray[ x ] << std::endl;
@@ -225,12 +228,12 @@ namespace HEVC
 
 		int angleSum = 0, iFact, iIdx, refIdx;
 
-		for (int x = 0; x < blockSize; x++)
+		for ( size_t x = 0; x < blockSize; x++)
 		{
 			angleSum += angle;
 			iFact = angleSum & 31;
 			iIdx = angleSum >> 5;
-			for (int y = 0; y < blockSize; y++)
+			for ( size_t y = 0; y < blockSize; y++)
 			{
 				refIdx = iIdx + y + 1;
 				/*//LOG( "PRED" ) << "x = " << x << ", y = " << y << std::endl;
@@ -253,9 +256,9 @@ namespace HEVC
 
 		if (!modeHor)
 		{
-			for (int y = 0; y < blockSize; y++)
+			for ( size_t y = 0; y < blockSize; y++)
 			{
-				for (int x = y; x < blockSize; x++)
+				for ( size_t x = y; x < blockSize; x++)
 				{
 					std::swap(prediction(x, y), prediction(y, x));
 				}

@@ -1,15 +1,10 @@
 #pragma once
 
-#include <cassert>
 #include "CU.h"
-#include <vector>
 #include <Common/Enums.h>
 
 namespace HEVC
 {
-	class Pintra;
-	class TB;
-
 	class PU : public BlockBase
 	{
 	private:

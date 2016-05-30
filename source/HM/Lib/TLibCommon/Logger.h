@@ -124,6 +124,8 @@ namespace HEVC
 		static const LogId IO;
 		static const LogId BinOut;
 
+		static const LogId Decoder;
+
 		void printSpaces();
 		void increaseSpaces();
 		void decreaseSpaces();
@@ -328,6 +330,15 @@ namespace HEVC
 #define LOG_FUNCTION_INDENT(logId) Indent COMBINE(logIndent,__LINE__)(__FUNCTION__,logId)
 #define LOG_SCOPE_MUTE(logId) Mute COMBINE(logMute,__LINE__)(logId)
 
+#define LOG_JSON_SCOPE(logId) Indent COMBINE(logIndent,__LINE__)(logId,"{},")
+#define LOG_JSON_NAMED_SCOPE(logId,name)	LOGLN(logId,(#name), ": "); \
+																					Indent COMBINE(logIndent,__LINE__)(logId,"{},")
+
+#define LOG_JSON_ARRAY_SCOPE(logId,name)	LOGLN(logId,(#name), ": "); \
+																					Indent COMBINE(logIndent,__LINE__)(logId,"[],")
+#define PRINTVAR_JSON(x) "\"",(#x), "\" : ",(x),NewLineToken()
+#define LOGLN_JSON(logId, name, value) LoggingControl::instance().printlnToLog(logId,(#name),": ",value,",");
+
 #else
 
 #define LOGLN(...) 
@@ -351,6 +362,7 @@ namespace HEVC
 	private:
 
 		LogId _logId;
+		std::string delimeters{ "{}" };
 
 		void tab(LogId logId);
 		void untab(LogId logId);
@@ -358,6 +370,7 @@ namespace HEVC
 	public:
 
 		Indent(LogId inId);
+		Indent( LogId inId, std::string custom_delimeters );
 		Indent(const char* func, LogId inId);
 
 		~Indent();

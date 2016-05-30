@@ -3,23 +3,24 @@
 
 namespace HEVC
 {
-	PictureParameterSet::PictureParameterSet(int idx) :
-		ParameterSetBase(idx)
+	PictureParameterSet::PictureParameterSet( int idx, std::shared_ptr<SequenceParameterSet> sps ):
+		ParameterSetBase( idx ),
+		sps( sps )
 	{
-		initWithDefaults();
+		initWithDefaults( );
 	}
 
-	PictureParameterSet::~PictureParameterSet()
+	PictureParameterSet::~PictureParameterSet( )
 	{
-		initWithDefaults();
+		initWithDefaults( );
 	}
 
-	void PictureParameterSet::configure(EncoderParameters configuration)
+	void PictureParameterSet::configure( EncoderParameters configuration )
 	{
 		init_qp = configuration.qp;
 	}
 
-	void PictureParameterSet::initWithDefaults()
+	void PictureParameterSet::initWithDefaults( )
 	{
 		dependent_slice_segments_enabled_flag = true;
 		output_flag_present_flag = true;
@@ -61,60 +62,61 @@ namespace HEVC
 		slice_segment_header_extension_present_flag = false;
 		extension_flag = false;
 
-		refresh();
+		refresh( );
 	}
 
-	void PictureParameterSet::refresh()
+	void PictureParameterSet::refresh( )
 	{
-		refreshChromaQP();
-		resetZScanArray();
-		log2_parallel_merge_level = Calc::log2(parallel_merge_level);
+		refreshChromaQP( );
+		if( sps != nullptr )
+			resetZScanArray( );
+		log2_parallel_merge_level = Calc::log2( parallel_merge_level );
 	}
 
-	int PictureParameterSet::getQP(ImgComp comp /*= ImgComp::Luma*/) const
+	int PictureParameterSet::getQP( ImgComp comp /*= ImgComp::Luma*/ ) const
 	{
-		if (comp == ImgComp::Luma)
+		if( comp == ImgComp::Luma )
 			return init_qp;
-		else if (comp == ImgComp::Cb)
+		else if( comp == ImgComp::Cb )
 			return cb_init_qp;
 		else
 			return cr_init_qp;
 	}
 
-	void PictureParameterSet::refreshChromaQP()
+	void PictureParameterSet::refreshChromaQP( )
 	{
 		cb_init_qp = init_qp + cb_qp_offset;
 		cr_init_qp = init_qp + cr_qp_offset;
 	}
 
-	void PictureParameterSet::resetZScanArray()
+	void PictureParameterSet::resetZScanArray( )
 	{
 		int y, x, m, p, i, tbX, tbY, ctbAddrRs;
 		int minTUSize = sps->min_luma_transform_block_size, CTUSize = sps->log2_ctu_size;
 		int PicWidthInCTUs = sps->pic_width_in_ctus, PicHeightInCTUs = sps->pic_height_in_ctus;
 
-		if (minTUSize < 2 || CTUSize < 4 || PicHeightInCTUs <= 0 || PicHeightInCTUs <= 0)
+		if( minTUSize < 2 || CTUSize < 4 || PicHeightInCTUs <= 0 || PicHeightInCTUs <= 0 )
 			return;
 
-		int yLimit = PicHeightInCTUs << (CTUSize - minTUSize);
-		int xLimit = PicWidthInCTUs << (CTUSize - minTUSize);
+		int yLimit = PicHeightInCTUs << ( CTUSize - minTUSize );
+		int xLimit = PicWidthInCTUs << ( CTUSize - minTUSize );
 
-		z_scan_array = Matrix<size_t>(xLimit, yLimit);
+		z_scan_array = Matrix<size_t>( xLimit, yLimit );
 
-		for (y = 0; y < yLimit; ++y)
+		for( y = 0; y < yLimit; ++y )
 		{
-			for (x = 0; x < xLimit; ++x)
+			for( x = 0; x < xLimit; ++x )
 			{
-				tbX = (x << minTUSize) >> CTUSize;
-				tbY = (y << minTUSize) >> CTUSize;
+				tbX = ( x << minTUSize ) >> CTUSize;
+				tbY = ( y << minTUSize ) >> CTUSize;
 				ctbAddrRs = PicWidthInCTUs * tbY + tbX;
-				z_scan_array(x, y) = ctbAddrRs << ((CTUSize - minTUSize) * 2);
-				for (i = 0, p = 0; i < (CTUSize - minTUSize); i++)
+				z_scan_array( x, y ) = ctbAddrRs << ( ( CTUSize - minTUSize ) * 2 );
+				for( i = 0, p = 0; i < ( CTUSize - minTUSize ); i++ )
 				{
 					m = 1 << i;
-					p += (m & x ? m * m : 0) + (m & y ? 2 * m * m : 0);
+					p += ( m & x ? m * m : 0 ) + ( m & y ? 2 * m * m : 0 );
 				}
-				z_scan_array(x, y) += p;
+				z_scan_array( x, y ) += p;
 			}
 		}
 	}

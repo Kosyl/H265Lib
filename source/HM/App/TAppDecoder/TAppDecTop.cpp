@@ -44,6 +44,9 @@
 #include "TAppDecTop.h"
 #include "TLibDecoder/AnnexBread.h"
 #include "TLibDecoder/NALread.h"
+#include <TLibCommon/Logger.h>
+using namespace HEVC;
+
 #if RExt__DECODER_DEBUG_BIT_STATISTICS
 #include "TLibCommon/TComCodingStatistics.h"
 #endif
@@ -85,6 +88,8 @@ Void TAppDecTop::destroy()
  */
 Void TAppDecTop::decode()
 {
+	LOG_JSON_SCOPE( HEVC::Logger::Decoder );
+
   Int                 poc;
   TComList<TComPic*>* pcListPic = NULL;
 

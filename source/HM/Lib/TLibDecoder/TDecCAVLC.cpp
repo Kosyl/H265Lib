@@ -39,6 +39,9 @@
 #include "SEIread.h"
 #include "TDecSlice.h"
 #include "TLibCommon/TComChromaFormat.h"
+#include <TLibCommon/Logger.h>
+using namespace HEVC;
+
 #if RExt__DECODER_DEBUG_BIT_STATISTICS
 #include "TLibCommon/TComCodingStatistics.h"
 #endif
@@ -192,77 +195,77 @@ Void TDecCavlc::parsePPS(TComPPS* pcPPS)
 
   Int   iCode;
 
-  READ_UVLC( uiCode, "pps_pic_parameter_set_id");
+  READ_UVLC( uiCode, "pps_pic_parameter_set_id"); LOGLN_JSON( Logger::Decoder, "pps_pic_parameter_set_id", uiCode );
   assert(uiCode <= 63);
   pcPPS->setPPSId (uiCode);
 
-  READ_UVLC( uiCode, "pps_seq_parameter_set_id");
+  READ_UVLC( uiCode, "pps_seq_parameter_set_id"); LOGLN_JSON( Logger::Decoder, "pps_seq_parameter_set_id", uiCode );
   assert(uiCode <= 15);
   pcPPS->setSPSId (uiCode);
 
-  READ_FLAG( uiCode, "dependent_slice_segments_enabled_flag"    );    pcPPS->setDependentSliceSegmentsEnabledFlag   ( uiCode == 1 );
+  READ_FLAG( uiCode, "dependent_slice_segments_enabled_flag"    );    pcPPS->setDependentSliceSegmentsEnabledFlag   ( uiCode == 1 ); LOGLN_JSON( Logger::Decoder, "dependent_slice_segments_enabled_flag", uiCode == 1 );
 
-  READ_FLAG( uiCode, "output_flag_present_flag" );                    pcPPS->setOutputFlagPresentFlag( uiCode==1 );
+  READ_FLAG( uiCode, "output_flag_present_flag" );                    pcPPS->setOutputFlagPresentFlag( uiCode==1 ); LOGLN_JSON( Logger::Decoder, "output_flag_present_flag", uiCode == 1 );
 
-  READ_CODE(3, uiCode, "num_extra_slice_header_bits");                pcPPS->setNumExtraSliceHeaderBits(uiCode);
+  READ_CODE(3, uiCode, "num_extra_slice_header_bits");                pcPPS->setNumExtraSliceHeaderBits(uiCode); LOGLN_JSON( Logger::Decoder, "num_extra_slice_header_bits", uiCode );
 
-  READ_FLAG ( uiCode, "sign_data_hiding_flag" ); pcPPS->setSignHideFlag( uiCode );
+  READ_FLAG ( uiCode, "sign_data_hiding_flag" ); pcPPS->setSignHideFlag( uiCode ); LOGLN_JSON( Logger::Decoder, "sign_data_hiding_flag", uiCode );
 
-  READ_FLAG( uiCode,   "cabac_init_present_flag" );            pcPPS->setCabacInitPresentFlag( uiCode ? true : false );
+  READ_FLAG( uiCode,   "cabac_init_present_flag" );            pcPPS->setCabacInitPresentFlag( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "cabac_init_present_flag", uiCode ? true : false );
 
-  READ_UVLC(uiCode, "num_ref_idx_l0_default_active_minus1");
+  READ_UVLC(uiCode, "num_ref_idx_l0_default_active_minus1"); LOGLN_JSON( Logger::Decoder, "num_ref_idx_l0_default_active_minus1", uiCode );
   assert(uiCode <= 14);
   pcPPS->setNumRefIdxL0DefaultActive(uiCode+1);
 
-  READ_UVLC(uiCode, "num_ref_idx_l1_default_active_minus1");
+  READ_UVLC(uiCode, "num_ref_idx_l1_default_active_minus1"); LOGLN_JSON( Logger::Decoder, "num_ref_idx_l1_default_active_minus1", uiCode );
   assert(uiCode <= 14);
   pcPPS->setNumRefIdxL1DefaultActive(uiCode+1);
 
-  READ_SVLC(iCode, "init_qp_minus26" );                            pcPPS->setPicInitQPMinus26(iCode);
-  READ_FLAG( uiCode, "constrained_intra_pred_flag" );              pcPPS->setConstrainedIntraPred( uiCode ? true : false );
+  READ_SVLC(iCode, "init_qp_minus26" );                            pcPPS->setPicInitQPMinus26(iCode); LOGLN_JSON( Logger::Decoder, "init_qp_minus26", iCode );
+  READ_FLAG( uiCode, "constrained_intra_pred_flag" );              pcPPS->setConstrainedIntraPred( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "constrained_intra_pred_flag", uiCode ? true : false );
   READ_FLAG( uiCode, "transform_skip_enabled_flag" );
-  pcPPS->setUseTransformSkip ( uiCode ? true : false );
+  pcPPS->setUseTransformSkip ( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "transform_skip_enabled_flag", uiCode ? true : false );
 
-  READ_FLAG( uiCode, "cu_qp_delta_enabled_flag" );            pcPPS->setUseDQP( uiCode ? true : false );
+  READ_FLAG( uiCode, "cu_qp_delta_enabled_flag" );            pcPPS->setUseDQP( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "cu_qp_delta_enabled_flag", uiCode ? true : false );
   if( pcPPS->getUseDQP() )
   {
     READ_UVLC( uiCode, "diff_cu_qp_delta_depth" );
-    pcPPS->setMaxCuDQPDepth( uiCode );
+    pcPPS->setMaxCuDQPDepth( uiCode ); LOGLN_JSON( Logger::Decoder, "diff_cu_qp_delta_depth", uiCode );
   }
   else
   {
     pcPPS->setMaxCuDQPDepth( 0 );
   }
-  READ_SVLC( iCode, "pps_cb_qp_offset");
+  READ_SVLC( iCode, "pps_cb_qp_offset"); LOGLN_JSON( Logger::Decoder, "pps_cb_qp_offset", iCode );
   pcPPS->setQpOffset(COMPONENT_Cb, iCode);
   assert( pcPPS->getQpOffset(COMPONENT_Cb) >= -12 );
   assert( pcPPS->getQpOffset(COMPONENT_Cb) <=  12 );
 
-  READ_SVLC( iCode, "pps_cr_qp_offset");
+  READ_SVLC( iCode, "pps_cr_qp_offset"); LOGLN_JSON( Logger::Decoder, "pps_cr_qp_offset", iCode );
   pcPPS->setQpOffset(COMPONENT_Cr, iCode);
   assert( pcPPS->getQpOffset(COMPONENT_Cr) >= -12 );
   assert( pcPPS->getQpOffset(COMPONENT_Cr) <=  12 );
 
   assert(MAX_NUM_COMPONENT<=3);
 
-  READ_FLAG( uiCode, "pps_slice_chroma_qp_offsets_present_flag" );
+  READ_FLAG( uiCode, "pps_slice_chroma_qp_offsets_present_flag" ); LOGLN_JSON( Logger::Decoder, "pps_slice_chroma_qp_offsets_present_flag", uiCode ? true : false );
   pcPPS->setSliceChromaQpFlag( uiCode ? true : false );
 
   READ_FLAG( uiCode, "weighted_pred_flag" );          // Use of Weighting Prediction (P_SLICE)
-  pcPPS->setUseWP( uiCode==1 );
+  pcPPS->setUseWP( uiCode==1 ); LOGLN_JSON( Logger::Decoder, "weighted_pred_flag", uiCode == 1 );
   READ_FLAG( uiCode, "weighted_bipred_flag" );         // Use of Bi-Directional Weighting Prediction (B_SLICE)
-  pcPPS->setWPBiPred( uiCode==1 );
+  pcPPS->setWPBiPred( uiCode==1 ); LOGLN_JSON( Logger::Decoder, "weighted_bipred_flag", uiCode == 1 );
 
   READ_FLAG( uiCode, "transquant_bypass_enable_flag");
-  pcPPS->setTransquantBypassEnableFlag(uiCode ? true : false);
-  READ_FLAG( uiCode, "tiles_enabled_flag"               );    pcPPS->setTilesEnabledFlag            ( uiCode == 1 );
-  READ_FLAG( uiCode, "entropy_coding_sync_enabled_flag" );    pcPPS->setEntropyCodingSyncEnabledFlag( uiCode == 1 );
+  pcPPS->setTransquantBypassEnableFlag(uiCode ? true : false); LOGLN_JSON( Logger::Decoder, "transquant_bypass_enable_flag", uiCode ? true : false );
+  READ_FLAG( uiCode, "tiles_enabled_flag"               );    pcPPS->setTilesEnabledFlag            ( uiCode == 1 ); LOGLN_JSON( Logger::Decoder, "tiles_enabled_flag", uiCode == 1 );
+  READ_FLAG( uiCode, "entropy_coding_sync_enabled_flag" );    pcPPS->setEntropyCodingSyncEnabledFlag( uiCode == 1 ); LOGLN_JSON( Logger::Decoder, "entropy_coding_sync_enabled_flag", uiCode == 1 );
 
   if( pcPPS->getTilesEnabledFlag() )
   {
-    READ_UVLC ( uiCode, "num_tile_columns_minus1" );                pcPPS->setNumTileColumnsMinus1( uiCode );  
-    READ_UVLC ( uiCode, "num_tile_rows_minus1" );                   pcPPS->setNumTileRowsMinus1( uiCode );  
-    READ_FLAG ( uiCode, "uniform_spacing_flag" );                   pcPPS->setTileUniformSpacingFlag( uiCode == 1 );
+    READ_UVLC ( uiCode, "num_tile_columns_minus1" );                pcPPS->setNumTileColumnsMinus1( uiCode );  LOGLN_JSON( Logger::Decoder, "num_tile_columns_minus1", uiCode );
+    READ_UVLC ( uiCode, "num_tile_rows_minus1" );                   pcPPS->setNumTileRowsMinus1( uiCode );  LOGLN_JSON( Logger::Decoder, "num_tile_rows_minus1", uiCode );
+    READ_FLAG ( uiCode, "uniform_spacing_flag" );                   pcPPS->setTileUniformSpacingFlag( uiCode == 1 ); LOGLN_JSON( Logger::Decoder, "uniform_spacing_flag", uiCode == 1 );
 
     const UInt tileColumnsMinus1 = pcPPS->getNumTileColumnsMinus1();
     const UInt tileRowsMinus1    = pcPPS->getNumTileRowsMinus1();
@@ -271,10 +274,11 @@ Void TDecCavlc::parsePPS(TComPPS* pcPPS)
     {
       if (tileColumnsMinus1 > 0)
       {
+				LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "tile_columns" );
         std::vector<Int> columnWidth(tileColumnsMinus1);
         for(UInt i = 0; i < tileColumnsMinus1; i++)
         { 
-          READ_UVLC( uiCode, "column_width_minus1" );  
+          READ_UVLC( uiCode, "column_width_minus1" );  LOGLN( Logger::Decoder, uiCode, "," );
           columnWidth[i] = uiCode+1;
         }
         pcPPS->setTileColumnWidth(columnWidth);
@@ -282,10 +286,11 @@ Void TDecCavlc::parsePPS(TComPPS* pcPPS)
 
       if (tileRowsMinus1 > 0)
       {
+				LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "tile_rows" );
         std::vector<Int> rowHeight (tileRowsMinus1);
         for(UInt i = 0; i < tileRowsMinus1; i++)
         {
-          READ_UVLC( uiCode, "row_height_minus1" );
+          READ_UVLC( uiCode, "row_height_minus1" );  LOGLN( Logger::Decoder, uiCode, "," );
           rowHeight[i] = uiCode + 1;
         }
         pcPPS->setTileRowHeight(rowHeight);
@@ -294,37 +299,37 @@ Void TDecCavlc::parsePPS(TComPPS* pcPPS)
 
     if ((tileColumnsMinus1 + tileRowsMinus1) != 0)
     {
-      READ_FLAG ( uiCode, "loop_filter_across_tiles_enabled_flag" );   pcPPS->setLoopFilterAcrossTilesEnabledFlag( uiCode ? true : false );
+      READ_FLAG ( uiCode, "loop_filter_across_tiles_enabled_flag" );   pcPPS->setLoopFilterAcrossTilesEnabledFlag( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "loop_filter_across_tiles_enabled_flag", uiCode ? true : false );
     }
   }
-  READ_FLAG( uiCode, "pps_loop_filter_across_slices_enabled_flag" );   pcPPS->setLoopFilterAcrossSlicesEnabledFlag( uiCode ? true : false );
-  READ_FLAG( uiCode, "deblocking_filter_control_present_flag" );       pcPPS->setDeblockingFilterControlPresentFlag( uiCode ? true : false );
+  READ_FLAG( uiCode, "pps_loop_filter_across_slices_enabled_flag" );   pcPPS->setLoopFilterAcrossSlicesEnabledFlag( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "pps_loop_filter_across_slices_enabled_flag", uiCode ? true : false );
+  READ_FLAG( uiCode, "deblocking_filter_control_present_flag" );       pcPPS->setDeblockingFilterControlPresentFlag( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "deblocking_filter_control_present_flag", uiCode ? true : false );
   if(pcPPS->getDeblockingFilterControlPresentFlag())
   {
-    READ_FLAG( uiCode, "deblocking_filter_override_enabled_flag" );    pcPPS->setDeblockingFilterOverrideEnabledFlag( uiCode ? true : false );
-    READ_FLAG( uiCode, "pps_disable_deblocking_filter_flag" );         pcPPS->setPicDisableDeblockingFilterFlag(uiCode ? true : false );
+    READ_FLAG( uiCode, "deblocking_filter_override_enabled_flag" );    pcPPS->setDeblockingFilterOverrideEnabledFlag( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "deblocking_filter_override_enabled_flag", uiCode ? true : false );
+    READ_FLAG( uiCode, "pps_disable_deblocking_filter_flag" );         pcPPS->setPicDisableDeblockingFilterFlag(uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "pps_disable_deblocking_filter_flag", uiCode ? true : false );
     if(!pcPPS->getPicDisableDeblockingFilterFlag())
     {
-      READ_SVLC ( iCode, "pps_beta_offset_div2" );                     pcPPS->setDeblockingFilterBetaOffsetDiv2( iCode );
-      READ_SVLC ( iCode, "pps_tc_offset_div2" );                       pcPPS->setDeblockingFilterTcOffsetDiv2( iCode );
+      READ_SVLC ( iCode, "pps_beta_offset_div2" );                     pcPPS->setDeblockingFilterBetaOffsetDiv2( iCode ); LOGLN_JSON( Logger::Decoder, "pps_beta_offset_div2", iCode );
+      READ_SVLC ( iCode, "pps_tc_offset_div2" );                       pcPPS->setDeblockingFilterTcOffsetDiv2( iCode ); LOGLN_JSON( Logger::Decoder, "pps_tc_offset_div2", iCode );
     }
   }
-  READ_FLAG( uiCode, "pps_scaling_list_data_present_flag" );           pcPPS->setScalingListPresentFlag( uiCode ? true : false );
+  READ_FLAG( uiCode, "pps_scaling_list_data_present_flag" );           pcPPS->setScalingListPresentFlag( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "pps_scaling_list_data_present_flag", uiCode ? true : false );
   if(pcPPS->getScalingListPresentFlag ())
   {
     parseScalingList( &(pcPPS->getScalingList()) );
   }
 
-  READ_FLAG( uiCode, "lists_modification_present_flag");
+  READ_FLAG( uiCode, "lists_modification_present_flag"); LOGLN_JSON( Logger::Decoder, "lists_modification_present_flag", uiCode );
   pcPPS->setListsModificationPresentFlag(uiCode);
 
-  READ_UVLC( uiCode, "log2_parallel_merge_level_minus2");
+  READ_UVLC( uiCode, "log2_parallel_merge_level_minus2"); LOGLN_JSON( Logger::Decoder, "log2_parallel_merge_level_minus2", uiCode );
   pcPPS->setLog2ParallelMergeLevelMinus2 (uiCode);
 
-  READ_FLAG( uiCode, "slice_segment_header_extension_present_flag");
+  READ_FLAG( uiCode, "slice_segment_header_extension_present_flag"); LOGLN_JSON( Logger::Decoder, "slice_segment_header_extension_present_flag", uiCode );
   pcPPS->setSliceHeaderExtensionPresentFlag(uiCode);
 
-  READ_FLAG( uiCode, "pps_extension_present_flag");
+  READ_FLAG( uiCode, "pps_extension_present_flag"); LOGLN_JSON( Logger::Decoder, "pps_extension_present_flag", uiCode );
   if (uiCode)
   {
 #if ENC_DEC_TRACE || RExt__DECODER_DEBUG_BIT_STATISTICS
@@ -409,7 +414,7 @@ Void TDecCavlc::parsePPS(TComPPS* pcPPS)
     {
       while ( xMoreRbspData() )
       {
-        READ_FLAG( uiCode, "pps_extension_data_flag");
+        READ_FLAG( uiCode, "pps_extension_data_flag"); LOGLN_JSON( Logger::Decoder, "pps_extension_data_flag", uiCode );
       }
     }
   }
@@ -596,11 +601,11 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
 #endif
 
   UInt  uiCode;
-  READ_CODE( 4,  uiCode, "sps_video_parameter_set_id");          pcSPS->setVPSId        ( uiCode );
-  READ_CODE( 3,  uiCode, "sps_max_sub_layers_minus1" );          pcSPS->setMaxTLayers   ( uiCode+1 );
+  READ_CODE( 4,  uiCode, "sps_video_parameter_set_id");          pcSPS->setVPSId        ( uiCode ); LOGLN_JSON( Logger::Decoder, "sps_video_parameter_set_id", uiCode );
+  READ_CODE( 3,  uiCode, "sps_max_sub_layers_minus1" );          pcSPS->setMaxTLayers   ( uiCode+1 ); LOGLN_JSON( Logger::Decoder, "sps_max_sub_layers_minus1", uiCode );
   assert(uiCode <= 6);
 
-  READ_FLAG( uiCode, "sps_temporal_id_nesting_flag" );           pcSPS->setTemporalIdNestingFlag ( uiCode > 0 ? true : false );
+  READ_FLAG( uiCode, "sps_temporal_id_nesting_flag" );           pcSPS->setTemporalIdNestingFlag ( uiCode > 0 ? true : false ); LOGLN_JSON( Logger::Decoder, "sps_temporal_id_nesting_flag", uiCode );
   if ( pcSPS->getMaxTLayers() == 1 )
   {
     // sps_temporal_id_nesting_flag must be 1 when sps_max_sub_layers_minus1 is 0
@@ -608,30 +613,30 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
   }
 
   parsePTL(pcSPS->getPTL(), 1, pcSPS->getMaxTLayers() - 1);
-  READ_UVLC(     uiCode, "sps_seq_parameter_set_id" );           pcSPS->setSPSId( uiCode );
+  READ_UVLC(     uiCode, "sps_seq_parameter_set_id" );           pcSPS->setSPSId( uiCode ); LOGLN_JSON( Logger::Decoder, "sps_seq_parameter_set_id", uiCode );
   assert(uiCode <= 15);
 
-  READ_UVLC(     uiCode, "chroma_format_idc" );                  pcSPS->setChromaFormatIdc( ChromaFormat(uiCode) );
+  READ_UVLC(     uiCode, "chroma_format_idc" );                  pcSPS->setChromaFormatIdc( ChromaFormat(uiCode) ); LOGLN_JSON( Logger::Decoder, "chroma_format_idc", pcSPS->getChromaFormatIdc() );
   assert(uiCode <= 3);
 
   if( pcSPS->getChromaFormatIdc() == CHROMA_444 )
   {
-    READ_FLAG(     uiCode, "separate_colour_plane_flag");        assert(uiCode == 0);
+    READ_FLAG(     uiCode, "separate_colour_plane_flag");        assert(uiCode == 0); LOGLN_JSON( Logger::Decoder, "separate_colour_plane_flag", uiCode );
   }
 
-  READ_UVLC (    uiCode, "pic_width_in_luma_samples" );          pcSPS->setPicWidthInLumaSamples ( uiCode    );
-  READ_UVLC (    uiCode, "pic_height_in_luma_samples" );         pcSPS->setPicHeightInLumaSamples( uiCode    );
-  READ_FLAG(     uiCode, "conformance_window_flag");
+  READ_UVLC (    uiCode, "pic_width_in_luma_samples" );          pcSPS->setPicWidthInLumaSamples ( uiCode    ); LOGLN_JSON( Logger::Decoder, "pic_width_in_luma_samples", uiCode );
+  READ_UVLC (    uiCode, "pic_height_in_luma_samples" );         pcSPS->setPicHeightInLumaSamples( uiCode    ); LOGLN_JSON( Logger::Decoder, "pic_height_in_luma_samples", uiCode );
+  READ_FLAG(     uiCode, "conformance_window_flag"); LOGLN_JSON( Logger::Decoder, "conformance_window_flag", uiCode );
   if (uiCode != 0)
   {
     Window &conf = pcSPS->getConformanceWindow();
-    READ_UVLC(   uiCode, "conf_win_left_offset" );               conf.setWindowLeftOffset  ( uiCode * TComSPS::getWinUnitX( pcSPS->getChromaFormatIdc() ) );
-    READ_UVLC(   uiCode, "conf_win_right_offset" );              conf.setWindowRightOffset ( uiCode * TComSPS::getWinUnitX( pcSPS->getChromaFormatIdc() ) );
-    READ_UVLC(   uiCode, "conf_win_top_offset" );                conf.setWindowTopOffset   ( uiCode * TComSPS::getWinUnitY( pcSPS->getChromaFormatIdc() ) );
-    READ_UVLC(   uiCode, "conf_win_bottom_offset" );             conf.setWindowBottomOffset( uiCode * TComSPS::getWinUnitY( pcSPS->getChromaFormatIdc() ) );
+    READ_UVLC(   uiCode, "conf_win_left_offset" );               conf.setWindowLeftOffset  ( uiCode * TComSPS::getWinUnitX( pcSPS->getChromaFormatIdc() ) ); LOGLN_JSON( Logger::Decoder, "conf_win_left_offset", uiCode );
+    READ_UVLC(   uiCode, "conf_win_right_offset" );              conf.setWindowRightOffset ( uiCode * TComSPS::getWinUnitX( pcSPS->getChromaFormatIdc() ) ); LOGLN_JSON( Logger::Decoder, "conf_win_right_offset", uiCode );
+    READ_UVLC(   uiCode, "conf_win_top_offset" );                conf.setWindowTopOffset   ( uiCode * TComSPS::getWinUnitY( pcSPS->getChromaFormatIdc() ) ); LOGLN_JSON( Logger::Decoder, "conf_win_top_offset", uiCode );
+    READ_UVLC(   uiCode, "conf_win_bottom_offset" );             conf.setWindowBottomOffset( uiCode * TComSPS::getWinUnitY( pcSPS->getChromaFormatIdc() ) ); LOGLN_JSON( Logger::Decoder, "conf_win_bottom_offset", uiCode );
   }
 
-  READ_UVLC(     uiCode, "bit_depth_luma_minus8" );
+  READ_UVLC(     uiCode, "bit_depth_luma_minus8" ); LOGLN_JSON( Logger::Decoder, "bit_depth_luma_minus8", uiCode );
 #if O0043_BEST_EFFORT_DECODING
   pcSPS->setStreamBitDepth(CHANNEL_TYPE_LUMA, 8 + uiCode);
   const UInt forceDecodeBitDepth = pcSPS->getForceDecodeBitDepth();
@@ -649,7 +654,7 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
   pcSPS->setQpBDOffset(CHANNEL_TYPE_LUMA, (Int) (6*uiCode) );
 #endif
 
-  READ_UVLC( uiCode,    "bit_depth_chroma_minus8" );
+  READ_UVLC( uiCode,    "bit_depth_chroma_minus8" ); LOGLN_JSON( Logger::Decoder, "bit_depth_chroma_minus8", uiCode );
 #if O0043_BEST_EFFORT_DECODING
   pcSPS->setStreamBitDepth(CHANNEL_TYPE_CHROMA, 8 + uiCode);
   if (forceDecodeBitDepth != 0)
@@ -665,37 +670,41 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
   pcSPS->setQpBDOffset(CHANNEL_TYPE_CHROMA,  (Int) (6*uiCode) );
 #endif
 
-  READ_UVLC( uiCode,    "log2_max_pic_order_cnt_lsb_minus4" );   pcSPS->setBitsForPOC( 4 + uiCode );
+  READ_UVLC( uiCode,    "log2_max_pic_order_cnt_lsb_minus4" );   pcSPS->setBitsForPOC( 4 + uiCode ); LOGLN_JSON( Logger::Decoder, "log2_max_pic_order_cnt_lsb_minus4", uiCode );
   assert(uiCode <= 12);
 
   UInt subLayerOrderingInfoPresentFlag;
-  READ_FLAG(subLayerOrderingInfoPresentFlag, "sps_sub_layer_ordering_info_present_flag");
+  READ_FLAG(subLayerOrderingInfoPresentFlag, "sps_sub_layer_ordering_info_present_flag"); LOGLN_JSON( Logger::Decoder, "sps_sub_layer_ordering_info_present_flag", uiCode );
 
-  for(UInt i=0; i <= pcSPS->getMaxTLayers()-1; i++)
-  {
-    READ_UVLC ( uiCode, "sps_max_dec_pic_buffering_minus1[i]");
-    pcSPS->setMaxDecPicBuffering( uiCode + 1, i);
-    READ_UVLC ( uiCode, "sps_max_num_reorder_pics[i]" );
-    pcSPS->setNumReorderPics(uiCode, i);
-    READ_UVLC ( uiCode, "sps_max_latency_increase_plus1[i]");
-    pcSPS->setMaxLatencyIncreasePlus1( uiCode, i );
+	{
+		LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "sub_layer_ordering_info" );
+		for( UInt i = 0; i <= pcSPS->getMaxTLayers( ) - 1; i++ )
+		{
+			LOG_JSON_SCOPE( Logger::Decoder );
+			READ_UVLC( uiCode, "sps_max_dec_pic_buffering_minus1[i]" ); LOGLN_JSON( Logger::Decoder, "sps_max_dec_pic_buffering_minus1", uiCode );
+			pcSPS->setMaxDecPicBuffering( uiCode + 1, i );
+			READ_UVLC( uiCode, "sps_max_num_reorder_pics[i]" ); LOGLN_JSON( Logger::Decoder, "sps_max_num_reorder_pics", uiCode );
+			pcSPS->setNumReorderPics( uiCode, i );
+			READ_UVLC( uiCode, "sps_max_latency_increase_plus1[i]" ); LOGLN_JSON( Logger::Decoder, "sps_max_latency_increase_plus1", uiCode );
+			pcSPS->setMaxLatencyIncreasePlus1( uiCode, i );
 
-    if (!subLayerOrderingInfoPresentFlag)
-    {
-      for (i++; i <= pcSPS->getMaxTLayers()-1; i++)
-      {
-        pcSPS->setMaxDecPicBuffering(pcSPS->getMaxDecPicBuffering(0), i);
-        pcSPS->setNumReorderPics(pcSPS->getNumReorderPics(0), i);
-        pcSPS->setMaxLatencyIncreasePlus1(pcSPS->getMaxLatencyIncreasePlus1(0), i);
-      }
-      break;
-    }
-  }
+			if( !subLayerOrderingInfoPresentFlag )
+			{
+				for( i++; i <= pcSPS->getMaxTLayers( ) - 1; i++ )
+				{
+					pcSPS->setMaxDecPicBuffering( pcSPS->getMaxDecPicBuffering( 0 ), i );
+					pcSPS->setNumReorderPics( pcSPS->getNumReorderPics( 0 ), i );
+					pcSPS->setMaxLatencyIncreasePlus1( pcSPS->getMaxLatencyIncreasePlus1( 0 ), i );
+				}
+				break;
+			}
+		}
+	}
 
-  READ_UVLC( uiCode, "log2_min_luma_coding_block_size_minus3" );
+  READ_UVLC( uiCode, "log2_min_luma_coding_block_size_minus3" ); LOGLN_JSON( Logger::Decoder, "log2_min_luma_coding_block_size_minus3", uiCode );
   Int log2MinCUSize = uiCode + 3;
   pcSPS->setLog2MinCodingBlockSize(log2MinCUSize);
-  READ_UVLC( uiCode, "log2_diff_max_min_luma_coding_block_size" );
+  READ_UVLC( uiCode, "log2_diff_max_min_luma_coding_block_size" ); LOGLN_JSON( Logger::Decoder, "log2_diff_max_min_luma_coding_block_size", uiCode );
   pcSPS->setLog2DiffMaxMinCodingBlockSize(uiCode);
   
   if (pcSPS->getPTL()->getGeneralPTL()->getLevelIdc() >= Level::LEVEL5)
@@ -706,40 +715,40 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
   Int maxCUDepthDelta = uiCode;
   pcSPS->setMaxCUWidth  ( 1<<(log2MinCUSize + maxCUDepthDelta) );
   pcSPS->setMaxCUHeight ( 1<<(log2MinCUSize + maxCUDepthDelta) );
-  READ_UVLC( uiCode, "log2_min_luma_transform_block_size_minus2" );   pcSPS->setQuadtreeTULog2MinSize( uiCode + 2 );
+  READ_UVLC( uiCode, "log2_min_luma_transform_block_size_minus2" );   pcSPS->setQuadtreeTULog2MinSize( uiCode + 2 ); LOGLN_JSON( Logger::Decoder, "log2_min_luma_transform_block_size_minus2", uiCode );
 
-  READ_UVLC( uiCode, "log2_diff_max_min_luma_transform_block_size" ); pcSPS->setQuadtreeTULog2MaxSize( uiCode + pcSPS->getQuadtreeTULog2MinSize() );
+  READ_UVLC( uiCode, "log2_diff_max_min_luma_transform_block_size" ); pcSPS->setQuadtreeTULog2MaxSize( uiCode + pcSPS->getQuadtreeTULog2MinSize() ); LOGLN_JSON( Logger::Decoder, "log2_diff_max_min_luma_transform_block_size", uiCode );
   pcSPS->setMaxTrSize( 1<<(uiCode + pcSPS->getQuadtreeTULog2MinSize()) );
 
-  READ_UVLC( uiCode, "max_transform_hierarchy_depth_inter" );    pcSPS->setQuadtreeTUMaxDepthInter( uiCode+1 );
-  READ_UVLC( uiCode, "max_transform_hierarchy_depth_intra" );    pcSPS->setQuadtreeTUMaxDepthIntra( uiCode+1 );
+  READ_UVLC( uiCode, "max_transform_hierarchy_depth_inter" );    pcSPS->setQuadtreeTUMaxDepthInter( uiCode+1 ); LOGLN_JSON( Logger::Decoder, "max_transform_hierarchy_depth_inter", uiCode );
+  READ_UVLC( uiCode, "max_transform_hierarchy_depth_intra" );    pcSPS->setQuadtreeTUMaxDepthIntra( uiCode+1 ); LOGLN_JSON( Logger::Decoder, "max_transform_hierarchy_depth_intra", uiCode );
 
   Int addCuDepth = max (0, log2MinCUSize - (Int)pcSPS->getQuadtreeTULog2MinSize() );
   pcSPS->setMaxTotalCUDepth( maxCUDepthDelta + addCuDepth  + getMaxCUDepthOffset(pcSPS->getChromaFormatIdc(), pcSPS->getQuadtreeTULog2MinSize()) );
 
-  READ_FLAG( uiCode, "scaling_list_enabled_flag" );                 pcSPS->setScalingListFlag ( uiCode );
+  READ_FLAG( uiCode, "scaling_list_enabled_flag" );                 pcSPS->setScalingListFlag ( uiCode ); LOGLN_JSON( Logger::Decoder, "scaling_list_enabled_flag", uiCode );
   if(pcSPS->getScalingListFlag())
   {
-    READ_FLAG( uiCode, "sps_scaling_list_data_present_flag" );                 pcSPS->setScalingListPresentFlag ( uiCode );
+    READ_FLAG( uiCode, "sps_scaling_list_data_present_flag" );                 pcSPS->setScalingListPresentFlag ( uiCode ); LOGLN_JSON( Logger::Decoder, "sps_scaling_list_data_present_flag", uiCode );
     if(pcSPS->getScalingListPresentFlag ())
     {
       parseScalingList( &(pcSPS->getScalingList()) );
     }
   }
-  READ_FLAG( uiCode, "amp_enabled_flag" );                          pcSPS->setUseAMP( uiCode );
-  READ_FLAG( uiCode, "sample_adaptive_offset_enabled_flag" );       pcSPS->setUseSAO ( uiCode ? true : false );
+  READ_FLAG( uiCode, "amp_enabled_flag" );                          pcSPS->setUseAMP( uiCode ); LOGLN_JSON( Logger::Decoder, "amp_enabled_flag", uiCode );
+  READ_FLAG( uiCode, "sample_adaptive_offset_enabled_flag" );       pcSPS->setUseSAO ( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "sample_adaptive_offset_enabled_flag", uiCode ? true : false );
 
-  READ_FLAG( uiCode, "pcm_enabled_flag" ); pcSPS->setUsePCM( uiCode ? true : false );
+  READ_FLAG( uiCode, "pcm_enabled_flag" ); pcSPS->setUsePCM( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "pcm_enabled_flag", uiCode ? true : false );
   if( pcSPS->getUsePCM() )
   {
-    READ_CODE( 4, uiCode, "pcm_sample_bit_depth_luma_minus1" );          pcSPS->setPCMBitDepth    ( CHANNEL_TYPE_LUMA, 1 + uiCode );
-    READ_CODE( 4, uiCode, "pcm_sample_bit_depth_chroma_minus1" );        pcSPS->setPCMBitDepth    ( CHANNEL_TYPE_CHROMA, 1 + uiCode );
-    READ_UVLC( uiCode, "log2_min_pcm_luma_coding_block_size_minus3" );   pcSPS->setPCMLog2MinSize (uiCode+3);
-    READ_UVLC( uiCode, "log2_diff_max_min_pcm_luma_coding_block_size" ); pcSPS->setPCMLog2MaxSize ( uiCode+pcSPS->getPCMLog2MinSize() );
-    READ_FLAG( uiCode, "pcm_loop_filter_disable_flag" );                 pcSPS->setPCMFilterDisableFlag ( uiCode ? true : false );
+    READ_CODE( 4, uiCode, "pcm_sample_bit_depth_luma_minus1" );          pcSPS->setPCMBitDepth    ( CHANNEL_TYPE_LUMA, 1 + uiCode ); LOGLN_JSON( Logger::Decoder, "pcm_sample_bit_depth_luma_minus1", uiCode );
+    READ_CODE( 4, uiCode, "pcm_sample_bit_depth_chroma_minus1" );        pcSPS->setPCMBitDepth    ( CHANNEL_TYPE_CHROMA, 1 + uiCode ); LOGLN_JSON( Logger::Decoder, "pcm_sample_bit_depth_chroma_minus1", uiCode );
+    READ_UVLC( uiCode, "log2_min_pcm_luma_coding_block_size_minus3" );   pcSPS->setPCMLog2MinSize (uiCode+3); LOGLN_JSON( Logger::Decoder, "log2_min_pcm_luma_coding_block_size_minus3", uiCode );
+    READ_UVLC( uiCode, "log2_diff_max_min_pcm_luma_coding_block_size" ); pcSPS->setPCMLog2MaxSize ( uiCode+pcSPS->getPCMLog2MinSize() ); LOGLN_JSON( Logger::Decoder, "log2_diff_max_min_pcm_luma_coding_block_size", uiCode );
+    READ_FLAG( uiCode, "pcm_loop_filter_disable_flag" );                 pcSPS->setPCMFilterDisableFlag ( uiCode ? true : false ); LOGLN_JSON( Logger::Decoder, "pcm_loop_filter_disable_flag", uiCode );
   }
 
-  READ_UVLC( uiCode, "num_short_term_ref_pic_sets" );
+  READ_UVLC( uiCode, "num_short_term_ref_pic_sets" ); LOGLN_JSON( Logger::Decoder, "num_short_term_ref_pic_sets", uiCode );
   assert(uiCode <= 64);
   pcSPS->createRPSList(uiCode);
 
@@ -751,31 +760,35 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
     rps = rpsList->getReferencePictureSet(i);
     parseShortTermRefPicSet(pcSPS,rps,i);
   }
-  READ_FLAG( uiCode, "long_term_ref_pics_present_flag" );          pcSPS->setLongTermRefsPresent(uiCode);
+  READ_FLAG( uiCode, "long_term_ref_pics_present_flag" );          pcSPS->setLongTermRefsPresent(uiCode); LOGLN_JSON( Logger::Decoder, "long_term_ref_pics_present_flag", uiCode );
   if (pcSPS->getLongTermRefsPresent())
   {
-    READ_UVLC( uiCode, "num_long_term_ref_pics_sps" );
+    READ_UVLC( uiCode, "num_long_term_ref_pics_sps" ); LOGLN_JSON( Logger::Decoder, "num_long_term_ref_pics_sps", uiCode );
     pcSPS->setNumLongTermRefPicSPS(uiCode);
-    for (UInt k = 0; k < pcSPS->getNumLongTermRefPicSPS(); k++)
-    {
-      READ_CODE( pcSPS->getBitsForPOC(), uiCode, "lt_ref_pic_poc_lsb_sps" );
-      pcSPS->setLtRefPicPocLsbSps(k, uiCode);
-      READ_FLAG( uiCode,  "used_by_curr_pic_lt_sps_flag[i]");
-      pcSPS->setUsedByCurrPicLtSPSFlag(k, uiCode?1:0);
-    }
+		{
+			LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "long_term_ref_pics" );
+			for( UInt k = 0; k < pcSPS->getNumLongTermRefPicSPS( ); k++ )
+			{
+				LOG_JSON_SCOPE( Logger::Decoder );
+				READ_CODE( pcSPS->getBitsForPOC( ), uiCode, "lt_ref_pic_poc_lsb_sps" ); LOGLN_JSON( Logger::Decoder, "lt_ref_pic_poc_lsb_sps", uiCode );
+				pcSPS->setLtRefPicPocLsbSps( k, uiCode );
+				READ_FLAG( uiCode, "used_by_curr_pic_lt_sps_flag[i]" ); LOGLN_JSON( Logger::Decoder, "used_by_curr_pic_lt_sps_flag", uiCode );
+				pcSPS->setUsedByCurrPicLtSPSFlag( k, uiCode ? 1 : 0 );
+			}
+		}
   }
-  READ_FLAG( uiCode, "sps_temporal_mvp_enable_flag" );            pcSPS->setTMVPFlagsPresent(uiCode);
+  READ_FLAG( uiCode, "sps_temporal_mvp_enable_flag" );            pcSPS->setTMVPFlagsPresent(uiCode); LOGLN_JSON( Logger::Decoder, "sps_temporal_mvp_enable_flag", uiCode );
 
-  READ_FLAG( uiCode, "sps_strong_intra_smoothing_enable_flag" );  pcSPS->setUseStrongIntraSmoothing(uiCode);
+  READ_FLAG( uiCode, "sps_strong_intra_smoothing_enable_flag" );  pcSPS->setUseStrongIntraSmoothing(uiCode); LOGLN_JSON( Logger::Decoder, "sps_strong_intra_smoothing_enable_flag", uiCode );
 
-  READ_FLAG( uiCode, "vui_parameters_present_flag" );             pcSPS->setVuiParametersPresentFlag(uiCode);
+  READ_FLAG( uiCode, "vui_parameters_present_flag" );             pcSPS->setVuiParametersPresentFlag(uiCode); LOGLN_JSON( Logger::Decoder, "vui_parameters_present_flag", uiCode );
 
   if (pcSPS->getVuiParametersPresentFlag())
   {
     parseVUI(pcSPS->getVuiParameters(), pcSPS);
   }
 
-  READ_FLAG( uiCode, "sps_extension_present_flag");
+  READ_FLAG( uiCode, "sps_extension_present_flag"); LOGLN_JSON( Logger::Decoder, "sps_extension_present_flag", uiCode );
   if (uiCode)
   {
 #if ENC_DEC_TRACE || RExt__DECODER_DEBUG_BIT_STATISTICS
@@ -828,7 +841,7 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
     {
       while ( xMoreRbspData() )
       {
-        READ_FLAG( uiCode, "sps_extension_data_flag");
+        READ_FLAG( uiCode, "sps_extension_data_flag"); LOGLN_JSON( Logger::Decoder, "sps_extension_data_flag", uiCode );
       }
     }
   }
@@ -843,39 +856,48 @@ Void TDecCavlc::parseVPS(TComVPS* pcVPS)
 #endif
   UInt  uiCode;
 
-  READ_CODE( 4,  uiCode,  "vps_video_parameter_set_id" );         pcVPS->setVPSId( uiCode );
-  READ_FLAG( uiCode,      "vps_base_layer_internal_flag" );       assert(uiCode == 1);
-  READ_FLAG( uiCode,      "vps_base_layer_available_flag" );      assert(uiCode == 1);
-  READ_CODE( 6,  uiCode,  "vps_max_layers_minus1" );
-  READ_CODE( 3,  uiCode,  "vps_max_sub_layers_minus1" );          pcVPS->setMaxTLayers( uiCode + 1 );    assert(uiCode+1 <= MAX_TLAYER);
-  READ_FLAG(     uiCode,  "vps_temporal_id_nesting_flag" );       pcVPS->setTemporalNestingFlag( uiCode ? true:false );
+  READ_CODE( 4, uiCode, "vps_video_parameter_set_id" );         pcVPS->setVPSId( uiCode );															LOGLN_JSON( Logger::Decoder, "vps_video_parameter_set_id", uiCode );
+  READ_FLAG( uiCode,      "vps_base_layer_internal_flag" );       assert(uiCode == 1);																	LOGLN_JSON( Logger::Decoder, "vps_base_layer_internal_flag", uiCode );
+  READ_FLAG( uiCode,      "vps_base_layer_available_flag" );      assert(uiCode == 1);																	LOGLN_JSON( Logger::Decoder, "vps_base_layer_available_flag", uiCode );
+  READ_CODE( 6,  uiCode,  "vps_max_layers_minus1" );																																		LOGLN_JSON( Logger::Decoder, "vps_max_layers_minus1", uiCode );
+  READ_CODE( 3,  uiCode,  "vps_max_sub_layers_minus1" );          pcVPS->setMaxTLayers( uiCode + 1 );    assert(uiCode+1 <= MAX_TLAYER); LOGLN_JSON( Logger::Decoder, "vps_max_sub_layers_minus1", uiCode );
+  READ_FLAG(     uiCode,  "vps_temporal_id_nesting_flag" );       pcVPS->setTemporalNestingFlag( uiCode ? true:false ); LOGLN_JSON( Logger::Decoder, "vps_temporal_id_nesting_flag", uiCode );
   assert (pcVPS->getMaxTLayers()>1||pcVPS->getTemporalNestingFlag());
   READ_CODE( 16, uiCode,  "vps_reserved_0xffff_16bits" );         assert(uiCode == 0xffff);
-  parsePTL ( pcVPS->getPTL(), true, pcVPS->getMaxTLayers()-1);
-  UInt subLayerOrderingInfoPresentFlag;
-  READ_FLAG(subLayerOrderingInfoPresentFlag, "vps_sub_layer_ordering_info_present_flag");
-  for(UInt i = 0; i <= pcVPS->getMaxTLayers()-1; i++)
-  {
-    READ_UVLC( uiCode,  "vps_max_dec_pic_buffering_minus1[i]" );    pcVPS->setMaxDecPicBuffering( uiCode + 1, i );
-    READ_UVLC( uiCode,  "vps_max_num_reorder_pics[i]" );            pcVPS->setNumReorderPics( uiCode, i );
-    READ_UVLC( uiCode,  "vps_max_latency_increase_plus1[i]" );      pcVPS->setMaxLatencyIncrease( uiCode, i );
 
-    if (!subLayerOrderingInfoPresentFlag)
-    {
-      for (i++; i <= pcVPS->getMaxTLayers()-1; i++)
-      {
-        pcVPS->setMaxDecPicBuffering(pcVPS->getMaxDecPicBuffering(0), i);
-        pcVPS->setNumReorderPics(pcVPS->getNumReorderPics(0), i);
-        pcVPS->setMaxLatencyIncrease(pcVPS->getMaxLatencyIncrease(0), i);
-      }
-      break;
-    }
-  }
+  parsePTL ( pcVPS->getPTL(), true, pcVPS->getMaxTLayers()-1);
+
+  UInt subLayerOrderingInfoPresentFlag;
+  READ_FLAG(subLayerOrderingInfoPresentFlag, "vps_sub_layer_ordering_info_present_flag");																LOGLN_JSON( Logger::Decoder, "vps_sub_layer_ordering_info_present_flag", subLayerOrderingInfoPresentFlag );
+
+	{
+		LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "subLayerOrderingInfo" );
+		for( UInt i = 0; i <= pcVPS->getMaxTLayers( ) - 1; i++ )
+		{
+			{
+				LOG_JSON_SCOPE( Logger::Decoder );
+				READ_UVLC( uiCode, "vps_max_dec_pic_buffering_minus1[i]" );    pcVPS->setMaxDecPicBuffering( uiCode + 1, i );			LOGLN_JSON( Logger::Decoder, "vps_max_dec_pic_buffering_minus1", uiCode );
+				READ_UVLC( uiCode, "vps_max_num_reorder_pics[i]" );            pcVPS->setNumReorderPics( uiCode, i );							LOGLN_JSON( Logger::Decoder, "vps_max_num_reorder_pics", uiCode );
+				READ_UVLC( uiCode, "vps_max_latency_increase_plus1[i]" );      pcVPS->setMaxLatencyIncrease( uiCode, i );					LOGLN_JSON( Logger::Decoder, "vps_max_latency_increase_plus1", uiCode );
+			}
+			if( !subLayerOrderingInfoPresentFlag )
+			{
+				for( i++; i <= pcVPS->getMaxTLayers( ) - 1; i++ )
+				{
+					LOG_JSON_SCOPE( Logger::Decoder );
+					pcVPS->setMaxDecPicBuffering( pcVPS->getMaxDecPicBuffering( 0 ), i ); LOGLN_JSON( Logger::Decoder, "vps_max_dec_pic_buffering_minus1", uiCode );
+					pcVPS->setNumReorderPics( pcVPS->getNumReorderPics( 0 ), i );					LOGLN_JSON( Logger::Decoder, "vps_max_num_reorder_pics", uiCode );
+					pcVPS->setMaxLatencyIncrease( pcVPS->getMaxLatencyIncrease( 0 ), i ); LOGLN_JSON( Logger::Decoder, "vps_max_latency_increase_plus1", uiCode );
+				}
+				break;
+			}
+		}
+	}
 
   assert( pcVPS->getNumHrdParameters() < MAX_VPS_OP_SETS_PLUS1 );
   assert( pcVPS->getMaxNuhReservedZeroLayerId() < MAX_VPS_NUH_RESERVED_ZERO_LAYER_ID_PLUS1 );
-  READ_CODE( 6, uiCode, "vps_max_layer_id" );                        pcVPS->setMaxNuhReservedZeroLayerId( uiCode );
-  READ_UVLC(    uiCode, "vps_num_layer_sets_minus1" );               pcVPS->setMaxOpSets( uiCode + 1 );
+  READ_CODE( 6, uiCode, "vps_max_layer_id" );                        pcVPS->setMaxNuhReservedZeroLayerId( uiCode );  LOGLN_JSON( Logger::Decoder, "vps_max_layer_id", uiCode );
+  READ_UVLC(    uiCode, "vps_num_layer_sets_minus1" );               pcVPS->setMaxOpSets( uiCode + 1 );							LOGLN_JSON( Logger::Decoder, "vps_num_layer_sets_minus1", uiCode );
   for( UInt opsIdx = 1; opsIdx <= ( pcVPS->getMaxOpSets() - 1 ); opsIdx ++ )
   {
     // Operation point set
@@ -886,18 +908,18 @@ Void TDecCavlc::parseVPS(TComVPS* pcVPS)
   }
 
   TimingInfo *timingInfo = pcVPS->getTimingInfo();
-  READ_FLAG(       uiCode, "vps_timing_info_present_flag");         timingInfo->setTimingInfoPresentFlag      (uiCode ? true : false);
+  READ_FLAG(       uiCode, "vps_timing_info_present_flag");         timingInfo->setTimingInfoPresentFlag      (uiCode ? true : false);	LOGLN_JSON( Logger::Decoder, "vps_timing_info_present_flag", ( uiCode ? true : false ) );
   if(timingInfo->getTimingInfoPresentFlag())
   {
-    READ_CODE( 32, uiCode, "vps_num_units_in_tick");                timingInfo->setNumUnitsInTick             (uiCode);
-    READ_CODE( 32, uiCode, "vps_time_scale");                       timingInfo->setTimeScale                  (uiCode);
-    READ_FLAG(     uiCode, "vps_poc_proportional_to_timing_flag");  timingInfo->setPocProportionalToTimingFlag(uiCode ? true : false);
+    READ_CODE( 32, uiCode, "vps_num_units_in_tick");                timingInfo->setNumUnitsInTick             (uiCode);									LOGLN_JSON( Logger::Decoder, "vps_num_units_in_tick",uiCode );
+    READ_CODE( 32, uiCode, "vps_time_scale");                       timingInfo->setTimeScale                  (uiCode);									LOGLN_JSON( Logger::Decoder, "vps_time_scale", uiCode );
+    READ_FLAG(     uiCode, "vps_poc_proportional_to_timing_flag");  timingInfo->setPocProportionalToTimingFlag(uiCode ? true : false);	LOGLN_JSON( Logger::Decoder, "vps_poc_proportional_to_timing_flag", uiCode );
     if(timingInfo->getPocProportionalToTimingFlag())
     {
-      READ_UVLC(   uiCode, "vps_num_ticks_poc_diff_one_minus1");    timingInfo->setNumTicksPocDiffOneMinus1   (uiCode);
+      READ_UVLC(   uiCode, "vps_num_ticks_poc_diff_one_minus1");    timingInfo->setNumTicksPocDiffOneMinus1   (uiCode);									LOGLN_JSON( Logger::Decoder, "vps_num_ticks_poc_diff_one_minus1", uiCode );
     }
 
-    READ_UVLC( uiCode, "vps_num_hrd_parameters" );                  pcVPS->setNumHrdParameters( uiCode );
+    READ_UVLC( uiCode, "vps_num_hrd_parameters" );                  pcVPS->setNumHrdParameters( uiCode );																LOGLN_JSON( Logger::Decoder, "vps_num_hrd_parameters", uiCode );
 
     if( pcVPS->getNumHrdParameters() > 0 )
     {
@@ -919,12 +941,12 @@ Void TDecCavlc::parseVPS(TComVPS* pcVPS)
     }
   }
 
-  READ_FLAG( uiCode,  "vps_extension_flag" );
+  READ_FLAG( uiCode,  "vps_extension_flag" );																																														LOGLN_JSON( Logger::Decoder, "vps_extension_flag", uiCode );
   if (uiCode)
   {
     while ( xMoreRbspData() )
     {
-      READ_FLAG( uiCode, "vps_extension_data_flag");
+      READ_FLAG( uiCode, "vps_extension_data_flag");																																										LOGLN_JSON( Logger::Decoder, "vps_extension_data_flag", uiCode );
     }
   }
 
@@ -1526,9 +1548,10 @@ Void TDecCavlc::parsePTL( TComPTL *rpcPTL, Bool profilePresentFlag, Int maxNumSu
   UInt uiCode;
   if(profilePresentFlag)
   {
+    LOG_JSON_NAMED_SCOPE( Logger::Decoder, "profileTier" );
     parseProfileTier(rpcPTL->getGeneralPTL(), false);
   }
-  READ_CODE( 8, uiCode, "general_level_idc" );    rpcPTL->getGeneralPTL()->setLevelIdc(Level::Name(uiCode));
+  READ_CODE( 8, uiCode, "general_level_idc" );    rpcPTL->getGeneralPTL()->setLevelIdc(Level::Name(uiCode)); LOGLN_JSON( Logger::Decoder, "general_level_idc", rpcPTL->getGeneralPTL( )->getLevelIdc() );
 
   for (Int i = 0; i < maxNumSubLayersMinus1; i++)
   {
@@ -1567,20 +1590,24 @@ Void TDecCavlc::parseProfileTier(ProfileTierLevel *ptl, const Bool /*bIsSubLayer
 #endif
 {
   UInt uiCode;
-  READ_CODE(2 , uiCode,   PTL_TRACE_TEXT("profile_space"                   )); ptl->setProfileSpace(uiCode);
-  READ_FLAG(    uiCode,   PTL_TRACE_TEXT("tier_flag"                       )); ptl->setTierFlag    (uiCode ? Level::HIGH : Level::MAIN);
-  READ_CODE(5 , uiCode,   PTL_TRACE_TEXT("profile_idc"                     )); ptl->setProfileIdc  (Profile::Name(uiCode));
-  for(Int j = 0; j < 32; j++)
-  {
-    READ_FLAG(  uiCode,   PTL_TRACE_TEXT("profile_compatibility_flag[][j]" )); ptl->setProfileCompatibilityFlag(j, uiCode ? 1 : 0);
-  }
-  READ_FLAG(uiCode,       PTL_TRACE_TEXT("progressive_source_flag"         )); ptl->setProgressiveSourceFlag(uiCode ? true : false);
+  READ_CODE(2 , uiCode,   PTL_TRACE_TEXT("profile_space"                   )); ptl->setProfileSpace(uiCode);															LOGLN_JSON( Logger::Decoder, "profile_space", uiCode );
+  READ_FLAG(    uiCode,   PTL_TRACE_TEXT("tier_flag"                       )); ptl->setTierFlag    (uiCode ? Level::HIGH : Level::MAIN);  LOGLN_JSON( Logger::Decoder, "tier_flag", ptl->getTierFlag() );
+  READ_CODE(5 , uiCode,   PTL_TRACE_TEXT("profile_idc"                     )); ptl->setProfileIdc  (Profile::Name(uiCode));								LOGLN_JSON( Logger::Decoder, "profile_idc", ptl->getProfileIdc() );
+	{
+		LOG_JSON_ARRAY_SCOPE( Logger::Decoder, "profile_compatibility_flags" );
+		for( Int j = 0; j < 32; j++ )
+		{
+			READ_FLAG( uiCode, PTL_TRACE_TEXT( "profile_compatibility_flag[][j]" ) ); ptl->setProfileCompatibilityFlag( j, uiCode ? 1 : 0 );
+			LOGLN( Logger::Decoder, ptl->getProfileCompatibilityFlag(j), " ,"[ j == 31 ? 0 : 1 ] );
+		}
+	}
+  READ_FLAG(uiCode,       PTL_TRACE_TEXT("progressive_source_flag"         )); ptl->setProgressiveSourceFlag(uiCode ? true : false);			LOGLN_JSON( Logger::Decoder, "progressive_source_flag", ptl->getProgressiveSourceFlag() );
 
-  READ_FLAG(uiCode,       PTL_TRACE_TEXT("interlaced_source_flag"          )); ptl->setInterlacedSourceFlag(uiCode ? true : false);
+  READ_FLAG(uiCode,       PTL_TRACE_TEXT("interlaced_source_flag"          )); ptl->setInterlacedSourceFlag(uiCode ? true : false);				LOGLN_JSON( Logger::Decoder, "interlaced_source_flag", ptl->getInterlacedSourceFlag( ) );
 
-  READ_FLAG(uiCode,       PTL_TRACE_TEXT("non_packed_constraint_flag"      )); ptl->setNonPackedConstraintFlag(uiCode ? true : false);
+  READ_FLAG(uiCode,       PTL_TRACE_TEXT("non_packed_constraint_flag"      )); ptl->setNonPackedConstraintFlag(uiCode ? true : false);		LOGLN_JSON( Logger::Decoder, "non_packed_constraint_flag", ptl->getNonPackedConstraintFlag( ) );
 
-  READ_FLAG(uiCode,       PTL_TRACE_TEXT("frame_only_constraint_flag"      )); ptl->setFrameOnlyConstraintFlag(uiCode ? true : false);
+  READ_FLAG(uiCode,       PTL_TRACE_TEXT("frame_only_constraint_flag"      )); ptl->setFrameOnlyConstraintFlag(uiCode ? true : false);		LOGLN_JSON( Logger::Decoder, "frame_only_constraint_flag", ptl->getFrameOnlyConstraintFlag( ) );
 
   if (ptl->getProfileIdc() == Profile::MAINREXT           || ptl->getProfileCompatibilityFlag(Profile::MAINREXT) ||
       ptl->getProfileIdc() == Profile::HIGHTHROUGHPUTREXT || ptl->getProfileCompatibilityFlag(Profile::HIGHTHROUGHPUTREXT))

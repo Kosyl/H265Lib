@@ -22,14 +22,10 @@ namespace UnitTests
 
 		TEST_METHOD(ParametersCtor_SetsCorrectPictureSize)
 		{
-			auto sps = SequenceParameterSetBank::instance().createNext();
-			auto pps = PictureParameterSetBank::instance().createNext();
-
-			sps->setPicSize(40, 60);
-			sps->chroma_format_idc = SubsamplingFormat::Mode_420;
+			ParametersBundle parameters = ParametersBundle::getDefaultParameters( 40, 60 );
 
 			Picture p;
-			p.initFromParameters(*sps);
+			p.initFromParameters(parameters );
 
 			Assert::IsTrue(p.input_samples[Luma].height() == 60);
 			Assert::IsTrue(p.input_samples[Luma].width() == 40);
@@ -41,15 +37,13 @@ namespace UnitTests
 
 		TEST_METHOD(getCTUBySamplePosition_ReturnsCorrectCTU)
 		{
-			auto sps = SequenceParameterSetBank::instance().createNext();
-			auto pps = PictureParameterSetBank::instance().createNext();
+			ParametersBundle parameters = ParametersBundle::getDefaultParameters( 200,200 );
 
-			sps->setPicSize(200, 200);
-			sps->chroma_format_idc = SubsamplingFormat::Mode_420;
-			sps->max_luma_coding_block_size = 64;
+			parameters.Sps->chroma_format_idc = SubsamplingFormat::Mode_420;
+			parameters.Sps->max_luma_coding_block_size = 64;
 
 			Picture p;
-			p.initFromParameters(*sps);
+			p.initFromParameters(parameters);
 
 			auto ctu00 = p.getCTUBySamplePosition(0, 0);
 			Assert::IsTrue(ctu00->pos.x == 0);

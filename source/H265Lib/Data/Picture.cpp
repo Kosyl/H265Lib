@@ -170,6 +170,13 @@ namespace HEVC
 		}
 	}
 
+	Position Picture::scalePositionToLuma(const Position& pos, ImgComp plane) const
+	{
+		if( plane == Luma )
+			return Position( pos );
+		return pos.scale( pps->sps->chromaScaleFactorX( ), pps->sps->chromaScaleFactorY( ) );
+	}
+
 	std::shared_ptr<CU> Picture::getCuContainingPosition(int x, int y)
 	{
 		std::shared_ptr<CTU> ctu = getCTUBySamplePosition(x, y);
@@ -207,7 +214,7 @@ namespace HEVC
 	size_t Picture::getZScanIdx(const size_t x, const size_t y, bool shiftToMinTb) const
 	{
 		int shift = shiftToMinTb ? log2_min_tb_size : 0;
-		return pps->z_scan_array->at(x >> shift, y >> shift);
+		return pps->z_scan_array.at(x >> shift, y >> shift);
 	}
 
 	size_t Picture::getRasterIdx(const size_t x, const size_t y, bool shiftToMinTb) const

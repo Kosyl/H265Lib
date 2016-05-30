@@ -284,7 +284,7 @@ namespace HEVC
 	template<typename T>
 	struct Matrix3D
 	{
-		Matrix<T> values[3]{nullptr,nullptr,nullptr};
+		Matrix<T> values[3];
 
 		Matrix<T>& operator[](int i) { return values[i]; }
 	};

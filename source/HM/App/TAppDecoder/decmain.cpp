@@ -68,6 +68,8 @@ int main(int argc, char* argv[])
   {
     cTAppDecTop.destroy();
     returnCode = EXIT_FAILURE;
+		std::cout << "Nacisnij klawisz, aby zakonczyc...";
+		getchar( );
     return returnCode;
   }
 
@@ -90,6 +92,9 @@ int main(int argc, char* argv[])
 
   // destroy application decoder class
   cTAppDecTop.destroy();
+
+	std::cout << "Nacisnij klawisz, aby zakonczyc...";
+	getchar( );
 
   return returnCode;
 }

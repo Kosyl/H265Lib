@@ -13,7 +13,15 @@ namespace HEVC
 
 		Position();
 		Position(int new_x, int new_y);
-		Position move(int dx, int dy) { return Position(x + dx, y + dy); };
+		Position move(int dx, int dy) const
+		{
+			return Position(x + dx, y + dy);
+		}
+
+		Position scale(int chroma_scale_factor_x, int chroma_scale_factor_y) const
+		{
+			return Position( x * chroma_scale_factor_x, y * chroma_scale_factor_y );
+		}
 	};
 
 	class BlockBase

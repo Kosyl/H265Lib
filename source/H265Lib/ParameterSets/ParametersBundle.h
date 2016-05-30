@@ -63,7 +63,11 @@ namespace HEVC
 		{
 			auto vps = VideoParameterSetBank::instance().createNext();
 			auto sps = SequenceParameterSetBank::instance().createNext();
-			auto pps = PictureParameterSetBank::instance().createNext();
+			auto pps = PictureParameterSetBank::instance().createNext(sps);
+
+			sps->vps = vps;
+			pps->vps = vps;
+			pps->sps = sps;
 
 			sps->setPicSize(picWIdth, picHeight);
 
@@ -74,7 +78,7 @@ namespace HEVC
 		{
 			auto vps = VideoParameterSetBank::instance().createNext();
 			auto sps = SequenceParameterSetBank::instance().createNext();
-			auto pps = PictureParameterSetBank::instance().createNext();
+			auto pps = PictureParameterSetBank::instance().createNext(sps);
 
 			sps->vps = vps;
 			pps->vps = vps;
