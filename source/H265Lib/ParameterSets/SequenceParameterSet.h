@@ -9,7 +9,7 @@
 #include "ScalingListData.h"
 #include "ShortTermReferencePictureSet.h"
 #include "VUIParameters.h"
-#include "VideoParameterSet.h"
+#include "ParameterSets/VideoParameterSet.h"
 
 namespace HEVC
 {
@@ -21,7 +21,7 @@ namespace HEVC
 
 		int max_sub_layers;
 		bool temporal_id_nesting_flag;
-		std::vector<ProfileTierLevel> profile_tier_level;
+		ProfileTierLevel profile_tier_level;
 
 		SubsamplingFormat chroma_format_idc;
 		bool separate_colour_plane_flag;

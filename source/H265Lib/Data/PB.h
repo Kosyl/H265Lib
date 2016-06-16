@@ -1,10 +1,14 @@
 #pragma once
 
 #include "BlockBase.h"
+#include <Common/Enums.h>
+#include <Common/Matrix.h>
 
 
 namespace HEVC
 {
+	struct ParametersBundle;
+
 	struct PB : public BlockBase
 	{
 		ImgComp img_comp;

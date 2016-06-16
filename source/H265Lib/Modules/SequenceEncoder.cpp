@@ -20,14 +20,14 @@ namespace HEVC
 		LOGLN(Logger::Dump, "Rozpoczecie kodowania");
 		LOGLN(Logger::Dump, "plik wejsciowy: ", configuration.input_file_path);
 		LOGLN(Logger::Dump, "plik wyjsciowy: ", configuration.output_file_path);
-		LOGLN(Logger::Dump, "klatki: ", configuration.num_frames_to_encode, ", QP: ", configuration.qp);
+		LOGLN(Logger::Dump, "klatki: ", configuration.num_frames_to_encode);
 		
 		config = configuration;
 		encoding_parameters = ParametersBundle::fromConfiguration(configuration);
 
 		loadFrames(configuration.input_file_path, configuration.num_frames_to_encode, encoding_parameters);
 
-		pic_encoder = std::make_unique<HardcodedPictureEncoder>(encoding_parameters);
+		pic_encoder = std::make_unique<HardcodedPictureEncoder>(encoding_parameters, &config.picture_coding_info);
 
 		for(auto& frame: input_frames)
 		{

@@ -2306,9 +2306,10 @@ namespace nlohmann
 		/// get a boolean (explicit)
 		constexpr boolean_t get_impl( boolean_t* ) const
 		{
-			return is_boolean( )
-				? m_value.boolean
-				: throw std::domain_error( "type must be boolean, but is " + type_name( ) );
+			return is_boolean( )?m_value.boolean:
+				is_number_integer() ? m_value.number_integer != 0 :
+				is_number_unsigned() ? m_value.number_unsigned != 0 :
+				throw std::domain_error( "type must be boolean, but is " + type_name( ) );
 		}
 
 		/// get a pointer to the value (object)
@@ -7735,6 +7736,9 @@ basic_json_parser_63:
 			basic_json parse( )
 			{
 				basic_json result = parse_internal( true );
+
+				if( last_token == lexer::token_type::value_separator )
+					get_token( );
 
 				expect( lexer::token_type::end_of_input );
 

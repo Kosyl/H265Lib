@@ -7,8 +7,6 @@ namespace HEVC
 	PU::PU(int X, int Y, int size) :
 		BlockBase(X, Y, size)
 	{
-		LOG_INDENT(Logger::Dump);
-		LOGLN(Logger::Dump, "PU(", pos.x, ",", pos.y, ") ", size, "x", size);
 	}
 
 	PU::~PU()

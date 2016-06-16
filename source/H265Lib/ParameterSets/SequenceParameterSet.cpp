@@ -17,8 +17,80 @@ namespace HEVC
 
 	void SequenceParameterSet::configure( EncoderParameters configuration )
 	{
-		chroma_format_idc = configuration.subsampling;
-		setPicSize( configuration.pic_width, configuration.pic_height );
+		nlohmann::json& sps = configuration.complete_configuration[ "sps" ];
+
+		max_sub_layers = sps["sps_max_sub_layers_minus1"].get<unsigned int>() + 1;
+		temporal_id_nesting_flag = sps[ "sps_temporal_id_nesting_flag" ].get<bool>( );
+
+		profile_tier_level.initFromJson( sps[ "profileTierLevel" ] );
+
+		chroma_format_idc = SubsamplingFormat( sps[ "chroma_format_idc" ].get<unsigned int>( ) );
+		if( chroma_format_idc == SubsamplingFormat::Mode_444 )
+		{
+			separate_colour_plane_flag = sps[ "sps_max_sub_layers_minus1" ].get<bool>( );
+		}
+
+		setPicSize( sps[ "pic_width_in_luma_samples" ].get<size_t>( ),
+								sps[ "pic_height_in_luma_samples" ].get<size_t>( ) );
+
+		conformance_window_flag = sps[ "conformance_window_flag" ].get<bool>( );
+		if( conformance_window_flag )
+		{
+			setConformanceWindow( sps[ "conf_win_top_offset" ].get<unsigned int>( ),
+														sps[ "conf_win_bottom_offset" ].get<unsigned int>( ),
+														sps[ "conf_win_left_offset" ].get<unsigned int>( ),
+														sps[ "conf_win_right_offset" ].get<unsigned int>( ) );
+		}
+
+		bit_depth_luma = sps[ "bit_depth_luma_minus8" ].get<unsigned int>( ) + 8;
+		bit_depth_chroma = sps[ "bit_depth_chroma_minus8" ].get<unsigned int>( ) + 8;
+
+		max_pic_order_cnt = 1 << ( sps[ "log2_max_pic_order_cnt_lsb_minus4" ].get<unsigned int>( ) + 4 );
+
+		sub_layer_ordering_info_present_flag = sps[ "sps_sub_layer_ordering_info_present_flag" ].get<bool>( );
+		if( sub_layer_ordering_info_present_flag )
+		{
+			for( auto& singleInfo : sps[ "sub_layer_ordering_info" ] )
+			{
+				sub_layer_ordering_infos.push_back( SubLayerOrderingInfo( singleInfo ) );
+			}
+		}
+
+		unsigned int log2_min_cu = sps[ "log2_min_luma_coding_block_size_minus3" ].get<unsigned int>( ) + 3;
+		unsigned int log2_cu_diff = sps[ "log2_diff_max_min_luma_coding_block_size" ].get<unsigned int>( );
+		unsigned int log2_min_tu = sps[ "log2_min_luma_transform_block_size_minus2" ].get<unsigned int>( ) + 2;
+		unsigned int log2_tu_diff = sps[ "log2_diff_max_min_luma_transform_block_size" ].get<unsigned int>( );
+
+		min_luma_coding_block_size = 1 << log2_min_cu;
+		max_luma_coding_block_size = min_luma_coding_block_size << log2_cu_diff;
+		min_luma_transform_block_size = 1 << log2_min_tu;
+		max_luma_transform_block_size = min_luma_transform_block_size << log2_tu_diff;
+		refresh( );
+
+		max_transform_hierarchy_depth_intra = sps[ "max_transform_hierarchy_depth_inter" ].get<unsigned int>( );
+		max_transform_hierarchy_depth_inter = sps[ "max_transform_hierarchy_depth_intra" ].get<unsigned int>( );
+
+		scaling_list_enabled_flag = sps[ "scaling_list_enabled_flag" ].get<bool>( );
+		if( scaling_list_enabled_flag )
+		{
+			scaling_list_data_present_flag = sps[ "scaling_list_data_present_flag" ].get<bool>( );
+		}
+
+		amp_enabled_flag = sps[ "amp_enabled_flag" ].get<bool>( );
+
+		sample_adaptive_offset_enabled_flag = sps[ "sample_adaptive_offset_enabled_flag" ].get<bool>();
+
+		pcm_enabled_flag = sps[ "pcm_enabled_flag" ].get<bool>( );
+		num_short_term_ref_pic_sets = sps[ "num_short_term_ref_pic_sets" ].get<unsigned int>( );
+		long_term_ref_pics_present_flag = sps[ "long_term_ref_pics_present_flag" ].get<bool>( );
+
+		temporal_mvp_enabled_flag = sps[ "sps_temporal_mvp_enable_flag" ].get<bool>( );
+
+		strong_intra_smoothing_enabled_flag = sps[ "sps_strong_intra_smoothing_enable_flag" ].get<bool>( );
+
+		vui_parameters_present_flag = sps[ "vui_parameters_present_flag" ].get<bool>( );
+
+		sps_extension_flag = sps[ "sps_extension_present_flag" ].get<bool>( );
 	}
 
 	int SequenceParameterSet::chromaScaleFactorX( ) const
@@ -126,8 +198,7 @@ namespace HEVC
 	void SequenceParameterSet::setPicSize( size_t width, size_t height )
 	{
 		assert( (width == 0 || width%min_luma_coding_block_size == 0) && 
-						(height == 0 || height%min_luma_coding_block_size == 0),
-						"Picture size must be a multiply of min_luma_cb_size" );
+						(height == 0 || height%min_luma_coding_block_size == 0) );
 
 		pic_width_in_luma_samples = width;
 		pic_height_in_luma_samples = height;

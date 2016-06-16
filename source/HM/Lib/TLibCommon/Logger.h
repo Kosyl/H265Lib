@@ -123,6 +123,7 @@ namespace HEVC
 		static const LogId Overview;
 		static const LogId IO;
 		static const LogId BinOut;
+    static const LogId Encoder;
 
 		static const LogId Decoder;
 

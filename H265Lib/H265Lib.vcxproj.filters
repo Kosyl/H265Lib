@@ -51,9 +51,6 @@
     <ClInclude Include="..\source\H265Lib\ParameterSets\ParameterSetBase.h">
       <Filter>ParameterSets</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\H265Lib\ParameterSets\VideoParameterSet.h">
-      <Filter>ParameterSets</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\H265Lib\ParameterSets\ProfileTierLevel.h">
       <Filter>ParameterSets</Filter>
     </ClInclude>
@@ -171,6 +168,9 @@
     <ClInclude Include="..\source\H265Lib\Common\JSON.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\H265Lib\ParameterSets\VideoParameterSet.h">
+      <Filter>ParameterSets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\H265Lib\ParameterSets\PictureParameterSet.cpp">
@@ -205,9 +205,6 @@
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\Modules\Transform.cpp">
       <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\H265Lib\ParameterSets\VideoParameterSet.cpp">
-      <Filter>ParameterSets</Filter>
     </ClCompile>
     <ClCompile Include="..\source\H265Lib\Modules\PictureEncoder.cpp">
       <Filter>Modules</Filter>
@@ -280,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="..\source\TinyXML\tinyxml2.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\H265Lib\ParameterSets\VideoParameterSet.cpp">
+      <Filter>ParameterSets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -681,11 +681,11 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
 		for( UInt i = 0; i <= pcSPS->getMaxTLayers( ) - 1; i++ )
 		{
 			LOG_JSON_SCOPE( Logger::Decoder );
-			READ_UVLC( uiCode, "sps_max_dec_pic_buffering_minus1[i]" ); LOGLN_JSON( Logger::Decoder, "sps_max_dec_pic_buffering_minus1", uiCode );
+			READ_UVLC( uiCode, "sps_max_dec_pic_buffering_minus1[i]" ); LOGLN_JSON( Logger::Decoder, "max_dec_pic_buffering_minus1", uiCode );
 			pcSPS->setMaxDecPicBuffering( uiCode + 1, i );
-			READ_UVLC( uiCode, "sps_max_num_reorder_pics[i]" ); LOGLN_JSON( Logger::Decoder, "sps_max_num_reorder_pics", uiCode );
+			READ_UVLC( uiCode, "sps_max_num_reorder_pics[i]" ); LOGLN_JSON( Logger::Decoder, "max_num_reorder_pics", uiCode );
 			pcSPS->setNumReorderPics( uiCode, i );
-			READ_UVLC( uiCode, "sps_max_latency_increase_plus1[i]" ); LOGLN_JSON( Logger::Decoder, "sps_max_latency_increase_plus1", uiCode );
+			READ_UVLC( uiCode, "sps_max_latency_increase_plus1[i]" ); LOGLN_JSON( Logger::Decoder, "max_latency_increase_plus1", uiCode );
 			pcSPS->setMaxLatencyIncreasePlus1( uiCode, i );
 
 			if( !subLayerOrderingInfoPresentFlag )
@@ -876,18 +876,18 @@ Void TDecCavlc::parseVPS(TComVPS* pcVPS)
 		{
 			{
 				LOG_JSON_SCOPE( Logger::Decoder );
-				READ_UVLC( uiCode, "vps_max_dec_pic_buffering_minus1[i]" );    pcVPS->setMaxDecPicBuffering( uiCode + 1, i );			LOGLN_JSON( Logger::Decoder, "vps_max_dec_pic_buffering_minus1", uiCode );
-				READ_UVLC( uiCode, "vps_max_num_reorder_pics[i]" );            pcVPS->setNumReorderPics( uiCode, i );							LOGLN_JSON( Logger::Decoder, "vps_max_num_reorder_pics", uiCode );
-				READ_UVLC( uiCode, "vps_max_latency_increase_plus1[i]" );      pcVPS->setMaxLatencyIncrease( uiCode, i );					LOGLN_JSON( Logger::Decoder, "vps_max_latency_increase_plus1", uiCode );
+				READ_UVLC( uiCode, "vps_max_dec_pic_buffering_minus1[i]" );    pcVPS->setMaxDecPicBuffering( uiCode + 1, i );			LOGLN_JSON( Logger::Decoder, "max_dec_pic_buffering_minus1", uiCode );
+				READ_UVLC( uiCode, "vps_max_num_reorder_pics[i]" );            pcVPS->setNumReorderPics( uiCode, i );							LOGLN_JSON( Logger::Decoder, "max_num_reorder_pics", uiCode );
+				READ_UVLC( uiCode, "vps_max_latency_increase_plus1[i]" );      pcVPS->setMaxLatencyIncrease( uiCode, i );					LOGLN_JSON( Logger::Decoder, "max_latency_increase_plus1", uiCode );
 			}
 			if( !subLayerOrderingInfoPresentFlag )
 			{
 				for( i++; i <= pcVPS->getMaxTLayers( ) - 1; i++ )
 				{
 					LOG_JSON_SCOPE( Logger::Decoder );
-					pcVPS->setMaxDecPicBuffering( pcVPS->getMaxDecPicBuffering( 0 ), i ); LOGLN_JSON( Logger::Decoder, "vps_max_dec_pic_buffering_minus1", uiCode );
-					pcVPS->setNumReorderPics( pcVPS->getNumReorderPics( 0 ), i );					LOGLN_JSON( Logger::Decoder, "vps_max_num_reorder_pics", uiCode );
-					pcVPS->setMaxLatencyIncrease( pcVPS->getMaxLatencyIncrease( 0 ), i ); LOGLN_JSON( Logger::Decoder, "vps_max_latency_increase_plus1", uiCode );
+					pcVPS->setMaxDecPicBuffering( pcVPS->getMaxDecPicBuffering( 0 ), i ); LOGLN_JSON( Logger::Decoder, "max_dec_pic_buffering_minus1", uiCode );
+					pcVPS->setNumReorderPics( pcVPS->getNumReorderPics( 0 ), i );					LOGLN_JSON( Logger::Decoder, "max_num_reorder_pics", uiCode );
+					pcVPS->setMaxLatencyIncrease( pcVPS->getMaxLatencyIncrease( 0 ), i ); LOGLN_JSON( Logger::Decoder, "max_latency_increase_plus1", uiCode );
 				}
 				break;
 			}
@@ -1545,10 +1545,10 @@ Void TDecCavlc::parseSliceHeader (TComSlice* pcSlice, ParameterSetManager *param
 
 Void TDecCavlc::parsePTL( TComPTL *rpcPTL, Bool profilePresentFlag, Int maxNumSubLayersMinus1 )
 {
+	LOG_JSON_NAMED_SCOPE( Logger::Decoder, "profileTierLevel" );
   UInt uiCode;
   if(profilePresentFlag)
   {
-    LOG_JSON_NAMED_SCOPE( Logger::Decoder, "profileTier" );
     parseProfileTier(rpcPTL->getGeneralPTL(), false);
   }
   READ_CODE( 8, uiCode, "general_level_idc" );    rpcPTL->getGeneralPTL()->setLevelIdc(Level::Name(uiCode)); LOGLN_JSON( Logger::Decoder, "general_level_idc", rpcPTL->getGeneralPTL( )->getLevelIdc() );

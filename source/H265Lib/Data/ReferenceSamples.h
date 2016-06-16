@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Common/TypeDef.h>
+#include <Common/Enums.h>
 #include <vector>
+#include <cassert>
 
 namespace HEVC
 {

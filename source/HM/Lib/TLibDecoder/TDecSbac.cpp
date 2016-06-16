@@ -519,6 +519,7 @@ Void TDecSbac::parseSplitFlag     ( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt ui
   if( uiDepth == pcCU->getSlice()->getSPS()->getLog2DiffMaxMinCodingBlockSize() )
   {
     pcCU->setDepthSubParts( uiDepth, uiAbsPartIdx );
+		LOGLN_JSON(Logger::Decoder, "split_flag", 0);
     return;
   }
 #if RExt__DECODER_DEBUG_BIT_STATISTICS
@@ -563,7 +564,7 @@ Void TDecSbac::parsePartSize( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth 
     }
     eMode = uiSymbol ? SIZE_2Nx2N : SIZE_NxN;
 
-    LOGLN_JSON( Logger::Decoder, "part_size", uiSymbol ? "SIZE_2Nx2N" : "SIZE_NxN");
+    LOGLN_JSON( Logger::Decoder, "part_size", uiSymbol ? "\"SIZE_2Nx2N\"" : "\"SIZE_NxN\"");
 
     UInt uiTrLevel = 0;
     UInt uiWidthInBit  = g_aucConvertToBit[pcCU->getWidth(uiAbsPartIdx)]+2;

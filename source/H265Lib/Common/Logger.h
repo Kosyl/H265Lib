@@ -60,6 +60,7 @@ namespace HEVC
 		static const LogId Prediction;
 		static const LogId Overview;
 		static const LogId BinOut;
+    static const LogId Encoder;
 
 		void printSpaces();
 		void increaseSpaces();

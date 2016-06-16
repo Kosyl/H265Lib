@@ -2,6 +2,7 @@
 
 #include <ParameterSets/PictureParameterSet.h>
 #include "EncoderParameters.h"
+#include <Common/Logger.h>
 
 namespace HEVC
 {
@@ -77,15 +78,15 @@ namespace HEVC
 		static ParametersBundle fromConfiguration(EncoderParameters configuration)
 		{
 			auto vps = VideoParameterSetBank::instance().createNext();
-			auto sps = SequenceParameterSetBank::instance().createNext();
-			auto pps = PictureParameterSetBank::instance().createNext(sps);
+			vps->configure( configuration );
 
+			auto sps = SequenceParameterSetBank::instance().createNext();
 			sps->vps = vps;
+			sps->configure( configuration );
+
+			auto pps = PictureParameterSetBank::instance().createNext(sps);
 			pps->vps = vps;
 			pps->sps = sps;
-
-			vps->configure(configuration);
-			sps->configure(configuration);
 			pps->configure(configuration);
 
 			return ParametersBundle(vps, sps, pps);

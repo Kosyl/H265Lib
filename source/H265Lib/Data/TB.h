@@ -3,6 +3,7 @@
 #include <Common/Bitset.h>
 #include <Data/BlockBase.h>
 #include <Data/ReferenceSamples.h>
+#include <Common/Matrix.h>
 
 namespace HEVC
 {

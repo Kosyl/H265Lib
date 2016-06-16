@@ -22,6 +22,7 @@ namespace HEVC
 	const LogId Logger::Prediction{ "Prediction" };
 	const LogId Logger::Overview{ "Overview" };
 	const LogId Logger::BinOut{ "BinOut" };
+  const LogId Logger::Encoder{ "Encoder" };
 
 	LoggingControl::LoggingControl()
 	{
@@ -82,6 +83,7 @@ namespace HEVC
 		_logs[Logger::Prediction] = createLog(Logger::Prediction, "D:\\txt\\predykcja.txt");
 		_logs[Logger::Overview] = createLog(Logger::Overview, "D:\\txt\\overview.txt");
 		_logs[Logger::BinOut] = createLog(Logger::BinOut, "D:\\txt\\binout.txt");
+    _logs[Logger::Encoder] = createLog(Logger::Encoder, "D:\\encoder.txt");
 	}
 
 	std::shared_ptr<Logger> LoggingControl::createLog(LogId logId, std::string path)

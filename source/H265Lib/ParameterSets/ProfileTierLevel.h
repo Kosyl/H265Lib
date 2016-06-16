@@ -1,5 +1,6 @@
 #pragma once
 #include <Common/Constants.h>
+#include <Common/JSON.h>
 
 namespace HEVC
 {
@@ -22,5 +23,6 @@ namespace HEVC
 
 		ProfileTierLevel() = default;
 		void initWithDefaults();
+		void initFromJson(nlohmann::json& ptl );
 	};
 }

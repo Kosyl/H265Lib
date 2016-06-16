@@ -7,7 +7,7 @@
 #include "SubLayerOrderingInfo.h"
 #include <Common/Matrix.h>
 #include "HRDParameters.h"
-#include "EncoderParameters.h"
+#include <ParameterSets/EncoderParameters.h>
 
 namespace HEVC
 {
@@ -23,6 +23,14 @@ namespace HEVC
 			max_dec_pic_buffering(maxDecPicBuffering),
 			max_num_reorder_pic(maxNumReorderPic),
 			max_latency_increase(maxLatencyIncrease)
+		{
+
+		}
+
+		SubLayerOrderingInfo(nlohmann::json& sloi ):
+			max_dec_pic_buffering( sloi["max_dec_pic_buffering_minus1"].get<unsigned int>()+1 ),
+			max_num_reorder_pic( sloi[ "max_num_reorder_pics" ].get<unsigned int>( ) ),
+			max_latency_increase( sloi[ "max_latency_increase_plus1" ].get<int>( ) - 1 )
 		{
 
 		}

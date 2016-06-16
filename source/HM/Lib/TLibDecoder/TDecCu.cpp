@@ -206,6 +206,7 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
   LOGLN_JSON( Logger::Decoder, "y", uiTPelY );
   LOGLN_JSON( Logger::Decoder, "x2", uiRPelX );
   LOGLN_JSON( Logger::Decoder, "y2", uiBPelY );
+  LOGLN_JSON( Logger::Decoder, "size", ( maxCuWidth >> uiDepth ) );
 
   if( ( uiRPelX < sps.getPicWidthInLumaSamples() ) && ( uiBPelY < sps.getPicHeightInLumaSamples() ) )
   {
@@ -214,6 +215,7 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
   else
   {
     bBoundary = true;
+		LOGLN_JSON(Logger::Decoder, "split_flag", 1);
   }
   if( ( ( uiDepth < pcCU->getDepth( uiAbsPartIdx ) ) && ( uiDepth < sps.getLog2DiffMaxMinCodingBlockSize() ) ) || bBoundary )
   {

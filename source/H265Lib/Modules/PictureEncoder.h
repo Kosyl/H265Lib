@@ -35,16 +35,20 @@ namespace HEVC
 	{
 	public:
 
-		HardcodedPictureEncoder(ParametersBundle parameter_sets);
+		HardcodedPictureEncoder(ParametersBundle parameter_sets, PictureCodingConfiguration *pic_coding_info);
 		virtual ~HardcodedPictureEncoder() = default;
 
 		virtual void encodePicture(Picture &pic) override;
 
+
 	protected:
 		ParametersBundle parameters;
+    PictureCodingConfiguration *coding_info;
 
-		void processQuadtree(CUQuadTree &tree, CuContext context);
-		void processCu(CU &cu, CuContext context);
-		void prepareTransformTree(CU &cu);
+		void processQuadtree(CUQuadTree &tree, CuContext context, CuCodingConfiguration& mode);
+		void processCu(CU &cu, CuContext context, CuCodingConfiguration& mode);
+		void prepareTransformTree(TUQuadTree &tu, CuContext& context, TuCodingConfiguration& mode) const;
+
+    void processTu(TU &tu);
 	};
 }
